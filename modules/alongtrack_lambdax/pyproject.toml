@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "alongtrack_lambdax"
+authors=[
+  {name = "Quentin Febvre", email = "quentin.febvre@gmail.com"},
+]
+[project.urls]
+Repository="https://github.com/quentinf00/my_ocb"
+
+[project.scripts]
+alongtrack_lambdax = "alongtrack_lambdax:api_endpoint"
+
+[tool.setuptools]
+py-modules=["alongtrack_lambdax"]

@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "ssh_tracks_loading"
+authors=[
+  {name = "Quentin Febvre", email = "quentin.febvre@gmail.com"},
+]
+[project.urls]
+Repository="https://github.com/quentinf00/my_ocb"
+
+[project.scripts]
+ssh_tracks_loading = "ssh_tracks_loading:api_endpoint"
+
+[tool.setuptools]
+py-modules=["ssh_tracks_loading"]
