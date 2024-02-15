@@ -72,7 +72,7 @@ def main_api(
         combine='nested', chunks='auto'
     )
     Path(output_file).parent.mkdir(exist_ok=True, parents=True)
-    ds.to_netcdf(output_file)
+    ds.load().sortby('time').to_netcdf(output_file)
 
 
 
@@ -85,7 +85,7 @@ zen_endpoint = hydra_zen.zen(main_api)
 #Store the config
 store = hydra_zen.ZenStore()
 store(main_config, name='ssh_tracks_loading')
-store.add_to_hydra_store()
+store.add_to_hydra_store(overwrite=True)
 
 # Create CLI endpoint
 api_endpoint = hydra.main(
