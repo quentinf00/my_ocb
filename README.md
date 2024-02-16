@@ -118,8 +118,8 @@ mkdir -p conf/my_pipeline_cfgs
 echo 'input_path: data/my_input.nc \nparam1: new_value' > conf/my_pipeline_cfgs/xp1.yaml
 my_pipeline --cs=conf/my_pipeline_cfgs +my_pipeline_cfgs=xp1
 ```
-### Composing pipelines
 
+#### From a python script
 ## Tooling
 ### Hydra / HydraZen
 Documentations:
@@ -131,7 +131,69 @@ Documentations:
 TBD
 
 
-## Template module
+## Pipeline Wishlist/Checklist:
+- [ ] Naming convention: `<pipeline_id>__<authorid>`
+  - [ ] python module or package
+  - [ ] hydra config
+  - [ ] script
+  - [ ] logger
+
+- [ ] Input/output validation
+  - [ ] type
+  - [ ] Nan allowed 
+  - [ ] Dimensions, sizes
+  - [ ] fields, variables, columns labels
+  - [ ] numeric constraints (range...)
+  - [ ] metadata (xarray attrs, units
+
+- [ ] Pipeline:
+  - [ ] Sensible arguments: Do different values encompass the different usecase I can Imagine
+  - [ ] Pure version & FileSystem version
+  - [ ] Hooks
+
+- Doc:
+  - [ ] Docstring Input validation
+  - [ ] Docstring Output validation
+  - [ ] Docstring Pipeline
+  - [ ] CLI --help
+  - [ ] logging
+  - [ ] Readme (Install, dependencies...)
+
+
+- Packaging
+  - [ ] conda-lock
+  - [ ] script
+
+- Notebook demonstration:
+  - [ ] Install
+  - [ ] Run
+
+- Testing:
+  - [ ] test pip install (CI)
+  - [ ] test notebook (CI)
+  - [ ] validation (unit test)
+
+## DataChallenge Wishlist/Checklist:
+  - [ ] Specification 
+    - [ ] Offlimit data
+    - [ ] Inference data
+    - [ ] Expected output data
+
+  - [ ] Pipelines 
+    - [ ] Inference data loading
+    - [ ] Diagnostics
+
+  - [ ] Pipeline versioning
+    - [ ]  Stockage
+    
+  - [ ] CI:
+    - [ ]  Automatic metrics computation
+
+  - [ ] Notebooks:
+    - [ ] Metrics computation
+    - [ ] Method integration with inference
+    [ ] 
+## Example module
 
 ```python
 # qf__select_n_rename.py
