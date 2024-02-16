@@ -27,11 +27,11 @@ def output_validation(output_path: str): # The expected format can depend on oth
   """
   {{cookiecutter.output_data_desc}}
   Requirements:
-    - output points to a file
+    - output_path points to a file
   """ ## TODO: implement and document validation steps
     log.debug('Starting output validation')
     try:
-        assert Path(output_path).exists(), "input_path points to a file"
+        assert Path(output_path).exists(), "output_path points to a file"
         log.debug('Succesfully validated output')
     except:
         log.error('Failed to validate output', exc_info=1)

@@ -4,39 +4,18 @@ import hydra
 from hydra.conf import HydraConf, HelpConf
 import alongtrack_lambdax
 import ssh_tracks_loading
-import ocn_tools._src.geoprocessing.gridding as ocngri
+import qf_interp_grid_on_track
 from functools import partial
-import ocn_tools._src.geoprocessing.validation as ocnval
 
 b = hydra_zen.make_custom_builds_fn(populate_full_signature=True)
 pb = hydra_zen.make_custom_builds_fn(zen_partial=True, populate_full_signature=True)
 
 # /!\ il faut que les dataset d'entrée soient préparés (unités, longitude formatées)
 
-def interp_on_track(
-        track_path: str = '???',
-        grid_path: str = '???',
-        grid_var: str = '???',
-        output_path: str = '???'
-    ):
-    """TODO: doc for interp_on_track """
-    map = (
-        xr.open_dataset(grid_path)
-        .pipe(ocnval.validate_latlon)
-        .pipe(ocnval.validate_time)
-        .pipe(ocnval.validate_ssh) # TODO validate rec ssh (add partial) 
-        [[grid_var]] 
-        
-    )
-    ocngri.grid_to_coord_based(
-        src_grid_ds=map,
-        tgt_coord_based_ds=xr.open_dataset(track_path)
-    ).interpolate_na(dim='time', method='nearest').to_netcdf(output_path)
-
 
 stages =  {
     'dl_tracks': pb(ssh_tracks_loading.main_api, filters=('*2017*',)),
-    'interp_map_on_track_grid': pb(interp_on_track, track_path='data/prepared/${..dl_tracks.sat}.nc', output_path='data/outputs/map_on_track.nc'),
+    'interp_map_on_track_grid': pb(qf_interp_grid_on_track.run, track_path='data/prepared/${..dl_tracks.sat}.nc', output_path='data/outputs/map_on_track.nc'),
     'lambdax': pb(alongtrack_lambdax.main_api,
         ref_path='${..interp_map_on_track_grid.track_path}',
         study_path='${..interp_map_on_track_grid.output_path}',
@@ -60,7 +39,7 @@ def run_pipeline(stages=stages):
 run_pipeline.__doc__ = f"""
     {ssh_tracks_loading.main_api.__doc__}
 
-    {interp_on_track.__doc__}
+    {qf_interp_grid_on_track.__doc__}
 
     {alongtrack_lambdax.main_api.__doc__}
 """
