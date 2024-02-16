@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "qf_interp_grid_on_track"
+authors=[
+  {name = "Quentin Febvre", email = "quentin.febvre@gmail.com"},
+]
+[project.urls]
+Repository="https://github.com/quentinf00/my_ocb.git"
+
+[project.scripts]
+alongtrack_lambdax = "qf_interp_grid_on_track:api_endpoint"
+
+[tool.setuptools]
+py-modules=["qf_interp_grid_on_track"]

@@ -17,6 +17,9 @@ def main_api(
     segment_overlapping: float = 0.25,
     output_dir='data/metrics',
 ):
+    """
+    TODO: doc for alongtrack_lambdax 
+    """
     study_da = xr.open_dataset(study_path)[study_var]
     ref_da = xr.open_dataset(ref_path)[ref_var]
     # try:
@@ -56,7 +59,7 @@ zen_endpoint = hydra_zen.zen(main_api)
 #Store the config
 store = hydra_zen.ZenStore()
 store(main_config, name='ssh_tracks_loading')
-store.add_to_hydra_store()
+store.add_to_hydra_store(overwrite_ok=True)
 
 # Create CLI endpoint
 api_endpoint = hydra.main(

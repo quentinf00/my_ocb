@@ -18,7 +18,9 @@ def download(
             dataset_id=dataset_id,
             filter=filt,
             output_directory = download_directory,
-            force_download=True
+            force_download=True,
+            sync=True,
+            dataset_version='202112',
         )
 
 def preprocess(
@@ -39,16 +41,20 @@ def preprocess(
         ))
         .assign(ssh = lambda d: d.sla_filtered + d.mdt - d.lwe)
         .pipe(ocnval.validate_ssh)
+        .sortby('time')
         [['ssh']]
     )
 
 def main_api(
         sat: str='c2',
-        min_lon: float= -66, max_lon: float=-54,
-        min_lat: float = 32, max_lat: float=44,
-        min_time: str = '2016-12-01', max_time: str='2018-02-01',
+        min_lon: float= -65, max_lon: float=-55,
+        min_lat: float = 33, max_lat: float=43,
+        min_time: str = '2017-01-01', max_time: str='2017-12-31',
         filters=None,
 ):
+    """
+    TODO: doc for ssh_tracks_loading 
+    """
     filters = filters if filters is not None else set([
         f"*{d.year}{d.month:02}*" for d in pd.date_range(min_time, max_time)]
     )
@@ -85,7 +91,7 @@ zen_endpoint = hydra_zen.zen(main_api)
 #Store the config
 store = hydra_zen.ZenStore()
 store(main_config, name='ssh_tracks_loading')
-store.add_to_hydra_store(overwrite=True)
+store.add_to_hydra_store(overwrite_ok=True)
 
 # Create CLI endpoint
 api_endpoint = hydra.main(
