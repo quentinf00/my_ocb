@@ -8,9 +8,7 @@ name = "qf_alongtrack_lambdax_from_map"
 authors=[
   {name = "Quentin Febvre", email = "quentin.febvre@gmail.com"},
 ]
-dependencies = [
-    "qf_interp_grid_on_track @ git+https://github.com/quentinf00/my_ocb.git@main#subdir=modules/qf_interp_grid_on_track",
-]
+
 [project.urls]
 Repository="https://github.com/quentinf00/my_ocb.git"
 

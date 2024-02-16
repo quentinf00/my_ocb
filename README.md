@@ -180,7 +180,7 @@ TBD
     - [ ] Inference data
     - [ ] Expected output data
 
-  - [ ] Pipelines 
+  - [ ] Pipelines  
     - [ ] Inference data loading
     - [ ] Diagnostics
 
@@ -201,3 +201,7 @@ TBD
 - [ ] CookieCutter pipeline (scaffolding)
 - [ ] CookieCutter datachallenge (scaffolding)
 
+## Next steps:
+- [ ] Notebook install + generate all lambdaxs from oceanbench
+- [ ] Clean up all pipelines with current requirements
+- [ ] split requirements between nice to have and mandatory

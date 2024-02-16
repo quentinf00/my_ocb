@@ -1,7 +1,7 @@
 import logging
 import hydra_zen
 import hydra
-from hydra import HydraConf, HelpConf
+from hydra.conf import HydraConf, HelpConf
 from pathlib import Path
 import xarray as xr
 import numpy as np
@@ -22,7 +22,6 @@ def input_validation(grid_path: str, grid_var: str, track_path: str): # The expe
     - grid_var is a variable of grid_ds
     - grid_path and track_path are xarray compatible
     - ssh is a variable of track_ds
-    - track ssh does not contain NaN
     - grid_ds has (time, lat, lon) dimensions
     - track_var has (time) dimension and (lat, lon) coordinates
 
@@ -39,7 +38,6 @@ def input_validation(grid_path: str, grid_var: str, track_path: str): # The expe
 
         assert grid_var in grid_ds, "grid_var is a variable of grid_ds"
         assert 'ssh' in track_ds, "'ssh' is a variable of track_ds"
-        assert track_ds['ssh'].pipe(np.isnan).sum().item() == 0, "track ssh does not contain NaN"
         assert tuple(sorted(list(grid_ds.dims))) == ('lat', 'lon', 'time'), "grid_ds has (time, lat, lon) dimensions"
         assert (track_ds.dims == ('time',)) and 'lat' in track_ds.coords and "lon" in track_ds.coords, "track_var has (time) dimension and (lat, lon) coordinates"
 
@@ -64,7 +62,7 @@ def output_validation(output_path: str, track_path): # The expected format can d
         except Exception as e:
             raise AssertionError("output_path is xarray compatible: {e}")
 
-        assert xr.testing.assert_equal(output_ds.coords.to_dataset(), track_ds.coords.to_dataset()), "output_ds has the same shape as track_path"
+        xr.testing.assert_equal(output_ds.coords.to_dataset(), track_ds.coords.to_dataset()), "output_ds has the same shape as track_path"
         log.debug('Succesfully validated output')
     except Exception as e:
         log.error('Failed to validate output', exc_info=1)
@@ -90,15 +88,16 @@ def run(
         [[grid_var]] 
         
     )
+
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True) # Make output directory
     ocngri.grid_to_coord_based(
         src_grid_ds=map,
         tgt_coord_based_ds=xr.open_dataset(track_path)
     ).interpolate_na(dim='time', method='nearest').to_netcdf(output_path)
 
-    Path(output_path).mkdir(parents=True, exist_ok=True) # Make output directory
 
     if not _skip_val:
-      output_validation(output_path=output_path)
+      output_validation(output_path=output_path, track_path=track_path)
 
 
 ## EXPOSE: document, and configure CLI

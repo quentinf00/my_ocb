@@ -29,17 +29,12 @@ def run_pipeline(stages=stages):
         stages['interp_map_on_track_grid'],
         stages['lambdax'],
     ]:
-        try:
-            print("\t\tStart")
-            stage()
-            print("\t\tEnd")
-        except Exception as e:
-            print('Failed', e)
+        stage()
 
 run_pipeline.__doc__ = f"""
     {ssh_tracks_loading.main_api.__doc__}
 
-    {qf_interp_grid_on_track.__doc__}
+    {qf_interp_grid_on_track.run.__doc__}
 
     {alongtrack_lambdax.main_api.__doc__}
 """

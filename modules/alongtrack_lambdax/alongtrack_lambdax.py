@@ -4,6 +4,7 @@ from ocn_tools._src.metrics.power_spectrum import psd_welch_score
 from functools import partial
 import hydra_zen
 import hydra
+import numpy as np
 from pathlib import Path
 
 def main_api(
@@ -25,6 +26,7 @@ def main_api(
     # try:
     xr.testing.assert_allclose(ref_da.coords.to_dataset(), study_da.coords.to_dataset())
     eval_ds = xr.Dataset(dict(study=study_da, ref=ref_da,))
+    eval_ds = eval_ds.where(eval_ds.ref.pipe(np.isfinite), drop=True)
     delta_x = velocity * delta_t
 
     partial_track_fn = partial(

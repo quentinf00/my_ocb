@@ -1,7 +1,7 @@
 import logging
 import hydra_zen
 import hydra
-from hydra import HydraConf, HelpConf
+from hydra.conf import HydraConf, HelpConf
 from pathlib import Path
 
 log = logging.getLogger(__name__)
