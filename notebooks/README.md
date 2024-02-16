@@ -16,7 +16,7 @@ condacolab.install_mambaforge()
 ```
 !git clone https://github.com/quentinf00/my_ocb.git
 %cd my_ocb
-!mamba env update -q -f my_ocb/env.yaml -n base
+!mamba env update -q -f env.yaml -n base
 ```
 ## Table of contents
 
