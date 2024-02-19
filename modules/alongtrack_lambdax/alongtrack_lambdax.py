@@ -16,7 +16,8 @@ def main_api(
     velocity: float = 6.77,
     length_scale: float = 1000,
     segment_overlapping: float = 0.25,
-    output_dir='data/metrics',
+    output_lambdax_path='data/metrics/lambdax.nc',
+    output_psd_path='data/metrics/psd_score.nc',
 ):
     """
     TODO: doc for alongtrack_lambdax 
@@ -48,9 +49,11 @@ def main_api(
     )
 
     ds, lambda_x = eval_ds.pipe(partial_track_fn).pipe(partial_score_fn)
-    Path(Path(output_dir)).mkdir(parents=True, exist_ok=True)
-    ds.to_netcdf(Path(output_dir) / 'lx_score.nc')
-    Path(Path(output_dir) / 'lambdax.txt').write_text(f'{lambda_x}')
+    Path(output_lambdax_path).parent.mkdir(parents=True, exist_ok=True)
+    Path(output_psd_path).parent.mkdir(parents=True, exist_ok=True)
+    ds.to_netcdf(Path(output_psd_path))
+    xr.Dataset(dict(lambdax=lambda_x)).to_netcdf(Path(output_lambdax_path))
+    
 
 # Create a configuration associated with the above function (cf next cell)
 main_config =  hydra_zen.builds(main_api, populate_full_signature=True)
@@ -71,3 +74,4 @@ api_endpoint = hydra.main(
 
 if __name__ == '__main__':
     api_endpoint()
+

@@ -1,0 +1,86 @@
+schema: '2.0'
+stages:
+  method_output@0:
+    cmd: wget 
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/a5/2381e9409cb7c6cf9be980bda9aced
+      -nc -O 'data/method_outputs/4dvarnet.nc'
+    outs:
+    - path: data/method_outputs/4dvarnet.nc
+      md5: a52381e9409cb7c6cf9be980bda9aced
+      size: 590300748
+  fetch_reference_data:
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[dl_tracks]'
+    deps:
+    - path: data/downloads
+      md5: 8e65579c4dc11a00e6d3dde2c686105c.dir
+      size: 165073748
+      nfiles: 362
+    outs:
+    - path: data/prepared
+      md5: 0307ee6866452c790f7a0f7c77cc0d3d.dir
+      size: 1392965
+      nfiles: 1
+  compute_lambdax@0:
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track,
+      lambdax]' 'stages.interp_on_track.grid_var=rec_ssh' 'stages.method=4dvarnet'
+    deps:
+    - path: data/method_outputs/4dvarnet.nc
+      md5: a52381e9409cb7c6cf9be980bda9aced
+      size: 590300748
+    - path: data/prepared
+      md5: 0307ee6866452c790f7a0f7c77cc0d3d.dir
+      size: 1392965
+      nfiles: 1
+    outs:
+    - path: data/method_outputs/4dvarnet_on_track.nc
+      md5: 2ad993563db96565f1262e6cdd43acdb
+      size: 1581595
+    - path: data/metrics/lambdax_4dvarnet.nc
+      md5: e72cd8fe7d7bb87ec4e0e3bd23465b53
+      size: 610
+    - path: data/metrics/psd_4dvarnet.nc
+      md5: 9175f74eaf634bbca4a935d50b5be2fa
+      size: 8954
+  method_output@1:
+    cmd: wget 
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/4f/014481eed0088eb9a0cf329ebf045b
+      -nc -O 'data/method_outputs/miost.nc'
+    outs:
+    - path: data/method_outputs/miost.nc
+      md5: 4f014481eed0088eb9a0cf329ebf045b
+      size: 29804673
+  compute_lambdax@1:
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track,
+      lambdax]' 'stages.interp_on_track.grid_var=ssh' 'stages.method=miost'
+    deps:
+    - path: data/method_outputs/miost.nc
+      md5: 4f014481eed0088eb9a0cf329ebf045b
+      size: 29804673
+    - path: data/prepared
+      md5: 0307ee6866452c790f7a0f7c77cc0d3d.dir
+      size: 1392965
+      nfiles: 1
+    outs:
+    - path: data/method_outputs/miost_on_track.nc
+      md5: b32d6701c29022677e1b4ab58e667c01
+      size: 1581595
+    - path: data/metrics/lambdax_miost.nc
+      md5: 7762aadf13aa0ea791e52f02239d2b10
+      size: 610
+    - path: data/metrics/psd_miost.nc
+      md5: 4ccbec92ad5b63dc63fc4ffaeb75f9e6
+      size: 8954
+  aggregate_metrics:
+    cmd: python -c 'from pathlib import Path;import xarray as xr;import pandas as
+      pd; pd.Series({p.name:xr.open_dataset(p).lambdax.item() for p in Path("data/metrics").glob("lambdax*.nc")
+      }).T.to_csv("data/leaderboard.csv")'
+    deps:
+    - path: data/metrics
+      md5: 1781e4646015e4c903bab49c43009105.dir
+      size: 19198
+      nfiles: 5
+    outs:
+    - path: data/leaderboard.csv
+      md5: 9226f8d61250894262561cd2bd4f4d00
+      size: 76
+

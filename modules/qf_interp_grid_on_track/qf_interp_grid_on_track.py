@@ -39,7 +39,7 @@ def input_validation(grid_path: str, grid_var: str, track_path: str): # The expe
         assert grid_var in grid_ds, "grid_var is a variable of grid_ds"
         assert 'ssh' in track_ds, "'ssh' is a variable of track_ds"
         assert tuple(sorted(list(grid_ds.dims))) == ('lat', 'lon', 'time'), "grid_ds has (time, lat, lon) dimensions"
-        assert (track_ds.dims == ('time',)) and 'lat' in track_ds.coords and "lon" in track_ds.coords, "track_var has (time) dimension and (lat, lon) coordinates"
+        assert (tuple(track_ds.dims) == ('time',)) and 'lat' in track_ds.coords and "lon" in track_ds.coords, "track_var has (time) dimension and (lat, lon) coordinates"
 
         log.debug('Succesfully validated input')
     except:
