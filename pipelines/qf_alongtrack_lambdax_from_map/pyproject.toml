@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+version = "0.0.1"
+name = "qf_alongtrack_lambdax_from_map"
+authors=[
+  {name = "Quentin Febvre", email = "quentin.febvre@gmail.com"},
+]
+
+[project.urls]
+Repository="https://github.com/quentinf00/my_ocb.git"
+
+[project.scripts]
+qf_alongtrack_lambdax_from_map = "qf_alongtrack_lambdax_from_map:api_endpoint"
+
+[tool.setuptools]
+py-modules=["qf_alongtrack_lambdax_from_map"]

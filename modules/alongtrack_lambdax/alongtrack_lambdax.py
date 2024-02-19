@@ -4,6 +4,7 @@ from ocn_tools._src.metrics.power_spectrum import psd_welch_score
 from functools import partial
 import hydra_zen
 import hydra
+import numpy as np
 from pathlib import Path
 
 def main_api(
@@ -17,11 +18,15 @@ def main_api(
     segment_overlapping: float = 0.25,
     output_dir='data/metrics',
 ):
+    """
+    TODO: doc for alongtrack_lambdax 
+    """
     study_da = xr.open_dataset(study_path)[study_var]
     ref_da = xr.open_dataset(ref_path)[ref_var]
     # try:
     xr.testing.assert_allclose(ref_da.coords.to_dataset(), study_da.coords.to_dataset())
     eval_ds = xr.Dataset(dict(study=study_da, ref=ref_da,))
+    eval_ds = eval_ds.where(eval_ds.ref.pipe(np.isfinite), drop=True)
     delta_x = velocity * delta_t
 
     partial_track_fn = partial(
@@ -56,7 +61,7 @@ zen_endpoint = hydra_zen.zen(main_api)
 #Store the config
 store = hydra_zen.ZenStore()
 store(main_config, name='ssh_tracks_loading')
-store.add_to_hydra_store()
+store.add_to_hydra_store(overwrite_ok=True)
 
 # Create CLI endpoint
 api_endpoint = hydra.main(

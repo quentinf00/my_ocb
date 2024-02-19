@@ -13,12 +13,15 @@ def download(
         dataset_id = f'cmems_obs-sl_glo_phy-ssh_my_c2-l3-duacs_PT1S',
         filters: list[str]= ('*201612*', '*2017*', '*201801*'),
     ):
+    Path(download_directory).mkdir(parents=True, exist_ok=True)
     for filt in filters:
         copernicusmarine.get(
             dataset_id=dataset_id,
             filter=filt,
             output_directory = download_directory,
-            force_download=True
+            force_download=True,
+            overwrite_output_data=True,
+            # sync=True, # use exit(1) and kill pipeline
         )
 
 def preprocess(
@@ -39,21 +42,25 @@ def preprocess(
         ))
         .assign(ssh = lambda d: d.sla_filtered + d.mdt - d.lwe)
         .pipe(ocnval.validate_ssh)
+        .sortby('time')
         [['ssh']]
     )
 
 def main_api(
         sat: str='c2',
-        min_lon: float= -66, max_lon: float=-54,
-        min_lat: float = 32, max_lat: float=44,
-        min_time: str = '2016-12-01', max_time: str='2018-02-01',
+        min_lon: float= -65, max_lon: float=-55,
+        min_lat: float = 33, max_lat: float=43,
+        min_time: str = '2017-01-01', max_time: str='2017-12-31',
         filters=None,
+        download_dir='data/downloads',
+        output_path='data/prepared/${.sat}.nc'
 ):
+    """
+    TODO: doc for ssh_tracks_loading 
+    """
     filters = filters if filters is not None else set([
         f"*{d.year}{d.month:02}*" for d in pd.date_range(min_time, max_time)]
     )
-    download_dir = f"data/downloads/{sat}"
-    output_file = f"data/prepared/{sat}.nc"
     dataset_id = f'cmems_obs-sl_glo_phy-ssh_my_{sat}-l3-duacs_PT1S'
 
     download(download_directory=download_dir, filters=filters, dataset_id=dataset_id)
@@ -71,8 +78,8 @@ def main_api(
         concat_dim='time',
         combine='nested', chunks='auto'
     )
-    Path(output_file).parent.mkdir(exist_ok=True, parents=True)
-    ds.load().sortby('time').to_netcdf(output_file)
+    Path(output_path).parent.mkdir(exist_ok=True, parents=True)
+    ds.load().sortby('time').to_netcdf(output_path)
 
 
 
@@ -85,7 +92,7 @@ zen_endpoint = hydra_zen.zen(main_api)
 #Store the config
 store = hydra_zen.ZenStore()
 store(main_config, name='ssh_tracks_loading')
-store.add_to_hydra_store(overwrite=True)
+store.add_to_hydra_store(overwrite_ok=True)
 
 # Create CLI endpoint
 api_endpoint = hydra.main(
