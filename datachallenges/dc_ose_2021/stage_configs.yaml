@@ -38,6 +38,6 @@ stages:
     velocity: 6.77
     length_scale: 1000.0
     segment_overlapping: 0.25
-    output_lambdax_path: data/metrics/lambdax_${..method}.nc
-    output_psd_path: data/metrics/psd_${..method}.nc
+    output_lambdax_path: data/metrics/lambdax_${..method}.json
+    output_psd_path: data/metrics/psd_${..method}.json
 

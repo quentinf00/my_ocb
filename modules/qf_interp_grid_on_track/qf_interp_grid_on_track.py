@@ -93,7 +93,7 @@ def run(
     ocngri.grid_to_coord_based(
         src_grid_ds=map,
         tgt_coord_based_ds=xr.open_dataset(track_path)
-    ).interpolate_na(dim='time', method='nearest').to_netcdf(output_path)
+    ).to_netcdf(output_path)
 
 
     if not _skip_val:

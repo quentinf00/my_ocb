@@ -29,8 +29,8 @@ stages =  {
         ref_path='${..interp_on_track.track_path}',
         study_path='${..interp_on_track.output_path}',
         study_var='${..interp_on_track.grid_var}',
-        output_lambdax_path='data/metrics/lambdax_${..method}.nc',
-        output_psd_path='data/metrics/psd_${..method}.nc',
+        output_lambdax_path='data/metrics/lambdax_${..method}.json',
+        output_psd_path='data/metrics/psd_${..method}.json',
     ),
 }
 
