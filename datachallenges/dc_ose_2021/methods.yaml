@@ -1,0 +1,13 @@
+methods:
+- name: 4dvarnet
+  var: rec_ssh
+  url: https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/a5/2381e9409cb7c6cf9be980bda9aced
+- name: miost
+  var: ssh
+  url: https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/4f/014481eed0088eb9a0cf329ebf045b
+- name: bfn
+  var: ssh
+  url: https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/29/6781b126d905e98b82dac9bcecf57e
+- name: duacs
+  var: ssh
+  url: https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/95/7d74696fbf5f2b6d0c528757951b8a
