@@ -10,11 +10,6 @@ stages:
       size: 590300748
   fetch_reference_data:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[dl_tracks]'
-    deps:
-    - path: data/downloads
-      md5: 8e65579c4dc11a00e6d3dde2c686105c.dir
-      size: 165073748
-      nfiles: 362
     params:
       stage_configs.yaml:
         stages.dl_tracks:
@@ -32,6 +27,10 @@ stages:
           download_dir: data/downloads
           output_path: data/prepared/${.sat}.nc
     outs:
+    - path: data/downloads
+      md5: 8e65579c4dc11a00e6d3dde2c686105c.dir
+      size: 165073748
+      nfiles: 362
     - path: data/prepared
       md5: 3ba34af6fcc3601ad381eae9c280fafb.dir
       size: 1392965
@@ -145,3 +144,107 @@ stages:
     - path: data/leaderboard.csv
       md5: 271cc9fe6c6e3a2f84b030f56c2cda32
       size: 76
+  method_output@2:
+    cmd: wget 
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/29/6781b126d905e98b82dac9bcecf57e
+      -nc -O 'data/method_outputs/bfn.nc'
+    outs:
+    - path: data/method_outputs/bfn.nc
+      md5: 296781b126d905e98b82dac9bcecf57e
+      size: 700845764
+  method_output@3:
+    cmd: wget 
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/95/7d74696fbf5f2b6d0c528757951b8a
+      -nc -O 'data/method_outputs/duacs.nc'
+    outs:
+    - path: data/method_outputs/duacs.nc
+      md5: 957d74696fbf5f2b6d0c528757951b8a
+      size: 4684262
+  compute_lambdax@3:
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track,
+      lambdax]' 'stages.interp_on_track.grid_var=ssh' 'stages.method=duacs'
+    deps:
+    - path: data/method_outputs/duacs.nc
+      md5: 957d74696fbf5f2b6d0c528757951b8a
+      size: 4684262
+    - path: data/prepared
+      md5: 3ba34af6fcc3601ad381eae9c280fafb.dir
+      size: 1392965
+      nfiles: 1
+    params:
+      stage_configs.yaml:
+        stages.interp_on_track:
+          _target_: qf_interp_grid_on_track.run
+          _partial_: true
+          track_path: data/prepared/${..dl_tracks.sat}.nc
+          grid_path: data/method_outputs/${..method}.nc
+          grid_var: ???
+          output_path: data/method_outputs/${..method}_on_track.nc
+          _skip_val: false
+        stages.lambdax:
+          _target_: alongtrack_lambdax.main_api
+          _partial_: true
+          study_path: ${..interp_on_track.output_path}
+          study_var: ${..interp_on_track.grid_var}
+          ref_path: ${..interp_on_track.track_path}
+          ref_var: ssh
+          delta_t: 0.9434
+          velocity: 6.77
+          length_scale: 1000.0
+          segment_overlapping: 0.25
+          output_lambdax_path: data/metrics/lambdax_${..method}.json
+          output_psd_path: data/metrics/psd_${..method}.json
+    outs:
+    - path: data/method_outputs/duacs_on_track.nc
+      md5: c50cfe3f583040156ab15188740164f9
+      size: 1581792
+    - path: data/metrics/lambdax_duacs.json
+      md5: 9c2de0afbe8a6d3d935166efd1080df3
+      size: 31
+    - path: data/metrics/psd_duacs.json
+      md5: d374f0d2bea76f1b89de60cd850b926b
+      size: 5576
+  compute_lambdax@2:
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track,
+      lambdax]' 'stages.interp_on_track.grid_var=ssh' 'stages.method=bfn'
+    deps:
+    - path: data/method_outputs/bfn.nc
+      md5: 296781b126d905e98b82dac9bcecf57e
+      size: 700845764
+    - path: data/prepared
+      md5: 3ba34af6fcc3601ad381eae9c280fafb.dir
+      size: 1392965
+      nfiles: 1
+    params:
+      stage_configs.yaml:
+        stages.interp_on_track:
+          _target_: qf_interp_grid_on_track.run
+          _partial_: true
+          track_path: data/prepared/${..dl_tracks.sat}.nc
+          grid_path: data/method_outputs/${..method}.nc
+          grid_var: ???
+          output_path: data/method_outputs/${..method}_on_track.nc
+          _skip_val: false
+        stages.lambdax:
+          _target_: alongtrack_lambdax.main_api
+          _partial_: true
+          study_path: ${..interp_on_track.output_path}
+          study_var: ${..interp_on_track.grid_var}
+          ref_path: ${..interp_on_track.track_path}
+          ref_var: ssh
+          delta_t: 0.9434
+          velocity: 6.77
+          length_scale: 1000.0
+          segment_overlapping: 0.25
+          output_lambdax_path: data/metrics/lambdax_${..method}.json
+          output_psd_path: data/metrics/psd_${..method}.json
+    outs:
+    - path: data/method_outputs/bfn_on_track.nc
+      md5: 87753fe88d28ab824162f03030f05444
+      size: 1581792
+    - path: data/metrics/lambdax_bfn.json
+      md5: 1fd2321150eddb4e1a55ba708f8d3c4b
+      size: 30
+    - path: data/metrics/psd_bfn.json
+      md5: c2ff886bc80298b0d1dc53f8806db4eb
+      size: 5558
