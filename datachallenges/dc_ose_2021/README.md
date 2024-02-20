@@ -1,4 +1,21 @@
 
+## Dag
+```mermaid
+flowchart TD
+	node1["compute_lambdax@0"]
+	node2["compute_lambdax@1"]
+	node3["compute_lambdax@2"]
+	node4["fetch_reference_data"]
+	node5["method_output@0"]
+	node6["method_output@1"]
+	node7["method_output@2"]
+	node4-->node1
+	node4-->node2
+	node4-->node3
+	node5-->node1
+	node6-->node2
+	node7-->node3
+```
 
 ## Install
 - clone repo:
