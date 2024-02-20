@@ -11,17 +11,28 @@ jobs:
           environment-file: env.yaml
           environment-name: ci
           init-shell: bash
-          # cache-environment: true
-          # post-cleanup: 'all'
+          cache-environment: true
+          post-cleanup: 'all'
       - uses: iterative/setup-cml@v1
       - name: install pipelines
         shell: bash -el {0}
         run: |
           pip install -r datachallenges/dc_ose_2021/pipelines.txt
+      - name: make data directories
+        shell: bash -el {0}
+        run: |
+          mkdir -p datachallenges/dc_ose_2021/data/method_outputs
+          mkdir -p datachallenges/dc_ose_2021/data/prepared
+          mkdir -p datachallenges/dc_ose_2021/data/metrics
+          mkdir -p datachallenges/dc_ose_2021/data/downloads
+      - name: pull ref
+        shell: bash -el {0}
+        run: |
+          dvc --cd datachallenges/dc_ose_2021 pull data/prepared
       - name: reproduce datachallenge results
         shell: bash -el {0}
         run: |
-          dvc --cd datachallenges/dc_ose_2021 repro
+          dvc --cd datachallenges/dc_ose_2021 repro --allow-missing --pull --glob compute_lambdax*
       - name: submit metrics report
         shell: bash -l {0}
         env:
