@@ -1,2 +1,34 @@
-name:
+name: Compute metrics
+on: [pull_request]
+jobs:
+  run:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          micromamba-version: 'latest'
+          environment-file: env.yaml
+          environment-name: ci
+          init-shell: bash
+          # cache-environment: true
+          # post-cleanup: 'all'
+      - uses: iterative/setup-cml@v1
+      - name: install pipelines
+        shell: bash -el {0}
+        run: |
+          pip install -r datachallenges/dc_ose_2021/pipelines.txt
+      - name: reproduce datachallenge results
+        shell: bash -el {0}
+        run: |
+          dvc --cd datachallenges/dc_ose_2021 repro
+      - name: submit metrics report
+        shell: bash -l {0}
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo 'Data Challenge OSE Gulfstream 2021\n' >> report.md
+          echo 'Spatial scales resolved $\lambda_x$' >> report.md
+          dvc metrics show --md datachallenges/dc_ose_2021/data/metrics/lambdax*.json >> report.md
+          cml-send-comment report.md
   
