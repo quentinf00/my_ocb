@@ -205,3 +205,4 @@ TBD
 - [ ] Notebook install + generate all lambdaxs from oceanbench
 - [ ] Clean up all pipelines with current requirements
 - [ ] split requirements between nice to have and mandatory
+- [ ] agnostic module (Fully configurable by injecting and piping ocn-tools fns but handle reading and writing)

@@ -14,22 +14,32 @@ pb = hydra_zen.make_custom_builds_fn(zen_partial=True, populate_full_signature=T
 
 
 stages =  {
-    'dl_tracks': pb(ssh_tracks_loading.main_api, filters=('*2017*',)),
-    'interp_map_on_track_grid': pb(qf_interp_grid_on_track.run, track_path='data/prepared/${..dl_tracks.sat}.nc', output_path='data/outputs/map_on_track.nc'),
+    'method': 'default',
+    'dl_tracks': pb(
+        ssh_tracks_loading.main_api,
+        filters=('*2017*',),
+    ),
+    'interp_on_track': pb(
+        qf_interp_grid_on_track.run,
+        grid_path='data/method_outputs/${..method}.nc',
+        track_path='data/prepared/${..dl_tracks.sat}.nc',
+        output_path='data/method_outputs/${..method}_on_track.nc',
+    ),
     'lambdax': pb(alongtrack_lambdax.main_api,
-        ref_path='${..interp_map_on_track_grid.track_path}',
-        study_path='${..interp_map_on_track_grid.output_path}',
-        study_var='${..interp_map_on_track_grid.grid_var}'
+        ref_path='${..interp_on_track.track_path}',
+        study_path='${..interp_on_track.output_path}',
+        study_var='${..interp_on_track.grid_var}',
+        output_lambdax_path='data/metrics/lambdax_${..method}.json',
+        output_psd_path='data/metrics/psd_${..method}.json',
     ),
 }
 
-def run_pipeline(stages=stages):
-    for stage in [
-        #stages['dl_tracks'],
-        stages['interp_map_on_track_grid'],
-        stages['lambdax'],
-    ]:
-        stage()
+def run_pipeline(
+    to_run=('dl_tracks', 'interp_on_track', 'lambdax'),
+    stages=stages
+    ):
+    for stage in to_run:
+        stages[stage]()
 
 run_pipeline.__doc__ = f"""
     {ssh_tracks_loading.main_api.__doc__}

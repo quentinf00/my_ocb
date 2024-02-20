@@ -1,4 +1,5 @@
 import xarray as xr
+import json
 from ocn_tools._src.preprocessing.alongtrack import select_track_segments
 from ocn_tools._src.metrics.power_spectrum import psd_welch_score
 from functools import partial
@@ -16,17 +17,17 @@ def main_api(
     velocity: float = 6.77,
     length_scale: float = 1000,
     segment_overlapping: float = 0.25,
-    output_dir='data/metrics',
+    output_lambdax_path='data/metrics/lambdax.json',
+    output_psd_path='data/metrics/psd_score.json',
 ):
     """
     TODO: doc for alongtrack_lambdax 
     """
     study_da = xr.open_dataset(study_path)[study_var]
     ref_da = xr.open_dataset(ref_path)[ref_var]
-    # try:
     xr.testing.assert_allclose(ref_da.coords.to_dataset(), study_da.coords.to_dataset())
     eval_ds = xr.Dataset(dict(study=study_da, ref=ref_da,))
-    eval_ds = eval_ds.where(eval_ds.ref.pipe(np.isfinite), drop=True)
+    eval_ds = eval_ds.where(eval_ds.ref.pipe(np.isfinite), drop=True).interpolate_na(dim='time', method='nearest')
     delta_x = velocity * delta_t
 
     partial_track_fn = partial(
@@ -48,9 +49,12 @@ def main_api(
     )
 
     ds, lambda_x = eval_ds.pipe(partial_track_fn).pipe(partial_score_fn)
-    Path(Path(output_dir)).mkdir(parents=True, exist_ok=True)
-    ds.to_netcdf(Path(output_dir) / 'lx_score.nc')
-    Path(Path(output_dir) / 'lambdax.txt').write_text(f'{lambda_x}')
+    Path(output_lambdax_path).parent.mkdir(parents=True, exist_ok=True)
+    Path(output_psd_path).parent.mkdir(parents=True, exist_ok=True)
+    ds.to_dataframe().to_json(output_psd_path)
+    with open(Path(output_lambdax_path), 'w') as f:
+        json.dump(dict(lambdax=lambda_x), f)
+    
 
 # Create a configuration associated with the above function (cf next cell)
 main_config =  hydra_zen.builds(main_api, populate_full_signature=True)
@@ -71,3 +75,4 @@ api_endpoint = hydra.main(
 
 if __name__ == '__main__':
     api_endpoint()
+
