@@ -19,8 +19,9 @@ stages:
             - stages.dl_tracks
         cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 
              'to_run=[dl_tracks]'
-        deps: ['data/downloads']
-        outs: ['data/prepared']
+        outs: 
+            - 'data/prepared'
+            - 'data/downloads'
     compute_lambdax:
         foreach: ${methods}
         do:
