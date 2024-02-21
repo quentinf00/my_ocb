@@ -24,17 +24,16 @@ stages:
           max_time: '2017-12-31'
           filters:
           - '*2017*'
-          download_dir: data/downloads
+          download_dir: data/downloads/${.sat}
           output_path: data/prepared/${.sat}.nc
     outs:
-    - path: data/downloads
+    - path: data/downloads/c2
       md5: 8e65579c4dc11a00e6d3dde2c686105c.dir
       size: 165073748
       nfiles: 362
-    - path: data/prepared
-      md5: 3ba34af6fcc3601ad381eae9c280fafb.dir
+    - path: data/prepared/c2.nc
+      md5: e1b553b652d4a03f7ac50bbbcd699dc9
       size: 1392965
-      nfiles: 1
   compute_lambdax@0:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track,
       lambdax]' 'stages.interp_on_track.grid_var=rec_ssh' 'stages.method=4dvarnet'
@@ -42,10 +41,9 @@ stages:
     - path: data/method_outputs/4dvarnet.nc
       md5: a52381e9409cb7c6cf9be980bda9aced
       size: 590300748
-    - path: data/prepared
-      md5: 3ba34af6fcc3601ad381eae9c280fafb.dir
+    - path: data/prepared/c2.nc
+      md5: e1b553b652d4a03f7ac50bbbcd699dc9
       size: 1392965
-      nfiles: 1
     params:
       stage_configs.yaml:
         stages.interp_on_track:
@@ -94,10 +92,9 @@ stages:
     - path: data/method_outputs/miost.nc
       md5: 4f014481eed0088eb9a0cf329ebf045b
       size: 29804673
-    - path: data/prepared
-      md5: 3ba34af6fcc3601ad381eae9c280fafb.dir
+    - path: data/prepared/c2.nc
+      md5: e1b553b652d4a03f7ac50bbbcd699dc9
       size: 1392965
-      nfiles: 1
     params:
       stage_configs.yaml:
         stages.interp_on_track:
@@ -167,10 +164,9 @@ stages:
     - path: data/method_outputs/duacs.nc
       md5: 957d74696fbf5f2b6d0c528757951b8a
       size: 4684262
-    - path: data/prepared
-      md5: 3ba34af6fcc3601ad381eae9c280fafb.dir
+    - path: data/prepared/c2.nc
+      md5: e1b553b652d4a03f7ac50bbbcd699dc9
       size: 1392965
-      nfiles: 1
     params:
       stage_configs.yaml:
         stages.interp_on_track:
@@ -211,10 +207,9 @@ stages:
     - path: data/method_outputs/bfn.nc
       md5: 296781b126d905e98b82dac9bcecf57e
       size: 700845764
-    - path: data/prepared
-      md5: 3ba34af6fcc3601ad381eae9c280fafb.dir
+    - path: data/prepared/c2.nc
+      md5: e1b553b652d4a03f7ac50bbbcd699dc9
       size: 1392965
-      nfiles: 1
     params:
       stage_configs.yaml:
         stages.interp_on_track:

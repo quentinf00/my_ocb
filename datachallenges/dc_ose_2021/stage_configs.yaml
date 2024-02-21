@@ -17,7 +17,7 @@ stages:
     max_time: '2017-12-31'
     filters:
     - '*2017*'
-    download_dir: data/downloads
+    download_dir: data/downloads/${.sat}
     output_path: data/prepared/${.sat}.nc
   interp_on_track:
     _target_: qf_interp_grid_on_track.run

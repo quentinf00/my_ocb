@@ -17,7 +17,7 @@ flowchart TD
 	node7-->node3
 ```
 
-## Install
+## Dev (editable) Install
 - clone repo:
 `git clone https://github.com/quentinf00/my_ocb.git`
 `cd my_ocb`
@@ -32,7 +32,7 @@ pip install -q -e modules/alongtrack_lambdax
 ```
 - install pipeline:
 ```
-pip install -q -e pipelines/qf_alongtrack_lambdax_from_map
+pip install -q --no-deps -e pipelines/qf_alongtrack_lambdax_from_map
 ```
 
 

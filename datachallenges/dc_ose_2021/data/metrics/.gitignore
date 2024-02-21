@@ -1,12 +1,8 @@
-/lambdax_4dvarnet.nc
-/psd_4dvarnet.nc
-/lambdax_miost.nc
-/psd_miost.nc
-/lambdax_4dvarnet.json
-/psd_4dvarnet.json
+/lambdax_bfn.json
+/psd_bfn.json
 /lambdax_miost.json
 /psd_miost.json
 /lambdax_duacs.json
 /psd_duacs.json
-/lambdax_bfn.json
-/psd_bfn.json
+/lambdax_4dvarnet.json
+/psd_4dvarnet.json

@@ -52,7 +52,7 @@ def main_api(
         min_lat: float = 33, max_lat: float=43,
         min_time: str = '2017-01-01', max_time: str='2017-12-31',
         filters=None,
-        download_dir='data/downloads',
+        download_dir='data/downloads/${.sat}',
         output_path='data/prepared/${.sat}.nc'
 ):
     """
@@ -63,6 +63,7 @@ def main_api(
     )
     dataset_id = f'cmems_obs-sl_glo_phy-ssh_my_{sat}-l3-duacs_PT1S'
 
+    Path(download_dir).mkdir(exist_ok=True, parents=True)
     download(download_directory=download_dir, filters=filters, dataset_id=dataset_id)
 
     partial_prepro = partial(

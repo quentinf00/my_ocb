@@ -13,33 +13,40 @@ jobs:
           init-shell: bash
           cache-environment: true
           post-cleanup: 'all'
-      - uses: iterative/setup-cml@v1
       - name: install pipelines
         shell: bash -el {0}
         run: |
           pip install -r datachallenges/dc_ose_2021/pipelines.txt
-      - name: make data directories
-        shell: bash -el {0}
-        run: |
-          mkdir -p datachallenges/dc_ose_2021/data/method_outputs
-          mkdir -p datachallenges/dc_ose_2021/data/prepared
-          mkdir -p datachallenges/dc_ose_2021/data/metrics
-          mkdir -p datachallenges/dc_ose_2021/data/downloads
+      # - name: make data directories
+      #   shell: bash -el {0}
+      #   run: |
+      #     mkdir -p datachallenges/dc_ose_2021/data/method_outputs
+      #     mkdir -p datachallenges/dc_ose_2021/data/prepared
+      #     mkdir -p datachallenges/dc_ose_2021/data/metrics
+      #     mkdir -p datachallenges/dc_ose_2021/data/downloads
       - name: pull ref
         shell: bash -el {0}
         run: |
-          dvc --cd datachallenges/dc_ose_2021 pull data/prepared
+          dvc --cd datachallenges/dc_ose_2021 pull --with-deps --allow-missing compute_lambdax
       - name: reproduce datachallenge results
         shell: bash -el {0}
         run: |
-          dvc --cd datachallenges/dc_ose_2021 repro --allow-missing --pull --glob compute_lambdax*
-      - name: submit metrics report
+          dvc --cd datachallenges/dc_ose_2021 freeze fetch_reference_data
+          dvc --cd datachallenges/dc_ose_2021 repro --pull 'compute_lambdax'
+          dvc --cd datachallenges/dc_ose_2021 unfreeze fetch_reference_data
+      - name: dump metrics report
         shell: bash -l {0}
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo 'Data Challenge OSE Gulfstream 2021\n' >> report.md
+          echo 'Data Challenge OSE Gulfstream 2021\n' >> ./datachallenges/dc_ose_2021/report.md
           echo 'Spatial scales resolved $\lambda_x$' >> report.md
-          dvc metrics show --md datachallenges/dc_ose_2021/data/metrics/lambdax*.json >> report.md
-          cml-send-comment report.md
+          dvc metrics show --md datachallenges/dc_ose_2021/data/metrics/lambdax*.json >> ./datachallenges/dc_ose_2021/report.md
+          cat report.md
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Update dc_ose_2021 leaderboard'
+          add: 'dvc.lock report.md'
+          cwd: './datachallenges/dc_ose_2021'
   
