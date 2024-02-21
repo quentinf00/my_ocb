@@ -3,18 +3,10 @@
 ```mermaid
 flowchart TD
 	node1["compute_lambdax@0"]
-	node2["compute_lambdax@1"]
-	node3["compute_lambdax@2"]
 	node4["fetch_reference_data"]
 	node5["method_output@0"]
-	node6["method_output@1"]
-	node7["method_output@2"]
 	node4-->node1
-	node4-->node2
-	node4-->node3
 	node5-->node1
-	node6-->node2
-	node7-->node3
 ```
 
 ## Dev (editable) Install
@@ -27,7 +19,8 @@ flowchart TD
 - install modules:
 ```
 pip install -q -e modules/qf_interp_grid_on_track
-pip install -q -e modules/ssh_tracks_loading
+pip install -q -e modules/dz_download_ssh_tracks
+pip install -q -e modules/qf_filter_merge_daily_ssh_tracks
 pip install -q -e modules/alongtrack_lambdax
 ```
 - install pipeline:

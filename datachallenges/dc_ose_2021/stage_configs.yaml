@@ -1,28 +1,37 @@
 _target_: qf_alongtrack_lambdax_from_map.run_pipeline
 to_run:
 - dl_tracks
+- filter_and_merge
 - interp_on_track
 - lambdax
 stages:
   method: default
   dl_tracks:
-    _target_: ssh_tracks_loading.main_api
+    _target_: dz_download_ssh_tracks.run
     _partial_: true
     sat: c2
+    download_dir: data/downloads/${.sat}
+    min_time: '2017-01-01'
+    max_time: '2017-12-31'
+    filters:
+    - '*2017*'
+    _skip_val: false
+  filter_and_merge:
+    _target_: qf_filter_merge_daily_ssh_tracks.run
+    _partial_: true
+    input_dir: ${..dl_tracks.download_dir}
+    output_path: data/prepared/${..dl_tracks.sat}.nc
     min_lon: -65.0
     max_lon: -55.0
     min_lat: 33.0
     max_lat: 43.0
     min_time: '2017-01-01'
-    max_time: '2017-12-31'
-    filters:
-    - '*2017*'
-    download_dir: data/downloads/${.sat}
-    output_path: data/prepared/${.sat}.nc
+    max_time: '2018-01-01'
+    _skip_val: false
   interp_on_track:
     _target_: qf_interp_grid_on_track.run
     _partial_: true
-    track_path: data/prepared/${..dl_tracks.sat}.nc
+    track_path: ${..filter_and_merge.output_path}
     grid_path: data/method_outputs/${..method}.nc
     grid_var: ???
     output_path: data/method_outputs/${..method}_on_track.nc
@@ -32,7 +41,7 @@ stages:
     _partial_: true
     study_path: ${..interp_on_track.output_path}
     study_var: ${..interp_on_track.grid_var}
-    ref_path: ${..interp_on_track.track_path}
+    ref_path: ${..filter_and_merge.output_path}
     ref_var: ssh
     delta_t: 0.9434
     velocity: 6.77
@@ -40,4 +49,3 @@ stages:
     segment_overlapping: 0.25
     output_lambdax_path: data/metrics/lambdax_${..method}.json
     output_psd_path: data/metrics/psd_${..method}.json
-
