@@ -10,12 +10,12 @@ log = logging.getLogger(__name__)
 ## VALIDATE: Specifying input output format
 
 def input_validation(input_path: str): # The expected format can depend on other parameters
-  """
-  {{cookiecutter.input_data_desc}}
-  Requirements: 
-    - input_path points to a file
+    """
+    {{cookiecutter.input_data_desc}}
+    Requirements:
+      - input_path points to a file
 
-  """ ## TODO: implement and document validation steps
+    """ ## TODO: implement and document validation steps
     log.debug('Starting input validation')
     try:
         assert Path(input_path).exists(), "input_path points to a file"
@@ -24,11 +24,11 @@ def input_validation(input_path: str): # The expected format can depend on other
         log.error('Failed to validate input, continuing anyway', exc_info=1)
 
 def output_validation(output_path: str): # The expected format can depend on other parameters
-  """
-  {{cookiecutter.output_data_desc}}
-  Requirements:
-    - output_path points to a file
-  """ ## TODO: implement and document validation steps
+    """
+    {{cookiecutter.output_data_desc}}
+    Requirements:
+      - output_path points to a file
+    """ ## TODO: implement and document validation steps
     log.debug('Starting output validation')
     try:
         assert Path(output_path).exists(), "output_path points to a file"
@@ -39,7 +39,7 @@ def output_validation(output_path: str): # The expected format can depend on oth
 
 ## PROCESS: Parameterize and implement how to go from input_files to output_files
 def run(
-    input_path: str = '???', 
+    input_path: str = '???',
     output_path: str = '???',
     ## TODO: Add pipeline parameters
     _skip_val: bool = False,
@@ -62,8 +62,8 @@ run.__doc__ = f"""
 {{cookiecutter.pipeline_desc}}
 
 Args:
-    input_path: {input_validation.__doc__}
-    output_path: {output_validation.__doc__}
+    {input_validation.__doc__}
+    {output_validation.__doc__}
 
 Returns:
     None

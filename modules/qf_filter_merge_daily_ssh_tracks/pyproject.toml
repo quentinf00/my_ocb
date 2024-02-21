@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "qf_filter_merge_daily_ssh_tracks"
+authors=[
+  {name = "Quentin Febvre", email = "quentin.febvre@gmail.com"},
+]
+[project.urls]
+Repository="https://github.com/quentinf00/my_ocb.git"
+
+[project.scripts]
+qf_filter_merge_daily_ssh_tracks = "qf_filter_merge_daily_ssh_tracks:api_endpoint"
+
+[tool.setuptools]
+py-modules=["qf_filter_merge_daily_ssh_tracks"]
