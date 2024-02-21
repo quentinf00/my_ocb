@@ -17,19 +17,18 @@ jobs:
         shell: bash -el {0}
         run: |
           pip install -q -e modules/qf_interp_grid_on_track
-          pip install -q -e modules/ssh_tracks_loading
+          pip install -q -e modules/dz_download_ssh_tracks
+          pip install -q -e modules/qf_filter_merge_daily_ssh_tracks
           pip install -q -e modules/alongtrack_lambdax
           pip install --no-deps -e pipelines/qf_alongtrack_lambdax_from_map
-      - name: pull ref
-        shell: bash -el {0}
-        run: |
-          dvc version
-          dvc --cd datachallenges/dc_ose_2021 pull --with-deps --allow-missing compute_lambdax
+      - name: install jq
+        uses: dcarbone/install-jq-action@v2
       - name: reproduce datachallenge results
         shell: bash -el {0}
         run: |
           dvc --cd datachallenges/dc_ose_2021 freeze fetch_reference_data
           dvc --cd datachallenges/dc_ose_2021 repro --keep-going compute_lambdax
+          dvc --cd datachallenges/dc_ose_2021 repro -k --pull $(dvc status --json | jq -r 'keys | join(" ")')
           dvc --cd datachallenges/dc_ose_2021 unfreeze fetch_reference_data
       - name: dump metrics report
         shell: bash -l {0}

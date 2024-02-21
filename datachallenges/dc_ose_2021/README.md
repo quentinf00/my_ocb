@@ -2,11 +2,14 @@
 ## Dag
 ```mermaid
 flowchart TD
-	node1["compute_lambdax@0"]
-	node4["fetch_reference_data"]
-	node5["method_output@0"]
-	node4-->node1
-	node5-->node1
+        node1["compute_lambdax@0"]
+        node2["filter_and_merge_ref"]
+        node3["interp_on_track@0"]
+        node4["method_output@0"]
+        node2-->node1
+        node2-->node3
+        node3-->node1
+        node4-->node3
 ```
 
 ## Dev (editable) Install

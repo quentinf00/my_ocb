@@ -10,7 +10,8 @@ authors=[
 ]
 dependencies = [
   "qf_interp_grid_on_track @ git+https://github.com/quentinf00/my_ocb.git#egg=qf_interp_grid_on_track&subdirectory=modules/qf_interp_grid_on_track",
-  "ssh_tracks_loading @ git+https://github.com/quentinf00/my_ocb.git#egg=ssh_tracks_loading&subdirectory=modules/ssh_tracks_loading",
+  "dz_download_ssh_tracks @ git+https://github.com/quentinf00/my_ocb.git#egg=dz_download_ssh_tracks&subdirectory=modules/dz_download_ssh_tracks",
+  "qf_filter_merge_daily_ssh_tracks @ git+https://github.com/quentinf00/my_ocb.git#egg=qf_filter_merge_daily_ssh_tracks&subdirectory=modules/qf_filter_merge_daily_ssh_tracks",
   "alongtrack_lambdax @ git+https://github.com/quentinf00/my_ocb.git#egg=alongtrack_lambdax&subdirectory=modules/alongtrack_lambdax",
 ]
 

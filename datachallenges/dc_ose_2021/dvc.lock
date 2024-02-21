@@ -344,3 +344,75 @@ stages:
       hash: md5
       md5: 55a157bf35618a513e3fd35112218d48
       size: 1587360
+  method_output@4:
+    cmd: wget 
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/95/7d74696fbf5f2b6d0c528757951b8a
+      -nc -O 'data/method_outputs/tata.nc'
+    outs:
+    - path: data/method_outputs/tata.nc
+      hash: md5
+      md5: 957d74696fbf5f2b6d0c528757951b8a
+      size: 4684262
+  interp_on_track@4:
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
+      'stages.interp_on_track.grid_var=ssh' 'stages.method=tata'
+    deps:
+    - path: data/method_outputs/tata.nc
+      hash: md5
+      md5: 957d74696fbf5f2b6d0c528757951b8a
+      size: 4684262
+    - path: data/prepared/c2.nc
+      hash: md5
+      md5: fb8bf253e87be431b298b136dde80d99
+      size: 1397837
+    params:
+      stage_configs.yaml:
+        stages.interp_on_track:
+          _target_: qf_interp_grid_on_track.run
+          _partial_: true
+          track_path: ${..filter_and_merge.output_path}
+          grid_path: data/method_outputs/${..method}.nc
+          grid_var: ???
+          output_path: data/method_outputs/${..method}_on_track.nc
+          _skip_val: false
+    outs:
+    - path: data/method_outputs/tata_on_track.nc
+      hash: md5
+      md5: 55a157bf35618a513e3fd35112218d48
+      size: 1587360
+  compute_lambdax@4:
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
+      'stages.interp_on_track.grid_var=ssh' 'stages.method=tata'
+    deps:
+    - path: data/method_outputs/tata_on_track.nc
+      hash: md5
+      md5: 55a157bf35618a513e3fd35112218d48
+      size: 1587360
+    - path: data/prepared/c2.nc
+      hash: md5
+      md5: fb8bf253e87be431b298b136dde80d99
+      size: 1397837
+    params:
+      stage_configs.yaml:
+        stages.lambdax:
+          _target_: alongtrack_lambdax.main_api
+          _partial_: true
+          study_path: ${..interp_on_track.output_path}
+          study_var: ${..interp_on_track.grid_var}
+          ref_path: ${..filter_and_merge.output_path}
+          ref_var: ssh
+          delta_t: 0.9434
+          velocity: 6.77
+          length_scale: 1000.0
+          segment_overlapping: 0.25
+          output_lambdax_path: data/metrics/lambdax_${..method}.json
+          output_psd_path: data/metrics/psd_${..method}.json
+    outs:
+    - path: data/metrics/lambdax_tata.json
+      hash: md5
+      md5: 8fc7d1b6fe1037a3808348e1cc49b771
+      size: 31
+    - path: data/metrics/psd_tata.json
+      hash: md5
+      md5: f20e46e3cfbe1e1cec45e127d9cdecb0
+      size: 5580

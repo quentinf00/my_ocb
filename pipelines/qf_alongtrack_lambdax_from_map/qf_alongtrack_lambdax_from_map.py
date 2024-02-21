@@ -3,7 +3,8 @@ import hydra_zen
 import hydra
 from hydra.conf import HydraConf, HelpConf
 import alongtrack_lambdax
-import ssh_tracks_loading
+import dz_download_ssh_tracks
+import qf_filter_merge_daily_ssh_tracks
 import qf_interp_grid_on_track
 from functools import partial
 
@@ -16,17 +17,22 @@ pb = hydra_zen.make_custom_builds_fn(zen_partial=True, populate_full_signature=T
 stages =  {
     'method': 'default',
     'dl_tracks': pb(
-        ssh_tracks_loading.main_api,
+        dz_download_ssh_tracks.run,
         filters=('*2017*',),
+    ),
+    'filter_and_merge': pb(
+       qf_filter_merge_daily_ssh_tracks.run,
+        input_dir='${..dl_tracks.download_dir}',
+        output_path='data/prepared/${..dl_tracks.sat}.nc',
     ),
     'interp_on_track': pb(
         qf_interp_grid_on_track.run,
         grid_path='data/method_outputs/${..method}.nc',
-        track_path='data/prepared/${..dl_tracks.sat}.nc',
+        track_path='${..filter_and_merge.output_path}',
         output_path='data/method_outputs/${..method}_on_track.nc',
     ),
     'lambdax': pb(alongtrack_lambdax.main_api,
-        ref_path='${..interp_on_track.track_path}',
+        ref_path='${..filter_and_merge.output_path}',
         study_path='${..interp_on_track.output_path}',
         study_var='${..interp_on_track.grid_var}',
         output_lambdax_path='data/metrics/lambdax_${..method}.json',
@@ -35,17 +41,24 @@ stages =  {
 }
 
 def run_pipeline(
-    to_run=('dl_tracks', 'interp_on_track', 'lambdax'),
+    to_run=('dl_tracks', 'filter_and_merge', 'interp_on_track', 'lambdax'),
     stages=stages
     ):
     for stage in to_run:
         stages[stage]()
 
 run_pipeline.__doc__ = f"""
-    {ssh_tracks_loading.main_api.__doc__}
+    Stages:
+        dl_tracks:
+    {dz_download_ssh_tracks.run.__doc__}
 
+        filter_and_merge:
+    {qf_filter_merge_daily_ssh_tracks.run.__doc__}
+
+        interp_on_track:
     {qf_interp_grid_on_track.run.__doc__}
 
+        lambdax:
     {alongtrack_lambdax.main_api.__doc__}
 """
 
