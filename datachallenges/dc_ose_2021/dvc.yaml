@@ -1,43 +1,41 @@
 vars:
-    - methods.yaml
-    - stage_configs.yaml:stages
+- methods.yaml
+- stage_configs.yaml:stages
 
 
 stages:
-    method_output:
-        foreach: ${methods}
-        do:
-            cmd: wget ${item.url} -nc -O 'data/method_outputs/${item.name}.nc'
-            outs:
-            - 'data/method_outputs/${item.name}.nc':
-                cache: false
-    fetch_reference_data:
-        params:
-        - stage_configs.yaml:
-          - stages.dl_tracks
-        cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs
-             'to_run=[dl_tracks]'
-        outs:
-        - data/prepared/c2.nc
-        - data/downloads/c2:
-            cache: false
-    compute_lambdax:
-        foreach: ${methods}
-        do:
-            cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs
-             'to_run=[interp_on_track, lambdax]'
-             'stages.interp_on_track.grid_var=${item.var}'
-             'stages.method=${item.name}'
-            params:
-            - stage_configs.yaml:
-              - stages.interp_on_track
-              - stages.lambdax
-            deps:
-                - data/prepared/c2.nc
-                - 'data/method_outputs/${item.name}.nc'
-            outs:
-                - 'data/method_outputs/${item.name}_on_track.nc'
-            metrics:
-                - 'data/metrics/lambdax_${item.name}.json'
-                - 'data/metrics/psd_${item.name}.json'
+  method_output:
+    foreach: ${methods}
+    do:
+      cmd: wget ${item.url} -nc -O 'data/method_outputs/${item.name}.nc'
+      outs:
+      - data/method_outputs/${item.name}.nc:
+          cache: false
+  fetch_reference_data:
+    params:
+    - stage_configs.yaml:
+      - stages.dl_tracks
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[dl_tracks]'
+    outs:
+    - data/downloads/c2:
+        cache: false
+    - data/prepared/c2.nc
+    frozen: true
+  compute_lambdax:
+    foreach: ${methods}
+    do:
+      cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track,
+        lambdax]' 'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${item.name}'
+      params:
+      - stage_configs.yaml:
+        - stages.interp_on_track
+        - stages.lambdax
+      deps:
+      - data/prepared/c2.nc
+      - data/method_outputs/${item.name}.nc
+      outs:
+      - data/method_outputs/${item.name}_on_track.nc
+      metrics:
+      - data/metrics/lambdax_${item.name}.json
+      - data/metrics/psd_${item.name}.json
 
