@@ -7,14 +7,14 @@ See below how to use each of the template:
 
 ## Module template.
 The module template allows to package a simple data processing step.
-It contains two files: 
+It contains two files:
 - the `<module>.py`
 - the `pyproject.toml`
 
 
 To use this template:
 - have `cookiecutter` installed (`pip install cookiecutter`)
-- from your modules directory run the command: `cookiecutter gh:quentinf00/myocb/templates/module`
+- from your modules directory run the command: `cookiecutter ../templates/module`
 - fill the information
 - in the `<module>.py` file, fill the `##TODO` items
 
