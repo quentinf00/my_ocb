@@ -12,7 +12,7 @@ authors=[
 Repository="{{cookiecutter.repo}}"
 
 [project.scripts]
-alongtrack_lambdax = "{{cookiecutter.project_slug}}:api_endpoint"
+{{cookiecutter.project_slug}} = "{{cookiecutter.project_slug}}:api_endpoint"
 
 [tool.setuptools]
 py-modules=["{{cookiecutter.project_slug}}"]
