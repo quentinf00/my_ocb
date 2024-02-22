@@ -128,7 +128,12 @@ Documentations:
 
 
 ### DVC
-TBD
+- datachallenges
+
+### Github action Workflows
+- actions
+- docker
+- act
 
 
 
@@ -202,6 +207,8 @@ TBD
 - [ ] CookieCutter datachallenge (scaffolding)
 
 ## Next steps:
+- [ ] version pipelines
+- [ ] add pipeline version to dc
 - [ ] Notebook install + generate all lambdaxs from oceanbench
 - [ ] Clean up all pipelines with current requirements
 - [ ] split requirements between nice to have and mandatory

@@ -10,7 +10,7 @@ import xarray as xr
 
 log = logging.getLogger(__name__)
 
-
+PIPELINE_DESC = "Filter the input files with the given ranges and merge them into a single file "
 ## VALIDATE: Specifying input output format
 
 def input_validation(input_dir: str): # The expected format can depend on other parameters
@@ -122,10 +122,13 @@ def run(
 
 ## EXPOSE: document, and configure CLI
 run.__doc__ = f"""
-Filter the input files with the given ranges and merge them into a single file
+Pipeline description: 
+    {PIPELINE_DESC}
 
-Args:
+Input description:
     {input_validation.__doc__}
+
+Output description:
     {output_validation.__doc__}
 
 Returns:

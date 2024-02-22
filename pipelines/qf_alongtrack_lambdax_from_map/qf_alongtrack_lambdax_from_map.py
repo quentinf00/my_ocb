@@ -50,16 +50,20 @@ def run_pipeline(
 run_pipeline.__doc__ = f"""
     Stages:
         dl_tracks:
-    {dz_download_ssh_tracks.run.__doc__}
+    {dz_download_ssh_tracks.PIPELINE_DESC}
+    more info with: `dz_download_ssh_tracks --help`
 
         filter_and_merge:
-    {qf_filter_merge_daily_ssh_tracks.run.__doc__}
+    {qf_filter_merge_daily_ssh_tracks.PIPELINE_DESC}
+    more info with: `qf_filter_merge_daily_ssh_tracks --help`
 
         interp_on_track:
-    {qf_interp_grid_on_track.run.__doc__}
+    {qf_interp_grid_on_track.PIPELINE_DESC}
+    more info with: `qf_interp_grid_on_track --help`
 
         lambdax:
-    {alongtrack_lambdax.main_api.__doc__}
+    {alongtrack_lambdax.PIPELINE_DESC}
+    more info with: `alongtrack_lambdax --help`
 """
 
 # Create a configuration associated with the above function (cf next cell)

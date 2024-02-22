@@ -8,7 +8,7 @@ import pandas as pd
 
 log = logging.getLogger(__name__)
 
-
+PIPELINE_DESC= "Download the SSH reprocessed tracks of a given satellite from copernicus marine store (requires cmems credentials)"
 
 def output_validation(download_dir: str): # The expected format can depend on other parameters
     """
@@ -58,15 +58,21 @@ def run(
 
 ## EXPOSE: document, and configure CLI
 run.__doc__ = f"""
-Download the SSH reprocessed tracks of a given satellite from copernicus marine store ( requires cmems credentials)
+ {PIPELINE_DESC}
 To specify the files to be downloaded, two options:
 - specify min_time and max_time parameters and the months encompassing the period
 will be downloaded
 - specify a list of filters in the form "*YYYY*" or "*YYYYMM*" or "*YYYYMMDD*" to
 have more fine grained control
 
-Args:
-   {output_validation.__doc__}
+Pipeline description: 
+    {PIPELINE_DESC}
+
+Input description: None
+    
+
+Output description:
+    {output_validation.__doc__}
 
 Returns:
     None

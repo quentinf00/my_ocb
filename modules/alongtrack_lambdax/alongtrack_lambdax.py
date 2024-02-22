@@ -8,6 +8,8 @@ import hydra
 import numpy as np
 from pathlib import Path
 
+PIPELINE_DESC = "Compute effective resolution lambda_x on the track geometry"
+
 def main_api(
     study_path: str = 'data/outputs/noisy_c2.nc',
     study_var: str = 'ssh',
