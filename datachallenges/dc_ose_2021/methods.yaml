@@ -11,3 +11,7 @@ methods:
 - name: duacs
   var: ssh
   url: https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/95/7d74696fbf5f2b6d0c528757951b8a
+- name: dymost
+  var: ssh
+  url: https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/1f/6fc60bba2ef471ff845b4cdcc18f6a
+
