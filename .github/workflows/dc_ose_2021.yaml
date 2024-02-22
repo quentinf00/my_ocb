@@ -23,12 +23,22 @@ jobs:
           pip install --no-deps -e pipelines/qf_alongtrack_lambdax_from_map
       - name: install jq
         uses: dcarbone/install-jq-action@v2
+      - name: compute_stages
+        shell: bash -el {0}
+        id: stages_to_run
+        run: |
+          dvc --cd datachallenges/dc_ose_2021 pull --with-deps --allow-missing compute_lambdax
+          STATUS=$(dvc --cd datachallenges/dc_ose_2021 status --json compute_lambdax)
+          echo $STATUS
+          STAGES=$(echo "$STATUS" | jq -r 'keys | join(" ")')
+          echo $STAGES
+          echo "stages=$STAGES" >> "$GITHUB_OUTPUT"
       - name: reproduce datachallenge results
         shell: bash -el {0}
+        if: ${{steps.stages_to_run.outputs.stages}}
         run: |
           dvc --cd datachallenges/dc_ose_2021 freeze fetch_reference_data
-          dvc --cd datachallenges/dc_ose_2021 repro --keep-going compute_lambdax
-          dvc --cd datachallenges/dc_ose_2021 repro -k --pull $(dvc status --json | jq -r 'keys | join(" ")')
+          dvc --cd datachallenges/dc_ose_2021 repro -k --pull ${{steps.stages_to_run.outputs.stages}}
           dvc --cd datachallenges/dc_ose_2021 unfreeze fetch_reference_data
       - name: dump metrics report
         shell: bash -l {0}
@@ -38,6 +48,7 @@ jobs:
           echo 'Data Challenge OSE Gulfstream 2021\n' >> ./datachallenges/dc_ose_2021/report.md
           echo 'Spatial scales resolved $\lambda_x$' >> report.md
           dvc metrics show --md datachallenges/dc_ose_2021/data/metrics/lambdax*.json >> ./datachallenges/dc_ose_2021/report.md
+          cat ./datachallenges/dc_ose_2021/report.md
       #     cat report.md
       # - name: Commit changes
       #   uses: EndBug/add-and-commit@v9
