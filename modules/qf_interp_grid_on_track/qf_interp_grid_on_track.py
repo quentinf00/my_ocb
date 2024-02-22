@@ -10,7 +10,7 @@ import ocn_tools._src.geoprocessing.gridding as ocngri
 
 log = logging.getLogger(__name__)
 
-
+PIPELINE_DESC =  "Interpolates the input grid data on the input alongtrack data"
 ## VALIDATE: Specifying input output format
 
 def input_validation(grid_path: str, grid_var: str, track_path: str): # The expected format can depend on other parameters
@@ -102,14 +102,15 @@ def run(
 
 ## EXPOSE: document, and configure CLI
 run.__doc__ = f"""
-    Interpolates the input grid data on the input alongtrack data
+Pipeline description: 
+    {PIPELINE_DESC}
 
-    Args:
-        input_path: {input_validation.__doc__}
-        output_path: {output_validation.__doc__}
+Input description:
+    {input_validation.__doc__}
 
-    Returns:
-        None
+Output description:
+    {output_validation.__doc__}
+
 """
 # Create a configuration associated with the above function (cf next cell)
 main_config =  hydra_zen.builds(run, populate_full_signature=True)

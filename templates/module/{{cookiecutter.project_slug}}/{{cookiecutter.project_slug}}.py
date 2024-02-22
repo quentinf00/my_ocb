@@ -6,6 +6,7 @@ from pathlib import Path
 
 log = logging.getLogger(__name__)
 
+PIPELINE_DESC = "{{cookiecutter.pipeline_desc}}"
 
 ## VALIDATE: Specifying input output format
 
@@ -59,10 +60,13 @@ def run(
 
 ## EXPOSE: document, and configure CLI
 run.__doc__ = f"""
-{{cookiecutter.pipeline_desc}}
+Pipeline description: 
+    {PIPELINE_DESC}
 
-Args:
+Input description:
     {input_validation.__doc__}
+
+Output description:
     {output_validation.__doc__}
 
 Returns:
