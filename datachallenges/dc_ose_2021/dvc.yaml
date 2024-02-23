@@ -1,18 +1,19 @@
 vars:
-- methods.yaml
 - stage_configs.yaml:stages
+- datachallenge.toml:pipelines,methods
 
 
 stages:
   method_output:
     foreach: ${methods}
     do:
-      cmd: wget ${item.url} -nc -O 'data/method_outputs/${item.name}.nc'
+      cmd: wget ${item.url} -nc -O 'data/method_outputs/${key}.nc'
       outs:
-      - data/method_outputs/${item.name}.nc:
+      - data/method_outputs/${key}.nc:
           cache: false
   fetch_reference_data:
     params:
+    - stage_configs.yaml:
     - stage_configs.yaml:
       - stages.dl_tracks
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[dl_tracks]'
@@ -22,6 +23,7 @@ stages:
     frozen: true
   filter_and_merge_ref:
     params:
+    - ${pipelines.diagnostic.qf_alongtrack_lambdax_from_map}
     - stage_configs.yaml:
       - stages.filter_and_merge
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[filter_and_merge]'
@@ -31,28 +33,30 @@ stages:
     foreach: ${methods}
     do:
       cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
-       'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${item.name}'
+       'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
       params:
+      - ${pipelines.diagnostic.qf_alongtrack_lambdax_from_map}
       - stage_configs.yaml:
         - stages.interp_on_track
       deps:
       - data/prepared/c2.nc
-      - data/method_outputs/${item.name}.nc
+      - data/method_outputs/${key}.nc
       outs:
-      - data/method_outputs/${item.name}_on_track.nc
+      - data/method_outputs/${key}_on_track.nc
   compute_lambdax:
     foreach: ${methods}
     do:
       cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
-       'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${item.name}'
+       'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
       params:
+      - ${pipelines.diagnostic.qf_alongtrack_lambdax_from_map}
       - stage_configs.yaml:
         - stages.lambdax
       deps:
       - data/prepared/c2.nc
-      - data/method_outputs/${item.name}_on_track.nc
+      - data/method_outputs/${key}_on_track.nc
       outs:
-      - data/metrics/psd_${item.name}.json
+      - data/metrics/psd_${key}.json
       metrics:
-      - data/metrics/lambdax_${item.name}.json
+      - data/metrics/lambdax_${key}.json
 

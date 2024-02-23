@@ -416,3 +416,48 @@ stages:
       hash: md5
       md5: 7c545418e16a438e667f15ca721ef8d1
       size: 7979
+  method_output@4dvarnet:
+    cmd: wget 
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/a5/2381e9409cb7c6cf9be980bda9aced
+      -nc -O 'data/method_outputs/4dvarnet.nc'
+    outs:
+    - path: data/method_outputs/4dvarnet.nc
+      hash: md5
+      md5: a52381e9409cb7c6cf9be980bda9aced
+      size: 590300748
+  method_output@miost:
+    cmd: wget 
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/4f/014481eed0088eb9a0cf329ebf045b
+      -nc -O 'data/method_outputs/miost.nc'
+    outs:
+    - path: data/method_outputs/miost.nc
+      hash: md5
+      md5: 4f014481eed0088eb9a0cf329ebf045b
+      size: 29804673
+  method_output@bfn:
+    cmd: wget 
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/29/6781b126d905e98b82dac9bcecf57e
+      -nc -O 'data/method_outputs/bfn.nc'
+    outs:
+    - path: data/method_outputs/bfn.nc
+      hash: md5
+      md5: 296781b126d905e98b82dac9bcecf57e
+      size: 700845764
+  method_output@duacs:
+    cmd: wget 
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/95/7d74696fbf5f2b6d0c528757951b8a
+      -nc -O 'data/method_outputs/duacs.nc'
+    outs:
+    - path: data/method_outputs/duacs.nc
+      hash: md5
+      md5: 957d74696fbf5f2b6d0c528757951b8a
+      size: 4684262
+  method_output@dymost:
+    cmd: wget 
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/1f/6fc60bba2ef471ff845b4cdcc18f6a
+      -nc -O 'data/method_outputs/dymost.nc'
+    outs:
+    - path: data/method_outputs/dymost.nc
+      hash: md5
+      md5: 1f6fc60bba2ef471ff845b4cdcc18f6a
+      size: 2354338

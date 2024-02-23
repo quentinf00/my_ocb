@@ -1,4 +1,3 @@
-import xarray as xr
 import hydra_zen
 import hydra
 from hydra.conf import HydraConf, HelpConf
@@ -7,6 +6,7 @@ import dz_download_ssh_tracks
 import qf_filter_merge_daily_ssh_tracks
 import qf_interp_grid_on_track
 from functools import partial
+
 
 b = hydra_zen.make_custom_builds_fn(populate_full_signature=True)
 pb = hydra_zen.make_custom_builds_fn(zen_partial=True, populate_full_signature=True)
@@ -42,7 +42,7 @@ stages =  {
 
 def run_pipeline(
     to_run=('dl_tracks', 'filter_and_merge', 'interp_on_track', 'lambdax'),
-    stages=stages
+    stages=stages,
     ):
     for stage in to_run:
         stages[stage]()
