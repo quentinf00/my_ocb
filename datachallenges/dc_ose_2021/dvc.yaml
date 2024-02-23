@@ -35,7 +35,7 @@ stages:
     foreach: ${methods}
     do:
       cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
-       'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
+        'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
       params:
       - datachallenge.toml:
         - pipelines.diagnostic.qf_alongtrack_lambdax_from_map
@@ -50,7 +50,7 @@ stages:
     foreach: ${methods}
     do:
       cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
-       'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
+        'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
       params:
       - datachallenge.toml:
         - pipelines.diagnostic.qf_alongtrack_lambdax_from_map

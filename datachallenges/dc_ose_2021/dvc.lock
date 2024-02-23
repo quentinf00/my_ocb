@@ -11,29 +11,24 @@ stages:
   fetch_reference_data:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[dl_tracks]'
     params:
+      datachallenge.toml:
+        pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
       stage_configs.yaml:
         stages.dl_tracks:
-          _target_: ssh_tracks_loading.main_api
+          _target_: dz_download_ssh_tracks.run
           _partial_: true
           sat: c2
-          min_lon: -65.0
-          max_lon: -55.0
-          min_lat: 33.0
-          max_lat: 43.0
+          download_dir: data/downloads/${.sat}
           min_time: '2017-01-01'
           max_time: '2017-12-31'
           filters:
           - '*2017*'
-          download_dir: data/downloads/${.sat}
-          output_path: data/prepared/${.sat}.nc
+          _skip_val: false
     outs:
     - path: data/downloads/c2
       md5: 8e65579c4dc11a00e6d3dde2c686105c.dir
       size: 165073748
       nfiles: 362
-    - path: data/prepared/c2.nc
-      md5: e1b553b652d4a03f7ac50bbbcd699dc9
-      size: 1392965
   compute_lambdax@0:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
       'stages.interp_on_track.grid_var=rec_ssh' 'stages.method=4dvarnet'
