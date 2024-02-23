@@ -5,7 +5,7 @@ methods:
 - name: miost
   var: ssh
   url: https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/4f/014481eed0088eb9a0cf329ebf045b
-- name: bfn
+- name: bfn-qg
   var: ssh
   url: https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/29/6781b126d905e98b82dac9bcecf57e
 - name: duacs
