@@ -425,3 +425,79 @@ stages:
       hash: md5
       md5: 913c8a9aa05ae4cb5ed6556e5c21a59d
       size: 31
+  method_output@convlstm_ssh_sst:
+    cmd: wget 
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/e6/a27e944de675bcf0cd0c67031f9d3f
+      -nc -O 'data/method_outputs/convlstm_ssh_sst.nc'
+    outs:
+    - path: data/method_outputs/convlstm_ssh_sst.nc
+      hash: md5
+      md5: e6a27e944de675bcf0cd0c67031f9d3f
+      size: 23372856
+  interp_on_track@convlstm_ssh_sst:
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
+      'stages.interp_on_track.grid_var=ssh' 'stages.method=convlstm_ssh_sst'
+    deps:
+    - path: data/method_outputs/convlstm_ssh_sst.nc
+      hash: md5
+      md5: e6a27e944de675bcf0cd0c67031f9d3f
+      size: 23372856
+    - path: data/prepared/c2.nc
+      hash: md5
+      md5: fb8bf253e87be431b298b136dde80d99
+      size: 1397837
+    params:
+      datachallenge.toml:
+        pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
+      stage_configs.yaml:
+        stages.interp_on_track:
+          _target_: qf_interp_grid_on_track.run
+          _partial_: true
+          track_path: ${..filter_and_merge.output_path}
+          grid_path: data/method_outputs/${..method}.nc
+          grid_var: ???
+          output_path: data/method_outputs/${..method}_on_track.nc
+          _skip_val: false
+    outs:
+    - path: data/method_outputs/convlstm_ssh_sst_on_track.nc
+      hash: md5
+      md5: e41a13173582607176fdc02e9b8dc96b
+      size: 1587360
+  compute_lambdax@convlstm_ssh_sst:
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
+      'stages.interp_on_track.grid_var=ssh' 'stages.method=convlstm_ssh_sst'
+    deps:
+    - path: data/method_outputs/convlstm_ssh_sst_on_track.nc
+      hash: md5
+      md5: e41a13173582607176fdc02e9b8dc96b
+      size: 1587360
+    - path: data/prepared/c2.nc
+      hash: md5
+      md5: fb8bf253e87be431b298b136dde80d99
+      size: 1397837
+    params:
+      datachallenge.toml:
+        pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
+      stage_configs.yaml:
+        stages.lambdax:
+          _target_: alongtrack_lambdax.main_api
+          _partial_: true
+          study_path: ${..interp_on_track.output_path}
+          study_var: ${..interp_on_track.grid_var}
+          ref_path: ${..filter_and_merge.output_path}
+          ref_var: ssh
+          delta_t: 0.9434
+          velocity: 6.77
+          length_scale: 850.0
+          segment_overlapping: 0.25
+          output_lambdax_path: data/metrics/lambdax_${..method}.json
+          output_psd_path: data/method_outputs/psd_${..method}.json
+    outs:
+    - path: data/method_outputs/psd_convlstm_ssh_sst.json
+      hash: md5
+      md5: cdf90e1b1fd99aa74de9134eeebf319d
+      size: 6745
+    - path: data/metrics/lambdax_convlstm_ssh_sst.json
+      hash: md5
+      md5: 26b15a736acc018e1741fe6390921ba0
+      size: 31
