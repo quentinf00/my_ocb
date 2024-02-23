@@ -1,4 +1,4 @@
-name: Compute metrics
+name: Compute DC OSE 2021 metrics
 on: 
   push:
     branches:
@@ -69,7 +69,7 @@ jobs:
           dvc metrics show --md datachallenges/dc_ose_2021/data/metrics >> ./datachallenges/dc_ose_2021/report.md
           cat ./datachallenges/dc_ose_2021/report.md
       - name: Commit changes
-        if: ${{ (steps.check_author.outputs.skip == 'false') }}
+        if: ${{  !env.ACT  && (steps.check_author.outputs.skip == 'false') }}
         uses: EndBug/add-and-commit@v9
         with:
           author_name: github-actions
