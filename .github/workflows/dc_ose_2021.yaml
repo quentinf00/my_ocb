@@ -1,5 +1,8 @@
 name: Compute metrics
-on: [pull_request]
+on: 
+  pull_request:
+    branches:
+    - dc_ose_2021/*
 jobs:
   run:
     runs-on: [ubuntu-latest]
@@ -56,21 +59,20 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{secrets.aws_key}}
           AWS_SECRET_ACCESS_KEY: ${{secrets.aws_secret}}
           AWS_DEFAULT_REGION: ${{secrets.aws_region}}
-        run: dvc --cd datachallenges/dc_ose_2021 push ${{steps.stages_to_run.outputs.stages}}
+        run: dvc --cd datachallenges/dc_ose_2021 push -r s3 ${{steps.stages_to_run.outputs.stages}}
       - name: dump metrics report
-        if: ${{ (steps.check_author.outputs.skip == 'false') && steps.stages_to_run.outputs.stages }}
+        if: ${{ (steps.check_author.outputs.skip == 'false') }}
         shell: bash -l {0}
         run: |
           echo 'Data Challenge OSE Gulfstream 2021\n' >> ./datachallenges/dc_ose_2021/report.md
           echo 'Spatial scales resolved $\lambda_x$' >> report.md
-          dvc metrics show --md datachallenges/dc_ose_2021/data/metrics/lambdax*.json >> ./datachallenges/dc_ose_2021/report.md
+          dvc metrics show --md datachallenges/dc_ose_2021/data/metrics >> ./datachallenges/dc_ose_2021/report.md
           cat ./datachallenges/dc_ose_2021/report.md
-          cat report.md
       - name: Commit changes
-        if: ${{ (steps.check_author.outputs.skip == 'false') && steps.stages_to_run.outputs.stages }}
+        if: ${{ (steps.check_author.outputs.skip == 'false') }}
         uses: EndBug/add-and-commit@v9
         with:
-          author: github-actions
+          author_name: github-actions
           message: 'Update dc_ose_2021 leaderboard'
           add: 'dvc.lock report.md'
           cwd: './datachallenges/dc_ose_2021'

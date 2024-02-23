@@ -1,4 +1,5 @@
 import xarray as xr
+import pandas as pd
 import json
 from ocn_tools._src.preprocessing.alongtrack import select_track_segments
 from ocn_tools._src.metrics.power_spectrum import psd_welch_score
@@ -29,7 +30,11 @@ def main_api(
     ref_da = xr.open_dataset(ref_path)[ref_var]
     xr.testing.assert_allclose(ref_da.coords.to_dataset(), study_da.coords.to_dataset())
     eval_ds = xr.Dataset(dict(study=study_da, ref=ref_da,))
-    eval_ds = eval_ds.where(eval_ds.ref.pipe(np.isfinite), drop=True).interpolate_na(dim='time', method='nearest')
+    eval_ds = (eval_ds
+        .where(eval_ds.ref.pipe(np.isfinite), drop=True)
+        .interpolate_na(dim='time', method='nearest')
+    )
+    # eval_ds = eval_ds.where(eval_ds.ref.pipe(np.isfinite), drop=True)
     delta_x = velocity * delta_t
 
     partial_track_fn = partial(
@@ -50,10 +55,22 @@ def main_api(
         nperseg=length_scale // delta_x
     )
 
-    ds, lambda_x = eval_ds.pipe(partial_track_fn).pipe(partial_score_fn)
+    ds, _ = eval_ds.pipe(partial_track_fn).pipe(partial_score_fn)
+
+    ## Robust lambda_x computation when small wavelength reach score > 0.5
+    df = ds.to_dataframe().assign(wl=lambda df: 1 / (df.index+1e-15))
+    df = df.reset_index().set_index('wl')
+    largest_unresolved_scale = df.loc[df.score < 0.5].index.max()
+    dff = df.loc[df.index >= largest_unresolved_scale].reset_index().set_index('score')
+    dff = dff.T
+    dff.insert(0, 0.5, np.nan)
+    dff = dff.T.sort_index()
+    lambda_x = dff.wl.interpolate().loc[0.5]
+
+
     Path(output_lambdax_path).parent.mkdir(parents=True, exist_ok=True)
     Path(output_psd_path).parent.mkdir(parents=True, exist_ok=True)
-    ds.to_dataframe().to_json(output_psd_path)
+    df.to_json(output_psd_path)
     with open(Path(output_lambdax_path), 'w') as f:
         json.dump(dict(lambdax=lambda_x), f)
     
