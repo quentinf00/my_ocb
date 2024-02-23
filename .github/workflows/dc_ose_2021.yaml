@@ -65,17 +65,18 @@ jobs:
         shell: bash -l {0}
         run: |
           cd datachallenges/dc_ose_2021/data/metrics
-          echo 'Data Challenge OSE Gulfstream 2021\n' >> ../report.md
-          echo 'Spatial scales resolved $\lambda_x$ \n' >> ../report.md
-          dvc metrics show --md *.json >> ../report.md
-          cat ../report.md
+          echo 'Data Challenge OSE Gulfstream 2021' >> ../../report.md
+          dvc metrics show --md *.json >> ../../report.md
+          cat ../../report.md
       - name: Commit changes
         if: ${{ (steps.check_author.outputs.skip == 'false') }}
         uses: EndBug/add-and-commit@v9
         with:
           author_name: github-actions
           message: 'Update dc_ose_2021 leaderboard'
+          new_branch: ${{ github.ref_name }}
           add: 'dvc.lock report.md'
           cwd: './datachallenges/dc_ose_2021'
+          fetch: ${{ !env.ACT || env.FORCE_PUSH }}
           push: ${{ !env.ACT || env.FORCE_PUSH }}
   
