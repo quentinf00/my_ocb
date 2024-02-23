@@ -60,7 +60,7 @@ stages:
       - data/prepared/c2.nc
       - data/method_outputs/${key}_on_track.nc
       outs:
-      - data/metrics/psd_${key}.json
+      - data/method_outputs/psd_${key}.json
       metrics:
       - data/metrics/lambdax_${key}.json
 
