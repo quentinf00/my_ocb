@@ -1,6 +1,6 @@
 name: Compute metrics
 on: 
-  pull_request:
+  push:
     branches:
     - dc_ose_2021/*
 jobs:
