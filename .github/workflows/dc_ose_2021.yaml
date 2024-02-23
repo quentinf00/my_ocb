@@ -39,7 +39,7 @@ jobs:
         shell: bash -el {0}
         id: stages_to_run
         run: |
-          dvc --cd datachallenges/dc_ose_2021 pull --with-deps --allow-missing compute_lambdax
+          dvc --cd datachallenges/dc_ose_2021 pull -q --with-deps --allow-missing compute_lambdax
           STATUS=$(dvc --cd datachallenges/dc_ose_2021 status --json compute_lambdax)
           echo $STATUS
           STAGES=$(echo "$STATUS" | jq -r 'keys | join(" ")')
