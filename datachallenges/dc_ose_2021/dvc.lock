@@ -64,12 +64,12 @@ stages:
     outs:
     - path: data/metrics/lambdax_4dvarnet.json
       hash: md5
-      md5: 3b30337b5eb83e5bc62a725a56d34403
+      md5: 3be49e19bba78900928cc7422415da0b
       size: 31
     - path: data/metrics/psd_4dvarnet.json
       hash: md5
-      md5: 1c15ea998daba4c0c48c2daf15e13297
-      size: 5562
+      md5: ddaeb1134dd7cfe88b3c098596a42e44
+      size: 7955
   method_output@1:
     cmd: wget 
       https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/4f/014481eed0088eb9a0cf329ebf045b
@@ -108,12 +108,12 @@ stages:
     outs:
     - path: data/metrics/lambdax_miost.json
       hash: md5
-      md5: 9b6c51e7feefe2d3ff723d7419d51873
-      size: 30
+      md5: 1dcd247fa10c90ce540a3da60593df93
+      size: 31
     - path: data/metrics/psd_miost.json
       hash: md5
-      md5: 0fd055a0c18d1fe02427d566ffb3faab
-      size: 5565
+      md5: ae5427e7be98a5c18de986e96449697b
+      size: 7958
   aggregate_metrics:
     cmd: python -c 'from pathlib import Path;import xarray as xr;import pandas as
       pd; pd.Series({p.name:xr.open_dataset(p).lambdax.item() for p in Path("data/metrics").glob("lambdax*.nc")
@@ -173,12 +173,12 @@ stages:
     outs:
     - path: data/metrics/lambdax_duacs.json
       hash: md5
-      md5: 8fc7d1b6fe1037a3808348e1cc49b771
+      md5: 1dcd247fa10c90ce540a3da60593df93
       size: 31
     - path: data/metrics/psd_duacs.json
       hash: md5
-      md5: f20e46e3cfbe1e1cec45e127d9cdecb0
-      size: 5580
+      md5: bdebc26558a34f40a4bfd68ae82a1591
+      size: 7973
   compute_lambdax@2:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
       'stages.interp_on_track.grid_var=ssh' 'stages.method=bfn'
@@ -209,12 +209,12 @@ stages:
     outs:
     - path: data/metrics/lambdax_bfn.json
       hash: md5
-      md5: 8ee54319fd3c2f4a17773227bb93f48e
-      size: 31
+      md5: 0065df0b4369de75e123600cb5470c8c
+      size: 30
     - path: data/metrics/psd_bfn.json
       hash: md5
-      md5: 64ade1a0fc6fcd88cf59feec96d0a2f0
-      size: 5564
+      md5: 4fc2fe5ec017bde54fe1e5b47a37873f
+      size: 7957
   filter_and_merge_ref:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[filter_and_merge]'
     params:
@@ -346,21 +346,21 @@ stages:
       size: 1587360
   method_output@4:
     cmd: wget 
-      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/95/7d74696fbf5f2b6d0c528757951b8a
-      -nc -O 'data/method_outputs/tata.nc'
+      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/1f/6fc60bba2ef471ff845b4cdcc18f6a
+      -nc -O 'data/method_outputs/dymost.nc'
     outs:
-    - path: data/method_outputs/tata.nc
+    - path: data/method_outputs/dymost.nc
       hash: md5
-      md5: 957d74696fbf5f2b6d0c528757951b8a
-      size: 4684262
+      md5: 1f6fc60bba2ef471ff845b4cdcc18f6a
+      size: 2354338
   interp_on_track@4:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
-      'stages.interp_on_track.grid_var=ssh' 'stages.method=tata'
+      'stages.interp_on_track.grid_var=ssh' 'stages.method=dymost'
     deps:
-    - path: data/method_outputs/tata.nc
+    - path: data/method_outputs/dymost.nc
       hash: md5
-      md5: 957d74696fbf5f2b6d0c528757951b8a
-      size: 4684262
+      md5: 1f6fc60bba2ef471ff845b4cdcc18f6a
+      size: 2354338
     - path: data/prepared/c2.nc
       hash: md5
       md5: fb8bf253e87be431b298b136dde80d99
@@ -376,18 +376,18 @@ stages:
           output_path: data/method_outputs/${..method}_on_track.nc
           _skip_val: false
     outs:
-    - path: data/method_outputs/tata_on_track.nc
+    - path: data/method_outputs/dymost_on_track.nc
       hash: md5
-      md5: 55a157bf35618a513e3fd35112218d48
-      size: 1587360
+      md5: 8873caf8d50b515f4fdd0462583d880e
+      size: 1589740
   compute_lambdax@4:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
-      'stages.interp_on_track.grid_var=ssh' 'stages.method=tata'
+      'stages.interp_on_track.grid_var=ssh' 'stages.method=dymost'
     deps:
-    - path: data/method_outputs/tata_on_track.nc
+    - path: data/method_outputs/dymost_on_track.nc
       hash: md5
-      md5: 55a157bf35618a513e3fd35112218d48
-      size: 1587360
+      md5: 8873caf8d50b515f4fdd0462583d880e
+      size: 1589740
     - path: data/prepared/c2.nc
       hash: md5
       md5: fb8bf253e87be431b298b136dde80d99
@@ -408,11 +408,11 @@ stages:
           output_lambdax_path: data/metrics/lambdax_${..method}.json
           output_psd_path: data/metrics/psd_${..method}.json
     outs:
-    - path: data/metrics/lambdax_tata.json
+    - path: data/metrics/lambdax_dymost.json
       hash: md5
-      md5: 8fc7d1b6fe1037a3808348e1cc49b771
-      size: 31
-    - path: data/metrics/psd_tata.json
+      md5: d1acd78b1829637e4bee155b9f85ea9c
+      size: 30
+    - path: data/metrics/psd_dymost.json
       hash: md5
-      md5: f20e46e3cfbe1e1cec45e127d9cdecb0
-      size: 5580
+      md5: 7c545418e16a438e667f15ca721ef8d1
+      size: 7979

@@ -51,7 +51,8 @@ stages:
       deps:
       - data/prepared/c2.nc
       - data/method_outputs/${item.name}_on_track.nc
+      outs:
+      - data/metrics/psd_${item.name}.json
       metrics:
       - data/metrics/lambdax_${item.name}.json
-      - data/metrics/psd_${item.name}.json
 
