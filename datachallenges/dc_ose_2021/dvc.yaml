@@ -13,7 +13,8 @@ stages:
           cache: false
   fetch_reference_data:
     params:
-    - stage_configs.yaml:
+    - datachallenge.toml:
+      - pipelines.diagnostic.qf_alongtrack_lambdax_from_map
     - stage_configs.yaml:
       - stages.dl_tracks
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[dl_tracks]'
@@ -23,7 +24,8 @@ stages:
     frozen: true
   filter_and_merge_ref:
     params:
-    - ${pipelines.diagnostic.qf_alongtrack_lambdax_from_map}
+    - datachallenge.toml:
+      - pipelines.diagnostic.qf_alongtrack_lambdax_from_map
     - stage_configs.yaml:
       - stages.filter_and_merge
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[filter_and_merge]'
@@ -35,7 +37,8 @@ stages:
       cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
        'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
       params:
-      - ${pipelines.diagnostic.qf_alongtrack_lambdax_from_map}
+      - datachallenge.toml:
+        - pipelines.diagnostic.qf_alongtrack_lambdax_from_map
       - stage_configs.yaml:
         - stages.interp_on_track
       deps:
@@ -49,7 +52,8 @@ stages:
       cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
        'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
       params:
-      - ${pipelines.diagnostic.qf_alongtrack_lambdax_from_map}
+      - datachallenge.toml:
+        - pipelines.diagnostic.qf_alongtrack_lambdax_from_map
       - stage_configs.yaml:
         - stages.lambdax
       deps:
