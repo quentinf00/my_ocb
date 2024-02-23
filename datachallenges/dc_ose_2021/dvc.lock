@@ -260,18 +260,18 @@ stages:
           ref_var: ssh
           delta_t: 0.9434
           velocity: 6.77
-          length_scale: 1000.0
+          length_scale: 850.0
           segment_overlapping: 0.25
           output_lambdax_path: data/metrics/lambdax_${..method}.json
           output_psd_path: data/method_outputs/psd_${..method}.json
     outs:
     - path: data/method_outputs/psd_4dvarnet.json
       hash: md5
-      md5: ddaeb1134dd7cfe88b3c098596a42e44
-      size: 7955
+      md5: 77602038e33fb0238ae69d318c1aa4d6
+      size: 6734
     - path: data/metrics/lambdax_4dvarnet.json
       hash: md5
-      md5: 3be49e19bba78900928cc7422415da0b
+      md5: 6382516d9bb5646b200a3c32f9fc9a5e
       size: 31
   compute_lambdax@miost:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
@@ -298,18 +298,18 @@ stages:
           ref_var: ssh
           delta_t: 0.9434
           velocity: 6.77
-          length_scale: 1000.0
+          length_scale: 850.0
           segment_overlapping: 0.25
           output_lambdax_path: data/metrics/lambdax_${..method}.json
           output_psd_path: data/method_outputs/psd_${..method}.json
     outs:
     - path: data/method_outputs/psd_miost.json
       hash: md5
-      md5: ae5427e7be98a5c18de986e96449697b
-      size: 7958
+      md5: a171e49c0077fffe5e2e070487c2269d
+      size: 6731
     - path: data/metrics/lambdax_miost.json
       hash: md5
-      md5: 1dcd247fa10c90ce540a3da60593df93
+      md5: 913c8a9aa05ae4cb5ed6556e5c21a59d
       size: 31
   compute_lambdax@bfn:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
@@ -336,19 +336,19 @@ stages:
           ref_var: ssh
           delta_t: 0.9434
           velocity: 6.77
-          length_scale: 1000.0
+          length_scale: 850.0
           segment_overlapping: 0.25
           output_lambdax_path: data/metrics/lambdax_${..method}.json
           output_psd_path: data/method_outputs/psd_${..method}.json
     outs:
     - path: data/method_outputs/psd_bfn.json
       hash: md5
-      md5: 4fc2fe5ec017bde54fe1e5b47a37873f
-      size: 7957
+      md5: f0edff33a1cf58cd87b23b809ec80ebf
+      size: 6739
     - path: data/metrics/lambdax_bfn.json
       hash: md5
-      md5: 0065df0b4369de75e123600cb5470c8c
-      size: 30
+      md5: 913c8a9aa05ae4cb5ed6556e5c21a59d
+      size: 31
   compute_lambdax@duacs:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
       'stages.interp_on_track.grid_var=ssh' 'stages.method=duacs'
@@ -374,19 +374,19 @@ stages:
           ref_var: ssh
           delta_t: 0.9434
           velocity: 6.77
-          length_scale: 1000.0
+          length_scale: 850.0
           segment_overlapping: 0.25
           output_lambdax_path: data/metrics/lambdax_${..method}.json
           output_psd_path: data/method_outputs/psd_${..method}.json
     outs:
     - path: data/method_outputs/psd_duacs.json
       hash: md5
-      md5: bdebc26558a34f40a4bfd68ae82a1591
-      size: 7973
+      md5: aedb502a10d8d64cfb45de5f43eedfcf
+      size: 6750
     - path: data/metrics/lambdax_duacs.json
       hash: md5
-      md5: 1dcd247fa10c90ce540a3da60593df93
-      size: 31
+      md5: 5cd0e04d4a720126dea099122cbaada6
+      size: 30
   compute_lambdax@dymost:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
       'stages.interp_on_track.grid_var=ssh' 'stages.method=dymost'
@@ -412,16 +412,16 @@ stages:
           ref_var: ssh
           delta_t: 0.9434
           velocity: 6.77
-          length_scale: 1000.0
+          length_scale: 850.0
           segment_overlapping: 0.25
           output_lambdax_path: data/metrics/lambdax_${..method}.json
           output_psd_path: data/method_outputs/psd_${..method}.json
     outs:
     - path: data/method_outputs/psd_dymost.json
       hash: md5
-      md5: 7c545418e16a438e667f15ca721ef8d1
-      size: 7979
+      md5: dc8eceb9f6c769931779444a8ae52c5d
+      size: 6757
     - path: data/metrics/lambdax_dymost.json
       hash: md5
-      md5: d1acd78b1829637e4bee155b9f85ea9c
-      size: 30
+      md5: 913c8a9aa05ae4cb5ed6556e5c21a59d
+      size: 31
