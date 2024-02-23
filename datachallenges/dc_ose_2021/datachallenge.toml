@@ -27,3 +27,8 @@ var = "ssh"
 [methods.dymost]
 url = "https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/1f/6fc60bba2ef471ff845b4cdcc18f6a"
 var = "ssh"
+
+[methods.convlstm_ssh_sst]
+url = "https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/e6/a27e944de675bcf0cd0c67031f9d3f"
+var = "ssh"
+

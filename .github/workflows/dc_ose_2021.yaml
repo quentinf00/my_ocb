@@ -65,7 +65,7 @@ jobs:
         shell: bash -l {0}
         run: |
           cd datachallenges/dc_ose_2021/data/metrics
-          echo 'Data Challenge OSE Gulfstream 2021' >> ../../report.md
+          echo 'Data Challenge OSE Gulfstream 2021' > ../../report.md
           dvc metrics show --md *.json >> ../../report.md
           cat ../../report.md
       - name: Commit changes
