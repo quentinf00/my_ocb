@@ -11,7 +11,7 @@ jobs:
         id: check_author
         run: |
           echo "skip=${{github.author == 'github-actions'}}" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         if: ${{ steps.check_author.outputs.skip == 'false' }}
       - uses: mamba-org/setup-micromamba@v1
         if: ${{ steps.check_author.outputs.skip  == 'false' }}

@@ -82,14 +82,14 @@ stages:
           max_lon: -55.0
           min_lat: 33.0
           max_lat: 43.0
-          min_time: '2017-01-01'
-          max_time: '2018-01-01'
+          min_time: '2017-06-21'
+          max_time: '2017-09-21'
           _skip_val: false
     outs:
     - path: data/prepared/c2.nc
       hash: md5
-      md5: fb8bf253e87be431b298b136dde80d99
-      size: 1397837
+      md5: c17105012b7e4788860e800986192ca4
+      size: 363909
   interp_on_track@4dvarnet:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
       'stages.interp_on_track.grid_var=rec_ssh' 'stages.method=4dvarnet'
