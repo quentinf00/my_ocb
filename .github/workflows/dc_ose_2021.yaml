@@ -42,16 +42,15 @@ jobs:
           dvc --cd datachallenges/dc_ose_2021 pull -q --with-deps --allow-missing
           STATUS=$(dvc --cd datachallenges/dc_ose_2021 status --json)
           echo $STATUS
-          STAGES=$(echo "$STATUS" | jq -r 'keys | join(" ")')
-          echo $STAGES
+          STAGES=$(echo "$STATUS" | jq -r '[keys[] | select(contains("method_output") | not)] |join(" ")')
+          echo "stages=$STAGES"
           echo "stages=$STAGES" >> "$GITHUB_OUTPUT"
-      - name: reproduce datachallenge results
+      - name: "Validating datachallenge consistency: reproduce locally if fail"
         shell: bash -el {0}
         if: ${{ (steps.check_author.outputs.skip == 'false') && steps.stages_to_run.outputs.stages }}
         run: |
-          dvc --cd datachallenges/dc_ose_2021 freeze fetch_reference_data method_output
-          dvc --cd datachallenges/dc_ose_2021 repro -k --pull ${{steps.stages_to_run.outputs.stages}}
-          dvc --cd datachallenges/dc_ose_2021 unfreeze method_output
+          dvc --cd datachallenges/dc_ose_2021 freeze fetch_reference_data
+          dvc --cd datachallenges/dc_ose_2021 repro -k --pull --downstream ${{steps.stages_to_run.outputs.stages}}
           dvc --cd datachallenges/dc_ose_2021 repro -k --pull ${{steps.stages_to_run.outputs.stages}}
           dvc --cd datachallenges/dc_ose_2021 unfreeze fetch_reference_data
       - name: push new files
@@ -75,7 +74,7 @@ jobs:
         if: ${{ (steps.check_author.outputs.skip == 'false') }}
         uses: EndBug/add-and-commit@v9
         with:
-          author_name: github-actions
+          default_author: github_actions
           message: 'Update dc_ose_2021 leaderboard'
           add: 'dvc.lock report.md'
           cwd: './datachallenges/dc_ose_2021'
