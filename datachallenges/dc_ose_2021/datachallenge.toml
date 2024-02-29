@@ -9,8 +9,8 @@ qf_alongtrack_lambdax_from_map = "0.0.1"
 
 [methods]
 [methods.4dvarnet]
-url = "https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/a5/2381e9409cb7c6cf9be980bda9aced"
-var = "rec_ssh"
+url = "https://s3.eu-central-1.wasabisys.com/melody/quentin_cloud/new_4dvarnet_out_dc2021a.nc"
+var = "out"
 
 [methods.duacs]
 url = "https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/95/7d74696fbf5f2b6d0c528757951b8a"
