@@ -100,8 +100,8 @@ stages:
       size: 590300748
     - path: data/prepared/c2.nc
       hash: md5
-      md5: fb8bf253e87be431b298b136dde80d99
-      size: 1397837
+      md5: c17105012b7e4788860e800986192ca4
+      size: 363909
     params:
       datachallenge.toml:
         pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
@@ -117,8 +117,8 @@ stages:
     outs:
     - path: data/method_outputs/4dvarnet_on_track.nc
       hash: md5
-      md5: a86f49eeb091b177ec0e48aa801c21a2
-      size: 1587241
+      md5: 51ae2c5770bf04b9407690ee17fb770a
+      size: 405609
   interp_on_track@miost:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
       'stages.interp_on_track.grid_var=ssh' 'stages.method=miost'
@@ -129,8 +129,8 @@ stages:
       size: 29804673
     - path: data/prepared/c2.nc
       hash: md5
-      md5: fb8bf253e87be431b298b136dde80d99
-      size: 1397837
+      md5: c17105012b7e4788860e800986192ca4
+      size: 363909
     params:
       datachallenge.toml:
         pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
@@ -146,8 +146,8 @@ stages:
     outs:
     - path: data/method_outputs/miost_on_track.nc
       hash: md5
-      md5: f5e9d3d586f044def64eff61c6e92198
-      size: 1587360
+      md5: 3ddffec59caeb26bbfb3815a8911e787
+      size: 405728
   interp_on_track@bfn:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
       'stages.interp_on_track.grid_var=ssh' 'stages.method=bfn'
@@ -158,8 +158,8 @@ stages:
       size: 700845764
     - path: data/prepared/c2.nc
       hash: md5
-      md5: fb8bf253e87be431b298b136dde80d99
-      size: 1397837
+      md5: c17105012b7e4788860e800986192ca4
+      size: 363909
     params:
       datachallenge.toml:
         pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
@@ -175,8 +175,8 @@ stages:
     outs:
     - path: data/method_outputs/bfn_on_track.nc
       hash: md5
-      md5: 3d31f6fed2f9786b7f69d0a8784abaec
-      size: 1587360
+      md5: aa34311be6937c1274b8f95cbb7824e9
+      size: 405728
   interp_on_track@duacs:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
       'stages.interp_on_track.grid_var=ssh' 'stages.method=duacs'
@@ -187,8 +187,8 @@ stages:
       size: 4684262
     - path: data/prepared/c2.nc
       hash: md5
-      md5: fb8bf253e87be431b298b136dde80d99
-      size: 1397837
+      md5: c17105012b7e4788860e800986192ca4
+      size: 363909
     params:
       datachallenge.toml:
         pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
@@ -204,8 +204,8 @@ stages:
     outs:
     - path: data/method_outputs/duacs_on_track.nc
       hash: md5
-      md5: 55a157bf35618a513e3fd35112218d48
-      size: 1587360
+      md5: 51d74ecc7998b4fcb4e39b36f4397c89
+      size: 405728
   interp_on_track@dymost:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
       'stages.interp_on_track.grid_var=ssh' 'stages.method=dymost'
@@ -216,8 +216,8 @@ stages:
       size: 2354338
     - path: data/prepared/c2.nc
       hash: md5
-      md5: fb8bf253e87be431b298b136dde80d99
-      size: 1397837
+      md5: c17105012b7e4788860e800986192ca4
+      size: 363909
     params:
       datachallenge.toml:
         pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
@@ -233,20 +233,20 @@ stages:
     outs:
     - path: data/method_outputs/dymost_on_track.nc
       hash: md5
-      md5: 8873caf8d50b515f4fdd0462583d880e
-      size: 1589740
+      md5: 579798a14f11d0591c13cc71f1236d70
+      size: 408108
   compute_lambdax@4dvarnet:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
       'stages.interp_on_track.grid_var=rec_ssh' 'stages.method=4dvarnet'
     deps:
     - path: data/method_outputs/4dvarnet_on_track.nc
       hash: md5
-      md5: a86f49eeb091b177ec0e48aa801c21a2
-      size: 1587241
+      md5: 51ae2c5770bf04b9407690ee17fb770a
+      size: 405609
     - path: data/prepared/c2.nc
       hash: md5
-      md5: fb8bf253e87be431b298b136dde80d99
-      size: 1397837
+      md5: c17105012b7e4788860e800986192ca4
+      size: 363909
     params:
       datachallenge.toml:
         pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
@@ -267,8 +267,8 @@ stages:
     outs:
     - path: data/method_outputs/psd_4dvarnet.json
       hash: md5
-      md5: ddaeb1134dd7cfe88b3c098596a42e44
-      size: 7955
+      md5: 32a417e9d38546fa98104a0ad0feb37b
+      size: 7952
     - path: data/metrics/lambdax_4dvarnet.json
       hash: md5
       md5: 3be49e19bba78900928cc7422415da0b
@@ -279,12 +279,12 @@ stages:
     deps:
     - path: data/method_outputs/miost_on_track.nc
       hash: md5
-      md5: f5e9d3d586f044def64eff61c6e92198
-      size: 1587360
+      md5: 3ddffec59caeb26bbfb3815a8911e787
+      size: 405728
     - path: data/prepared/c2.nc
       hash: md5
-      md5: fb8bf253e87be431b298b136dde80d99
-      size: 1397837
+      md5: c17105012b7e4788860e800986192ca4
+      size: 363909
     params:
       datachallenge.toml:
         pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
@@ -305,24 +305,24 @@ stages:
     outs:
     - path: data/method_outputs/psd_miost.json
       hash: md5
-      md5: ae5427e7be98a5c18de986e96449697b
-      size: 7958
+      md5: b41dd3bf8b03492dc297a37851af078c
+      size: 7951
     - path: data/metrics/lambdax_miost.json
       hash: md5
-      md5: 1dcd247fa10c90ce540a3da60593df93
-      size: 31
+      md5: d1acd78b1829637e4bee155b9f85ea9c
+      size: 30
   compute_lambdax@bfn:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
       'stages.interp_on_track.grid_var=ssh' 'stages.method=bfn'
     deps:
     - path: data/method_outputs/bfn_on_track.nc
       hash: md5
-      md5: 3d31f6fed2f9786b7f69d0a8784abaec
-      size: 1587360
+      md5: aa34311be6937c1274b8f95cbb7824e9
+      size: 405728
     - path: data/prepared/c2.nc
       hash: md5
-      md5: fb8bf253e87be431b298b136dde80d99
-      size: 1397837
+      md5: c17105012b7e4788860e800986192ca4
+      size: 363909
     params:
       datachallenge.toml:
         pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
@@ -343,8 +343,8 @@ stages:
     outs:
     - path: data/method_outputs/psd_bfn.json
       hash: md5
-      md5: 4fc2fe5ec017bde54fe1e5b47a37873f
-      size: 7957
+      md5: c3094dbec32625165e20bd7a3db9d498
+      size: 7958
     - path: data/metrics/lambdax_bfn.json
       hash: md5
       md5: 0065df0b4369de75e123600cb5470c8c
@@ -355,12 +355,12 @@ stages:
     deps:
     - path: data/method_outputs/duacs_on_track.nc
       hash: md5
-      md5: 55a157bf35618a513e3fd35112218d48
-      size: 1587360
+      md5: 51d74ecc7998b4fcb4e39b36f4397c89
+      size: 405728
     - path: data/prepared/c2.nc
       hash: md5
-      md5: fb8bf253e87be431b298b136dde80d99
-      size: 1397837
+      md5: c17105012b7e4788860e800986192ca4
+      size: 363909
     params:
       datachallenge.toml:
         pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
@@ -381,8 +381,8 @@ stages:
     outs:
     - path: data/method_outputs/psd_duacs.json
       hash: md5
-      md5: bdebc26558a34f40a4bfd68ae82a1591
-      size: 7973
+      md5: 898bf6a11c9d7b4f7b4129c3640adee3
+      size: 7971
     - path: data/metrics/lambdax_duacs.json
       hash: md5
       md5: 1dcd247fa10c90ce540a3da60593df93
@@ -393,12 +393,12 @@ stages:
     deps:
     - path: data/method_outputs/dymost_on_track.nc
       hash: md5
-      md5: 8873caf8d50b515f4fdd0462583d880e
-      size: 1589740
+      md5: 579798a14f11d0591c13cc71f1236d70
+      size: 408108
     - path: data/prepared/c2.nc
       hash: md5
-      md5: fb8bf253e87be431b298b136dde80d99
-      size: 1397837
+      md5: c17105012b7e4788860e800986192ca4
+      size: 363909
     params:
       datachallenge.toml:
         pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
@@ -419,9 +419,9 @@ stages:
     outs:
     - path: data/method_outputs/psd_dymost.json
       hash: md5
-      md5: 7c545418e16a438e667f15ca721ef8d1
-      size: 7979
+      md5: f22204ef92b42021d796b46dc38c0267
+      size: 7973
     - path: data/metrics/lambdax_dymost.json
       hash: md5
-      md5: d1acd78b1829637e4bee155b9f85ea9c
+      md5: 0065df0b4369de75e123600cb5470c8c
       size: 30
