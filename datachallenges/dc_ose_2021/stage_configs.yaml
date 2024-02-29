@@ -45,7 +45,7 @@ stages:
     ref_var: ssh
     delta_t: 0.9434
     velocity: 6.77
-    length_scale: 1000.0
+    length_scale: 800.0
     segment_overlapping: 0.25
     output_lambdax_path: data/metrics/lambdax_${..method}.json
     output_psd_path: data/method_outputs/psd_${..method}.nc
