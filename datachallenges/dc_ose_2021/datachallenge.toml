@@ -12,10 +12,6 @@ qf_alongtrack_lambdax_from_map = "0.0.1"
 url = "https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/a5/2381e9409cb7c6cf9be980bda9aced"
 var = "rec_ssh"
 
-[methods.miost]
-url = "https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/4f/014481eed0088eb9a0cf329ebf045b"
-var = "ssh"
-
 [methods.bfn]
 url = "https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/29/6781b126d905e98b82dac9bcecf57e"
 var = "ssh"
@@ -24,6 +20,3 @@ var = "ssh"
 url = "https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/95/7d74696fbf5f2b6d0c528757951b8a"
 var = "ssh"
 
-[methods.dymost]
-url = "https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/1f/6fc60bba2ef471ff845b4cdcc18f6a"
-var = "ssh"
