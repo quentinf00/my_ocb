@@ -2,10 +2,10 @@
 ## Dag
 ```mermaid
 flowchart TD
-        node1["compute_lambdax@0"]
+        node1["compute_lambdax@4dvarnet"]
         node2["filter_and_merge_ref"]
-        node3["interp_on_track@0"]
-        node4["method_output@0"]
+        node3["interp_on_track@4dvarnet"]
+        node4["method_output@4dvarnet"]
         node2-->node1
         node2-->node3
         node3-->node1
