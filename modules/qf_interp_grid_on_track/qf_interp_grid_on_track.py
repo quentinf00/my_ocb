@@ -7,6 +7,7 @@ import xarray as xr
 import numpy as np
 import ocn_tools._src.geoprocessing.validation as ocnval
 import ocn_tools._src.geoprocessing.gridding as ocngri
+from functools import partial
 
 log = logging.getLogger(__name__)
 
@@ -84,9 +85,8 @@ def run(
         xr.open_dataset(grid_path)
         .pipe(ocnval.validate_latlon)
         .pipe(ocnval.validate_time)
-        .pipe(ocnval.validate_ssh) # TODO validate rec ssh (add partial) 
+        .pipe(partial(ocnval.validate_ssh, variable=grid_var)) # TODO validate rec ssh (add partial) 
         [[grid_var]] 
-        
     )
 
     Path(output_path).parent.mkdir(parents=True, exist_ok=True) # Make output directory
