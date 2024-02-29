@@ -11,7 +11,7 @@ jobs:
         id: check_author
         run: |
           echo "skip=${{github.author == 'github-actions'}}" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         if: ${{ steps.check_author.outputs.skip == 'false' }}
       - uses: mamba-org/setup-micromamba@v1
         if: ${{ steps.check_author.outputs.skip  == 'false' }}
@@ -65,10 +65,10 @@ jobs:
         shell: bash -l {0}
         run: |
           cd datachallenges/dc_ose_2021/data/metrics
-          echo 'Data Challenge OSE Gulfstream 2021\n' >> ../report.md
-          echo 'Spatial scales resolved $\lambda_x$ \n' >> ../report.md
-          dvc metrics show --md *.json >> ../report.md
-          cat ../report.md
+          echo 'Data Challenge OSE Gulfstream 2021\n' >> ../../report.md
+          echo 'Spatial scales resolved $\lambda_x$ \n' >> ../../report.md
+          dvc metrics show --md *.json >> ../../report.md
+          cat ../../report.md
       - name: Commit changes
         if: ${{ (steps.check_author.outputs.skip == 'false') }}
         uses: EndBug/add-and-commit@v9
