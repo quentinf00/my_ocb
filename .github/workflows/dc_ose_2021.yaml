@@ -50,7 +50,7 @@ jobs:
         if: ${{ (steps.check_author.outputs.skip == 'false') && steps.stages_to_run.outputs.stages }}
         run: |
           dvc --cd datachallenges/dc_ose_2021 freeze fetch_reference_data
-          dvc --cd datachallenges/dc_ose_2021 repro -k --pull -s ${{steps.stages_to_run.outputs.stages}}
+          dvc --cd datachallenges/dc_ose_2021 repro -k --pull ${{steps.stages_to_run.outputs.stages}}
           dvc --cd datachallenges/dc_ose_2021 unfreeze fetch_reference_data
       - name: push new files
         if: ${{ (steps.check_author.outputs.skip == 'false') && steps.stages_to_run.outputs.stages }}
