@@ -1,0 +1,82 @@
+name: Compute DC OSE 2021 metrics
+on: 
+  push:
+    branches:
+    - dc_ose_2021/*
+jobs:
+  reproduce-metrics:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Is commit from github actions
+        id: check_author
+        run: |
+          echo "skip=${{github.author == 'github-actions'}}" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        if: ${{ steps.check_author.outputs.skip == 'false' }}
+      - uses: mamba-org/setup-micromamba@v1
+        if: ${{ steps.check_author.outputs.skip  == 'false' }}
+        with:
+          micromamba-version: 'latest'
+          environment-file: env.yaml
+          environment-name: ci
+          init-shell: bash
+          cache-environment: true
+          post-cleanup: 'all'
+      - name: install pipelines
+        if: ${{ steps.check_author.outputs.skip  == 'false' }}
+        shell: bash -el {0}
+        run: |
+          pip install -q -e modules/qf_interp_grid_on_track
+          pip install -q -e modules/dz_download_ssh_tracks
+          pip install -q -e modules/qf_filter_merge_daily_ssh_tracks
+          pip install -q -e modules/alongtrack_lambdax
+          pip install --no-deps -e pipelines/qf_alongtrack_lambdax_from_map
+      - name: install jq
+        if: ${{ steps.check_author.outputs.skip  == 'false' }}
+        uses: dcarbone/install-jq-action@v2
+      - name: compute_stages
+        if: ${{ steps.check_author.outputs.skip  == 'false' }}
+        shell: bash -el {0}
+        id: metrics_to_recompute
+        run: |
+          dvc --cd datachallenges/dc_ose_2021 pull --with-deps --allow-missing
+          STATUS=$(dvc --cd datachallenges/dc_ose_2021 status --json)
+          echo $STATUS
+          STAGES=$(echo "$STATUS" | jq -r '[keys[] | select(contains("metric"))] | join(" ")')
+          echo $STAGES
+          echo "stages=$STAGES" >> "$GITHUB_OUTPUT"
+      - name: reproduce datachallenge results
+        shell: bash -el {0}
+        if: ${{ (steps.check_author.outputs.skip == 'false') && steps.metrics_to_recompute.outputs.stages }}
+        env:
+          COPERNICUS_MARINE_SERVICE_USERNAME: ${{secrets.copernicus_login}}
+          COPERNICUS_MARINE_SERVICE_PASSWORD: ${{secrets.copernicus_pwd}}
+        run: |
+          dvc --cd datachallenges/dc_ose_2021 repro -k --pull ${{steps.stages_to_run.outputs.stages}}
+      - name: push new files
+        if: ${{ env.push && (steps.check_author.outputs.skip == 'false') && steps.stages_to_run.outputs.stages }}
+        shell: bash -l {0}
+        env:
+          AWS_ACCESS_KEY_ID: ${{secrets.aws_key}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.aws_secret}}
+          AWS_DEFAULT_REGION: ${{secrets.aws_region}}
+        run: dvc --cd datachallenges/dc_ose_2021 push -r s3 ${{steps.stages_to_run.outputs.stages}}
+      - name: dump metrics report
+        if: ${{ (steps.check_author.outputs.skip == 'false') }}
+        shell: bash -l {0}
+        run: |
+          cd datachallenges/dc_ose_2021/data/metrics
+          echo 'Data Challenge OSE Gulfstream 2021\n' > ../../report.md
+          echo 'Spatial scales resolved $\lambda_x$ \n' >> ../../report.md
+          dvc metrics show --md *.json >> ../../report.md
+          cat ../../report.md
+      - name: Commit changes
+        if: ${{ (steps.check_author.outputs.skip == 'false') }}
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: 'Update dc_ose_2021 leaderboard'
+          add: 'dvc.lock report.md'
+          cwd: './datachallenges/dc_ose_2021'
+          push: ${{ env.push }}
+  
