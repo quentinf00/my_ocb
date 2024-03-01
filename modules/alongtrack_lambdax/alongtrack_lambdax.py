@@ -8,6 +8,10 @@ import hydra_zen
 import hydra
 import numpy as np
 from pathlib import Path
+import logging
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
 
 PIPELINE_DESC = "Compute effective resolution lambda_x on the track geometry"
 
@@ -21,7 +25,7 @@ def main_api(
     length_scale: float = 1000,
     segment_overlapping: float = 0.25,
     output_lambdax_path='data/metrics/lambdax.json',
-    output_psd_path='data/metrics/psd_score.json',
+    output_psd_path='data/metrics/psd_score.nc',
 ):
     """
     TODO: doc for alongtrack_lambdax 
@@ -58,19 +62,19 @@ def main_api(
     ds, _ = eval_ds.pipe(partial_track_fn).pipe(partial_score_fn)
 
     ## Robust lambda_x computation when small wavelength reach score > 0.5
-    df = ds.to_dataframe().assign(wl=lambda df: 1 / (df.index+1e-15))
-    df = df.reset_index().set_index('wl')
-    largest_unresolved_scale = df.loc[df.score < 0.5].index.max()
-    dff = df.loc[df.index >= largest_unresolved_scale].reset_index().set_index('score')
-    dff = dff.T
-    dff.insert(0, 0.5, np.nan)
-    dff = dff.T.sort_index()
-    lambda_x = dff.wl.interpolate().loc[0.5]
+    max_wnx = ds.isel(wavenumber=ds.score<=0.5).wavenumber.min().item()
+    log.debug(f"not considering wavelength below {1/max_wnx:.2f}, psd score: {ds.sel(wavenumber=max_wnx).score:.2f}")
+    lambda_x = 1 / (
+        ds.isel(wavenumber=ds.wavenumber<=max_wnx)
+            .swap_dims(wavenumber='score')
+            .interp(score=0.5).wavenumber.item()
+    )
+    log.debug(f"Effective scale resolved (interpolated at score 0.5) {lambda_x:.2f}")
 
 
     Path(output_lambdax_path).parent.mkdir(parents=True, exist_ok=True)
     Path(output_psd_path).parent.mkdir(parents=True, exist_ok=True)
-    df.to_json(output_psd_path)
+    ds.to_netcdf(output_psd_path)
     with open(Path(output_lambdax_path), 'w') as f:
         json.dump(dict(lambdax=lambda_x), f)
     
