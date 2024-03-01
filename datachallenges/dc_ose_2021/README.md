@@ -10,6 +10,7 @@ flowchart TD
         node2-->node3
         node3-->node1
         node4-->node3
+        node5[fetch_reference_data]-->node4
 ```
 
 ## Environment setup
