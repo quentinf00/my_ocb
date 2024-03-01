@@ -46,7 +46,7 @@ stages:
       - data/method_outputs/${key}.nc
       outs:
       - data/method_outputs/${key}_on_track.nc
-  compute_lambdax:
+  metric_lambdax:
     foreach: ${methods}
     do:
       cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
@@ -60,7 +60,7 @@ stages:
       - data/prepared/c2.nc
       - data/method_outputs/${key}_on_track.nc
       outs:
-      - data/method_outputs/psd_${key}.json
+      - data/method_outputs/psd_${key}.nc
       metrics:
       - data/metrics/lambdax_${key}.json
 

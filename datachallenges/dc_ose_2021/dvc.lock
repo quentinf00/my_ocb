@@ -235,3 +235,79 @@ stages:
       hash: md5
       md5: d1acd78b1829637e4bee155b9f85ea9c
       size: 30
+  metric_lambdax@4dvarnet:
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
+      'stages.interp_on_track.grid_var=rec_ssh' 'stages.method=4dvarnet'
+    deps:
+    - path: data/method_outputs/4dvarnet_on_track.nc
+      hash: md5
+      md5: a86f49eeb091b177ec0e48aa801c21a2
+      size: 1587241
+    - path: data/prepared/c2.nc
+      hash: md5
+      md5: fb8bf253e87be431b298b136dde80d99
+      size: 1397837
+    params:
+      datachallenge.toml:
+        pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
+      stage_configs.yaml:
+        stages.lambdax:
+          _target_: alongtrack_lambdax.main_api
+          _partial_: true
+          study_path: ${..interp_on_track.output_path}
+          study_var: ${..interp_on_track.grid_var}
+          ref_path: ${..filter_and_merge.output_path}
+          ref_var: ssh
+          delta_t: 0.9434
+          velocity: 6.77
+          length_scale: 1000.0
+          segment_overlapping: 0.25
+          output_lambdax_path: data/metrics/lambdax_${..method}.json
+          output_psd_path: data/method_outputs/psd_${..method}.nc
+    outs:
+    - path: data/method_outputs/psd_4dvarnet.nc
+      hash: md5
+      md5: 5356c0a6079d47d970318e8347977e6f
+      size: 8954
+    - path: data/metrics/lambdax_4dvarnet.json
+      hash: md5
+      md5: 66d494988e9edf9d7be641cf03492237
+      size: 31
+  metric_lambdax@duacs:
+    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
+      'stages.interp_on_track.grid_var=ssh' 'stages.method=duacs'
+    deps:
+    - path: data/method_outputs/duacs_on_track.nc
+      hash: md5
+      md5: 55a157bf35618a513e3fd35112218d48
+      size: 1587360
+    - path: data/prepared/c2.nc
+      hash: md5
+      md5: fb8bf253e87be431b298b136dde80d99
+      size: 1397837
+    params:
+      datachallenge.toml:
+        pipelines.diagnostic.qf_alongtrack_lambdax_from_map: 0.0.1
+      stage_configs.yaml:
+        stages.lambdax:
+          _target_: alongtrack_lambdax.main_api
+          _partial_: true
+          study_path: ${..interp_on_track.output_path}
+          study_var: ${..interp_on_track.grid_var}
+          ref_path: ${..filter_and_merge.output_path}
+          ref_var: ssh
+          delta_t: 0.9434
+          velocity: 6.77
+          length_scale: 1000.0
+          segment_overlapping: 0.25
+          output_lambdax_path: data/metrics/lambdax_${..method}.json
+          output_psd_path: data/method_outputs/psd_${..method}.nc
+    outs:
+    - path: data/method_outputs/psd_duacs.nc
+      hash: md5
+      md5: 9e1b8d50bbe0daff98446c3087769cfd
+      size: 8954
+    - path: data/metrics/lambdax_duacs.json
+      hash: md5
+      md5: 0850b8e92fadaa430e8ff13873c97cbf
+      size: 29
