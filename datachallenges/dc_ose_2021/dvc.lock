@@ -2,13 +2,13 @@ schema: '2.0'
 stages:
   method_output@4dvarnet:
     cmd: wget 
-      https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/a5/2381e9409cb7c6cf9be980bda9aced
+      https://s3.eu-central-1.wasabisys.com/melody/quentin_cloud/new_4dvarnet_out_dc2021a.nc
       -nc -O 'data/method_outputs/4dvarnet.nc'
     outs:
     - path: data/method_outputs/4dvarnet.nc
       hash: md5
-      md5: a52381e9409cb7c6cf9be980bda9aced
-      size: 590300748
+      md5: e392f19d22cabd32699d9fd3d51d43d9
+      size: 590300426
   method_output@duacs:
     cmd: wget 
       https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/95/7d74696fbf5f2b6d0c528757951b8a
@@ -65,12 +65,12 @@ stages:
       size: 1397837
   interp_on_track@4dvarnet:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
-      'stages.interp_on_track.grid_var=rec_ssh' 'stages.method=4dvarnet'
+      'stages.interp_on_track.grid_var=out' 'stages.method=4dvarnet'
     deps:
     - path: data/method_outputs/4dvarnet.nc
       hash: md5
-      md5: a52381e9409cb7c6cf9be980bda9aced
-      size: 590300748
+      md5: e392f19d22cabd32699d9fd3d51d43d9
+      size: 590300426
     - path: data/prepared/c2.nc
       hash: md5
       md5: fb8bf253e87be431b298b136dde80d99
@@ -90,8 +90,8 @@ stages:
     outs:
     - path: data/method_outputs/4dvarnet_on_track.nc
       hash: md5
-      md5: a86f49eeb091b177ec0e48aa801c21a2
-      size: 1587241
+      md5: 089cc36313e86c2a02d87aece6ebe41f
+      size: 1587360
   interp_on_track@duacs:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
       'stages.interp_on_track.grid_var=ssh' 'stages.method=duacs'
@@ -237,12 +237,12 @@ stages:
       size: 30
   metric_lambdax@4dvarnet:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
-      'stages.interp_on_track.grid_var=rec_ssh' 'stages.method=4dvarnet'
+      'stages.interp_on_track.grid_var=out' 'stages.method=4dvarnet'
     deps:
     - path: data/method_outputs/4dvarnet_on_track.nc
       hash: md5
-      md5: a86f49eeb091b177ec0e48aa801c21a2
-      size: 1587241
+      md5: 089cc36313e86c2a02d87aece6ebe41f
+      size: 1587360
     - path: data/prepared/c2.nc
       hash: md5
       md5: fb8bf253e87be431b298b136dde80d99
@@ -267,11 +267,11 @@ stages:
     outs:
     - path: data/method_outputs/psd_4dvarnet.nc
       hash: md5
-      md5: 5356c0a6079d47d970318e8347977e6f
+      md5: 6d2e0caf60846a25dabf9e9b73423dac
       size: 8954
     - path: data/metrics/lambdax_4dvarnet.json
       hash: md5
-      md5: 66d494988e9edf9d7be641cf03492237
+      md5: 5d72b995ca9fea29a9a1f0439830b2c0
       size: 31
   metric_lambdax@duacs:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
