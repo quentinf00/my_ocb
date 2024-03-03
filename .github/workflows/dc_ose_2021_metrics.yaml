@@ -54,7 +54,7 @@ jobs:
         run: |
           dvc --cd datachallenges/dc_ose_2021 repro -k --pull --allow-missing ${{steps.stages_to_run.outputs.stages}}
       - name: push new files
-        if: ${{ env.push && (steps.check_author.outputs.skip == 'false') && steps.stages_to_run.outputs.stages }}
+        if: ${{ (steps.check_author.outputs.skip == 'false') && steps.stages_to_run.outputs.stages }}
         shell: bash -l {0}
         env:
           AWS_ACCESS_KEY_ID: ${{secrets.aws_key}}
@@ -79,5 +79,5 @@ jobs:
           message: 'Update dc_ose_2021 leaderboard'
           add: 'dvc.lock report.md'
           cwd: './datachallenges/dc_ose_2021'
-          push: ${{ env.push }}
+          push: true
   
