@@ -52,7 +52,7 @@ jobs:
           COPERNICUS_MARINE_SERVICE_USERNAME: ${{secrets.copernicus_login}}
           COPERNICUS_MARINE_SERVICE_PASSWORD: ${{secrets.copernicus_pwd}}
         run: |
-          dvc --cd datachallenges/dc_ose_2021 repro -k --pull ${{steps.stages_to_run.outputs.stages}}
+          dvc --cd datachallenges/dc_ose_2021 repro -k --pull --allow-missing ${{steps.stages_to_run.outputs.stages}}
       - name: push new files
         if: ${{ env.push && (steps.check_author.outputs.skip == 'false') && steps.stages_to_run.outputs.stages }}
         shell: bash -l {0}
@@ -66,8 +66,9 @@ jobs:
         shell: bash -l {0}
         run: |
           cd datachallenges/dc_ose_2021/data/metrics
-          echo 'Data Challenge OSE Gulfstream 2021\n' > ../../report.md
-          echo 'Spatial scales resolved $\lambda_x$ \n' >> ../../report.md
+          echo 'Data Challenge OSE Gulfstream 2021' > ../../report.md
+          echo '' >> ../../report.md
+          echo 'Spatial scales resolved $\lambda_x$' >> ../../report.md
           dvc metrics show --md *.json >> ../../report.md
           cat ../../report.md
       - name: Commit changes
