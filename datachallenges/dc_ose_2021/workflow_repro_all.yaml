@@ -1,7 +1,7 @@
 name: Full reproduction
+on: {}
 jobs:
   reproduce-all:
-    if: ${{ github.event.act }}
     runs-on: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v4
