@@ -260,18 +260,18 @@ stages:
           ref_var: ssh
           delta_t: 0.9434
           velocity: 6.77
-          length_scale: 1000.0
+          length_scale: 800.0
           segment_overlapping: 0.25
           output_lambdax_path: data/metrics/lambdax_${..method}.json
           output_psd_path: data/method_outputs/psd_${..method}.nc
     outs:
     - path: data/method_outputs/psd_4dvarnet.nc
       hash: md5
-      md5: 5356c0a6079d47d970318e8347977e6f
+      md5: 5ec9dc8b2219c9036910c5825ee06340
       size: 8954
     - path: data/metrics/lambdax_4dvarnet.json
       hash: md5
-      md5: 66d494988e9edf9d7be641cf03492237
+      md5: a58552dd1618025f8207488bf06d3149
       size: 31
   metric_lambdax@duacs:
     cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
@@ -298,16 +298,16 @@ stages:
           ref_var: ssh
           delta_t: 0.9434
           velocity: 6.77
-          length_scale: 1000.0
+          length_scale: 800.0
           segment_overlapping: 0.25
           output_lambdax_path: data/metrics/lambdax_${..method}.json
           output_psd_path: data/method_outputs/psd_${..method}.nc
     outs:
     - path: data/method_outputs/psd_duacs.nc
       hash: md5
-      md5: 9e1b8d50bbe0daff98446c3087769cfd
+      md5: bb9c7a6b7f0ffb79ce7ed094a0463688
       size: 8954
     - path: data/metrics/lambdax_duacs.json
       hash: md5
-      md5: 0850b8e92fadaa430e8ff13873c97cbf
-      size: 29
+      md5: dc4e246eefcca3eaabcb340ddb85559f
+      size: 31
