@@ -5,6 +5,7 @@ import alongtrack_lambdax
 import dz_download_ssh_tracks
 import qf_filter_merge_daily_ssh_tracks
 import qf_interp_grid_on_track
+import dz_alongtrack_mu
 from functools import partial
 
 
@@ -38,10 +39,16 @@ stages =  {
         output_lambdax_path='data/metrics/lambdax_${..method}.json',
         output_psd_path='data/metrics/psd_${..method}.json',
     ),
+    'mu': pb(dz_alongtrack_mu.run,
+        ref_path='${..filter_and_merge.output_path}',
+        study_path='${..interp_on_track.output_path}',
+        study_var='${..interp_on_track.grid_var}',
+        output_path='data/metrics/mu_${..method}.json',
+    ),
 }
 
 def run_pipeline(
-    to_run=('dl_tracks', 'filter_and_merge', 'interp_on_track', 'lambdax'),
+    to_run=('dl_tracks', 'filter_and_merge', 'interp_on_track', 'lambdax', 'mu'),
     stages=stages,
     ):
     for stage in to_run:
@@ -64,6 +71,10 @@ run_pipeline.__doc__ = f"""
         lambdax:
     {alongtrack_lambdax.PIPELINE_DESC}
     more info with: `alongtrack_lambdax --help`
+
+        mu:
+    {dz_alongtrack_mu.PIPELINE_DESC}
+    more info with: `dz_alongtrack_mu --help`
 """
 
 # Create a configuration associated with the above function (cf next cell)
@@ -74,13 +85,13 @@ zen_endpoint = hydra_zen.zen(run_pipeline)
 
 #Store the config
 store = hydra_zen.ZenStore()
-store(HydraConf(help=HelpConf(header=run_pipeline.__doc__, app_name='alongtrack_lambdax_from_map',)))
-store(main_config, name='alongtrack_lambdax_from_map')
+store(HydraConf(help=HelpConf(header=run_pipeline.__doc__, app_name=__name__,)))
+store(main_config, name=__name__)
 store.add_to_hydra_store(overwrite_ok=True)
 
 # Create CLI endpoint
 api_endpoint = hydra.main(
-    config_name='alongtrack_lambdax_from_map', version_base="1.3", config_path=None
+    config_name=__name__, version_base="1.3", config_path=None
 )(zen_endpoint)
 
 

@@ -1,5 +1,5 @@
 name: Compute DC OSE 2021 metrics
-on: 
+on:
   push:
     branches:
     - dc_ose_2021/*
@@ -30,7 +30,7 @@ jobs:
           pip install -q -e modules/dz_download_ssh_tracks
           pip install -q -e modules/qf_filter_merge_daily_ssh_tracks
           pip install -q -e modules/alongtrack_lambdax
-          pip install --no-deps -e pipelines/qf_alongtrack_lambdax_from_map
+          pip install --no-deps -e pipelines/qf_alongtrack_metrics_from_map
       - name: install jq
         if: ${{ steps.check_author.outputs.skip  == 'false' }}
         uses: dcarbone/install-jq-action@v2
@@ -65,12 +65,10 @@ jobs:
         if: ${{ (steps.check_author.outputs.skip == 'false') }}
         shell: bash -l {0}
         run: |
-          cd datachallenges/dc_ose_2021/data/metrics
-          echo 'Data Challenge OSE Gulfstream 2021' > ../../report.md
-          echo '' >> ../../report.md
-          echo 'Spatial scales resolved $\lambda_x$' >> ../../report.md
-          dvc metrics show --md *.json >> ../../report.md
-          cat ../../report.md
+          cd datachallenges/dc_ose_2021
+          echo 'Data Challenge OSE Gulfstream 2021\n' > report.md
+          dvc metrics show --json | python scripts/format_metrics.py >> report.md
+          cat report.md
       - name: Commit changes
         if: ${{ (steps.check_author.outputs.skip == 'false') }}
         uses: EndBug/add-and-commit@v9
@@ -80,4 +78,4 @@ jobs:
           add: 'dvc.lock report.md'
           cwd: './datachallenges/dc_ose_2021'
           push: true
-  
+

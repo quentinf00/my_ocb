@@ -1,5 +1,6 @@
 name: Full reproduction
-on: {}
+on: 
+  push
 jobs:
   reproduce-all:
     runs-on: [ubuntu-latest]
@@ -20,7 +21,8 @@ jobs:
           pip install -q -e modules/dz_download_ssh_tracks
           pip install -q -e modules/qf_filter_merge_daily_ssh_tracks
           pip install -q -e modules/alongtrack_lambdax
-          pip install --no-deps -e pipelines/qf_alongtrack_lambdax_from_map
+          pip install -q -e modules/dz_alongtrack_mu
+          pip install --no-deps -e pipelines/qf_alongtrack_metrics_from_map
       - name: reproduce datachallenge results
         shell: bash -el {0}
         env:
@@ -36,20 +38,17 @@ jobs:
           AWS_DEFAULT_REGION: ${{secrets.aws_region}}
         run: dvc --cd datachallenges/dc_ose_2021 push -r s3 ${{steps.stages_to_run.outputs.stages}}
       - name: dump metrics report
-        if: ${{ (steps.check_author.outputs.skip == 'false') }}
         shell: bash -l {0}
         run: |
-          cd datachallenges/dc_ose_2021/data/metrics
-          echo 'Data Challenge OSE Gulfstream 2021\n' > ../../report.md
-          echo 'Spatial scales resolved $\lambda_x$ \n' >> ../../report.md
-          dvc metrics show --md *.json >> ../../report.md
-          cat ../../report.md
+          cd datachallenges/dc_ose_2021
+          echo 'Data Challenge OSE Gulfstream 2021\n' > report.md
+          dvc metrics show --json | python scripts/format_metrics.py >> report.md
+          cat report.md
       - name: Commit changes
-        if: ${{ (steps.check_author.outputs.skip == 'false') }}
         uses: EndBug/add-and-commit@v9
         with:
           message: 'Update dc_ose_2021 leaderboard'
           add: 'dvc.lock report.md'
           cwd: './datachallenges/dc_ose_2021'
           push: true
-  
+

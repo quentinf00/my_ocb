@@ -25,10 +25,10 @@ def main_api(
     length_scale: float = 1000,
     segment_overlapping: float = 0.25,
     output_lambdax_path='data/metrics/lambdax.json',
-    output_psd_path='data/metrics/psd_score.nc',
+    output_psd_path='data/method_outputs/psd_score.nc',
 ):
     """
-    TODO: doc for alongtrack_lambdax 
+    TODO: doc for alongtrack_lambdax
     """
     study_da = xr.open_dataset(study_path)[study_var]
     ref_da = xr.open_dataset(ref_path)[ref_var]
@@ -76,8 +76,8 @@ def main_api(
     Path(output_psd_path).parent.mkdir(parents=True, exist_ok=True)
     ds.to_netcdf(output_psd_path)
     with open(Path(output_lambdax_path), 'w') as f:
-        json.dump(dict(lambdax=lambda_x), f)
-    
+        json.dump({"$\lambda_x$": lambda_x}, f)
+
 
 # Create a configuration associated with the above function (cf next cell)
 main_config =  hydra_zen.builds(main_api, populate_full_signature=True)

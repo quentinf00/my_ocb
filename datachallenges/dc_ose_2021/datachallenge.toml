@@ -5,7 +5,7 @@ author = "Quentin"
 [pipelines]
 [pipelines.inference_data]
 [pipelines.diagnostic]
-qf_alongtrack_lambdax_from_map = "0.0.1"
+qf_alongtrack_metrics_from_map = "0.0.1"
 
 [methods]
 [methods.4dvarnet]
