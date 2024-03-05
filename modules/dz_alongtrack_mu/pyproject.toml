@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "dz_alongtrack_mu"
+authors=[
+  {name = "Daniel Zhu", email = "daniel.zhu@imt-atlantique.fr"},
+]
+[project.urls]
+Repository="https://github.com/quentinf00/my_ocb.git"
+
+[project.scripts]
+dz_alongtrack_mu = "dz_alongtrack_mu:api_endpoint"
+
+[tool.setuptools]
+py-modules=["dz_alongtrack_mu"]
