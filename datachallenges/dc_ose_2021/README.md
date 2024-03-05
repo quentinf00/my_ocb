@@ -33,6 +33,9 @@ pip install pipeline.txt
 dvc --cd datachallenges/dc_ose_2021 repro
 ```
 
+## Display Leaderboard
+dvc metrics show --json | python scripts/format_metrics.py
+
 ## Development
 
 ### Changing the source code:

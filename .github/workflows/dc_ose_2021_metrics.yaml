@@ -66,10 +66,8 @@ jobs:
         shell: bash -l {0}
         run: |
           cd datachallenges/dc_ose_2021/data/metrics
-          echo 'Data Challenge OSE Gulfstream 2021' > ../../report.md
-          echo '' >> ../../report.md
-          echo 'Spatial scales resolved $\lambda_x$' >> ../../report.md
-          dvc metrics show --md *.json >> ../../report.md
+          echo 'Data Challenge OSE Gulfstream 2021\n' > ../../report.md
+          dvc metrics show  | python scripts/format_metrics.py >> ../../report.md
           cat ../../report.md
       - name: Commit changes
         if: ${{ (steps.check_author.outputs.skip == 'false') }}

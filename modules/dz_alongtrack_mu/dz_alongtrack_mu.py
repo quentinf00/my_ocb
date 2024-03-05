@@ -62,7 +62,7 @@ def run(
     log.debug(mu)
 
     with open(Path(output_path), 'w') as f:
-        json.dump(dict(mu=mu), f)
+        json.dump({"$\mu$": mu}, f)
 
 
 run.__doc__ = f"""

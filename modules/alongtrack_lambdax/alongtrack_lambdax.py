@@ -76,7 +76,7 @@ def main_api(
     Path(output_psd_path).parent.mkdir(parents=True, exist_ok=True)
     ds.to_netcdf(output_psd_path)
     with open(Path(output_lambdax_path), 'w') as f:
-        json.dump(dict(lambdax=lambda_x), f)
+        json.dump({"$\lambda_x$": lambda_x}, f)
 
 
 # Create a configuration associated with the above function (cf next cell)

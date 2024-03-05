@@ -271,8 +271,8 @@ stages:
       size: 8954
     - path: data/metrics/lambdax_4dvarnet.json
       hash: md5
-      md5: 66d494988e9edf9d7be641cf03492237
-      size: 31
+      md5: 15ce77ac50d300cce8eff5a1d97edbdf
+      size: 36
   metric_lambdax@duacs:
     cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
       'stages.interp_on_track.grid_var=ssh' 'stages.method=duacs'
@@ -309,8 +309,8 @@ stages:
       size: 8954
     - path: data/metrics/lambdax_duacs.json
       hash: md5
-      md5: 0850b8e92fadaa430e8ff13873c97cbf
-      size: 29
+      md5: 20aedc1f83be5b391eb3032365bf1772
+      size: 34
   metric_mu@4dvarnet:
     cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[mu]' 'stages.interp_on_track.grid_var=rec_ssh'
       'stages.method=4dvarnet'
@@ -339,8 +339,8 @@ stages:
     outs:
     - path: data/metrics/mu_4dvarnet.json
       hash: md5
-      md5: 0f8df02aa25c7d552f43fea9f69d74a6
-      size: 26
+      md5: efe82203d021a8ca3a03cb93c3793c24
+      size: 30
   metric_mu@duacs:
     cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[mu]' 'stages.interp_on_track.grid_var=ssh'
       'stages.method=duacs'
@@ -369,5 +369,5 @@ stages:
     outs:
     - path: data/metrics/mu_duacs.json
       hash: md5
-      md5: d77153df2a6a7e1e0401c849992b85be
-      size: 26
+      md5: 159a3e398fc33216442a276c14b8bbb2
+      size: 30
