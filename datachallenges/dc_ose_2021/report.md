@@ -1,6 +1,4 @@
-Data Challenge OSE Gulfstream 2021
-
-
+Data Challenge OSE Gulfstream 2021\n
 |             |   4dvarnet |   duacs |
 |:------------|-----------:|--------:|
 | $\lambda_x$ |    102.756 | 154.519 |

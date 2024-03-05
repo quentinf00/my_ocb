@@ -61,7 +61,7 @@ stages:
     outs:
     - path: data/prepared/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
+      md5: fb8bf253e87be431b298b136dde80d99
       size: 1397837
   interp_on_track@4dvarnet:
     cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
@@ -73,7 +73,7 @@ stages:
       size: 590300748
     - path: data/prepared/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
+      md5: fb8bf253e87be431b298b136dde80d99
       size: 1397837
     params:
       datachallenge.toml:
@@ -102,7 +102,7 @@ stages:
       size: 4684262
     - path: data/prepared/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
+      md5: fb8bf253e87be431b298b136dde80d99
       size: 1397837
     params:
       datachallenge.toml:
@@ -245,7 +245,7 @@ stages:
       size: 1587333
     - path: data/prepared/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
+      md5: fb8bf253e87be431b298b136dde80d99
       size: 1397837
     params:
       datachallenge.toml:
@@ -283,7 +283,7 @@ stages:
       size: 1587360
     - path: data/prepared/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
+      md5: fb8bf253e87be431b298b136dde80d99
       size: 1397837
     params:
       datachallenge.toml:
@@ -321,7 +321,7 @@ stages:
       size: 1587333
     - path: data/prepared/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
+      md5: fb8bf253e87be431b298b136dde80d99
       size: 1397837
     params:
       datachallenge.toml:
@@ -351,7 +351,7 @@ stages:
       size: 1587360
     - path: data/prepared/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
+      md5: fb8bf253e87be431b298b136dde80d99
       size: 1397837
     params:
       datachallenge.toml:
