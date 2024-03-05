@@ -1,9 +1,10 @@
-_target_: qf_alongtrack_lambdax_from_map.run_pipeline
+_target_: qf_alongtrack_metrics_from_map.run_pipeline
 to_run:
 - dl_tracks
 - filter_and_merge
 - interp_on_track
 - lambdax
+- mu
 stages:
   method: default
   dl_tracks:
@@ -49,3 +50,12 @@ stages:
     segment_overlapping: 0.25
     output_lambdax_path: data/metrics/lambdax_${..method}.json
     output_psd_path: data/method_outputs/psd_${..method}.nc
+  mu:
+    _target_: dz_alongtrack_mu.run
+    _partial_: true
+    study_path: ${..interp_on_track.output_path}
+    study_var: ${..interp_on_track.grid_var}
+    ref_path: ${..filter_and_merge.output_path}
+    ref_var: ssh
+    dims: null
+    output_path: data/metrics/mu_${..method}.json

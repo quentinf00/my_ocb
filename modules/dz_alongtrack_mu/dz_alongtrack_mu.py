@@ -24,7 +24,7 @@ def run(
     output_path: str = 'data/metrics/mu.json',
 ):
     log.info("Starting")
-    Path(output_path).mkdir(parents=True, exist_ok=True)
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
     study_da = xr.open_dataset(study_path)[study_var]
     ref_da = xr.open_dataset(ref_path)[ref_var]
@@ -54,9 +54,12 @@ def run(
 
     mu = (
         eval_ds
-        .pipe(partial_track_fn)
+        # .pipe(partial_track_fn)
         .pipe(partial_score_fn)
+        .item()
     )
+
+    log.debug(mu)
 
     with open(Path(output_path), 'w') as f:
         json.dump(dict(mu=mu), f)

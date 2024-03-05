@@ -14,31 +14,30 @@ stages:
   fetch_reference_data:
     params:
     - datachallenge.toml:
-      - pipelines.diagnostic.qf_alongtrack_lambdax_from_map
+      - pipelines.diagnostic.qf_alongtrack_metrics_from_map
     - stage_configs.yaml:
       - stages.dl_tracks
-    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[dl_tracks]'
+    cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[dl_tracks]'
     outs:
     - data/downloads/c2:
         cache: false
-    frozen: true
   filter_and_merge_ref:
     params:
     - datachallenge.toml:
-      - pipelines.diagnostic.qf_alongtrack_lambdax_from_map
+      - pipelines.diagnostic.qf_alongtrack_metrics_from_map
     - stage_configs.yaml:
       - stages.filter_and_merge
-    cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[filter_and_merge]'
+    cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[filter_and_merge]'
     outs:
     - data/prepared/c2.nc
   interp_on_track:
     foreach: ${methods}
     do:
-      cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
+      cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[interp_on_track]'
         'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
       params:
       - datachallenge.toml:
-        - pipelines.diagnostic.qf_alongtrack_lambdax_from_map
+        - pipelines.diagnostic.qf_alongtrack_metrics_from_map
       - stage_configs.yaml:
         - stages.interp_on_track
       deps:
@@ -49,11 +48,11 @@ stages:
   metric_lambdax:
     foreach: ${methods}
     do:
-      cmd: qf_alongtrack_lambdax_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
+      cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[lambdax]'
         'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
       params:
       - datachallenge.toml:
-        - pipelines.diagnostic.qf_alongtrack_lambdax_from_map
+        - pipelines.diagnostic.qf_alongtrack_metrics_from_map
       - stage_configs.yaml:
         - stages.lambdax
       deps:
@@ -62,5 +61,21 @@ stages:
       outs:
       - data/method_outputs/psd_${key}.nc
       metrics:
-      - data/metrics/lambdax_${key}.json
-
+      - data/metrics/lambdax_${key}.json:
+          cache: false
+  metric_mu:
+    foreach: ${methods}
+    do:
+      cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[mu]'
+        'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
+      params:
+      - datachallenge.toml:
+        - pipelines.diagnostic.qf_alongtrack_metrics_from_map
+      - stage_configs.yaml:
+        - stages.mu
+      deps:
+      - data/prepared/c2.nc
+      - data/method_outputs/${key}_on_track.nc
+      metrics:
+      - data/metrics/mu_${key}.json:
+          cache: false

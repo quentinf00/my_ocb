@@ -42,7 +42,8 @@ pip install -q -e modules/qf_interp_grid_on_track
 pip install -q -e modules/dz_download_ssh_tracks
 pip install -q -e modules/qf_filter_merge_daily_ssh_tracks
 pip install -q -e modules/alongtrack_lambdax
-pip install -q --no-deps -e pipelines/qf_alongtrack_lambdax_from_map
+pip install -q -e modules/dz_alongtrack_mu
+pip install -q --no-deps -e pipelines/qf_alongtrack_metrics_from_map
 ```
 
 - update the versions (# TODO)
@@ -50,7 +51,9 @@ pip install -q --no-deps -e pipelines/qf_alongtrack_lambdax_from_map
 ### Update the config:
 - Update values in `stage_configs.yaml`
 if you want to reset the config to the default pipeline use:
-  `qf_alongtrack_lambdax_from_map --cfg job  > datachallenges/dc_ose_2021/stage_configs.yaml`
+  `qf_alongtrack_metrics_from_map --cfg job  > datachallenges/dc_ose_2021/stage_configs.yaml`
+
+#TODO: improve config update (do not lose previous updates) àréfléchir
 
 ### Updating the dag
 - specify in the `dvc.yaml` the stages dependencies, outputs, and command

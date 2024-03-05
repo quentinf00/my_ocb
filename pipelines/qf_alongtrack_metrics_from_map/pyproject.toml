@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 version = "0.0.1"
-name = "qf_alongtrack_lambdax_from_map"
+name = "qf_alongtrack_metrics_from_map"
 authors=[
   {name = "Quentin Febvre", email = "quentin.febvre@gmail.com"},
 ]
@@ -13,13 +13,14 @@ dependencies = [
   "dz_download_ssh_tracks @ git+https://github.com/quentinf00/my_ocb.git#egg=dz_download_ssh_tracks&subdirectory=modules/dz_download_ssh_tracks",
   "qf_filter_merge_daily_ssh_tracks @ git+https://github.com/quentinf00/my_ocb.git#egg=qf_filter_merge_daily_ssh_tracks&subdirectory=modules/qf_filter_merge_daily_ssh_tracks",
   "alongtrack_lambdax @ git+https://github.com/quentinf00/my_ocb.git#egg=alongtrack_lambdax&subdirectory=modules/alongtrack_lambdax",
+    "dz_alongtrack_mu @ git+https://github.com/quentinf00/my_ocb.git#egg=dz_alongtrack_mu&subdirectory=modules/dz_alongtrack_mu",
 ]
 
 [project.urls]
 Repository="https://github.com/quentinf00/my_ocb.git"
 
 [project.scripts]
-qf_alongtrack_lambdax_from_map = "qf_alongtrack_lambdax_from_map:api_endpoint"
+qf_alongtrack_metrics_from_map = "qf_alongtrack_metrics_from_map:api_endpoint"
 
 [tool.setuptools]
-py-modules=["qf_alongtrack_lambdax_from_map"]
+py-modules=["qf_alongtrack_metrics_from_map"]

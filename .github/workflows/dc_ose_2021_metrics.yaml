@@ -1,5 +1,5 @@
 name: Compute DC OSE 2021 metrics
-on: 
+on:
   push:
     branches:
     - dc_ose_2021/*
@@ -30,7 +30,7 @@ jobs:
           pip install -q -e modules/dz_download_ssh_tracks
           pip install -q -e modules/qf_filter_merge_daily_ssh_tracks
           pip install -q -e modules/alongtrack_lambdax
-          pip install --no-deps -e pipelines/qf_alongtrack_lambdax_from_map
+          pip install --no-deps -e pipelines/qf_alongtrack_metrics_from_map
       - name: install jq
         if: ${{ steps.check_author.outputs.skip  == 'false' }}
         uses: dcarbone/install-jq-action@v2
@@ -80,4 +80,4 @@ jobs:
           add: 'dvc.lock report.md'
           cwd: './datachallenges/dc_ose_2021'
           push: true
-  
+
