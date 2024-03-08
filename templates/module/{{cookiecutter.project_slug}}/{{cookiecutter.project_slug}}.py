@@ -1,8 +1,9 @@
 import logging
-import hydra_zen
-import hydra
-from hydra.conf import HydraConf, HelpConf
 from pathlib import Path
+
+import hydra
+import hydra_zen
+from hydra.conf import HelpConf, HydraConf
 
 log = logging.getLogger(__name__)
 
@@ -72,8 +73,6 @@ Output description:
 Returns:
     None
 """
-# Create a configuration associated with the above function (cf next cell)
-main_config =  hydra_zen.builds(run, populate_full_signature=True)
 
 # Wrap the function to accept the configuration as input
 zen_endpoint = hydra_zen.zen(run)
@@ -81,7 +80,17 @@ zen_endpoint = hydra_zen.zen(run)
 #Store the config
 store = hydra_zen.ZenStore()
 store(HydraConf(help=HelpConf(header=run.__doc__, app_name=__name__)))
-store(main_config, name=__name__)
+
+store(
+    hydra_zen.builds(run, populate_full_signature=True),
+    name=__name__,
+    group='ocb_mods',
+    package='_global_',
+
+)
+# Create a  partial configuration associated with the above function (for easy extensibility)
+run_cfg =  hydra_zen.builds(run, populate_full_signature=True, zen_partial=True)
+
 store.add_to_hydra_store(overwrite_ok=True)
 
 # Create CLI endpoint

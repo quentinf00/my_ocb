@@ -1,9 +1,12 @@
 vars:
-- stage_configs.yaml:stages
 - datachallenge.toml:pipelines,methods
 
 
 stages:
+  update_config:
+    cmd: qf_alongtrack_metrics_from_map --cfg job > stage_configs.yaml
+    outs:
+    - stage_configs.yaml
   method_output:
     foreach: ${methods}
     do:

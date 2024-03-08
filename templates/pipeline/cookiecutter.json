@@ -1,0 +1,13 @@
+{
+  "pipeline_name": "My pipeline",
+  "input_data_desc": null,
+  "output_data_desc": null,
+  "pipeline_desc": null,
+  "stages": {},
+  "first_name": "Quentin",
+  "last_name": "Febvre",
+  "project_slug": "{{ cookiecutter.first_name[0].lower()+ cookiecutter.last_name[0].lower()+ '_' + cookiecutter.pipeline_name.lower().replace(' ', '_')}}",
+  "author_email": "quentin.febvre@gmail.com",
+  "repo": "https://github.com/quentinf00/my_ocb.git",
+  "project_name": "QF's Oceanbench"
+}
