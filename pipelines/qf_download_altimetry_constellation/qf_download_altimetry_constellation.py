@@ -25,17 +25,16 @@ pipe_inference_data_stages = store(group="dc_ose_2021/inference")
 pipe_inference_data_stages(
     dl_conf(
         sat="???",
-        min_time="${..min_time}",
-        max_time="${..max_time}",
         download_dir="data/downloads/inference/${.sat}",
+        filters=["*[201612,2017,201801]*"],
     ),
-    name="01_fetch_inference_tracks",
+    name="_01_fetch_inference_tracks",
 )
 
 pipe_inference_data_stages(
     filter_conf(
-        input_dir="data/downloads/inference/${..01_fetch_inference_tracks.sat}",
-        output_path="data/prepared/inference/${..01_fetch_inference_tracks.sat}.nc",
+        input_dir="data/downloads/inference/${.._01_fetch_inference_tracks.sat}",
+        output_path="data/prepared/inference/${.._01_fetch_inference_tracks.sat}.nc",
         min_lon="${..min_lon}",
         max_lon="${..max_lon}",
         min_lat="${..min_lat}",
@@ -43,23 +42,10 @@ pipe_inference_data_stages(
         min_time="${..min_time}",
         max_time="${..max_time}",
     ),
-    name="02_filter_tracks",
+    name="_02_filter_tracks",
 )
-pipe_inference_data_stages(
-    filter_conf(
-        input_dir="data/downloads/inference/${..01_fetch_inference_tracks.sat}",
-        output_path="data/prepared/inference/${..01_fetch_inference_tracks.sat}.nc",
-        min_lon="${..min_lon}",
-        max_lon="${..max_lon}",
-        min_lat="${..min_lat}",
-        max_lat="${..max_lat}",
-        min_time="${..min_time}",
-        max_time="${..max_time}",
-    ),
-    name="02_filter_tracks",
-)
+
 combine_nested_cfg = chain_store[("ocb_mods/qf_chains", "combine_nested")]
-
 
 steps = OmegaConf.merge(
     combine_nested_cfg,
@@ -75,20 +61,19 @@ pipe_inference_data_stages(
         steps=steps,
         bases=(chain_config,),
     ),
-    name="03_merge_tracks",
+    name="_03_merge_tracks",
 )
 
 stage_configs = toolz.keymap(
     lambda t: t[1], pipe_inference_data_stages["dc_ose_2021/inference"]
 )
 
-
 stages = dict(
-    sats=["alg", "h2g", "j2g", "j2n", "j3", "s3a"],
+    sats=["alg", "h2ag", "j2g", "j2n", "j3", "s3a"],
     min_time="2016-01-01",
     max_time="2018-02-01",
-    min_lon=-64.0,
-    max_lon=-56.0,
+    min_lon=-66.0,
+    max_lon=-54.0,
     min_lat=32.0,
     max_lat=44.0,
     **stage_configs,
@@ -111,7 +96,7 @@ Stages:
     [
         f"""{stage}:
     {go(go(stage_configs[stage]._target_).__module__ + '.PIPELINE_DESC')}
-    more info with: `{hydra.utils.get_object(stage_configs["01_fetch_inference_tracks"]._target_).__module__} --help`
+    more info with: `{hydra.utils.get_object(stage_configs[stage]._target_).__module__} --help`
     """
         for stage in sorted(stage_configs)
     ]
