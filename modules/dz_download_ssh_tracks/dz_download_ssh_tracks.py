@@ -38,28 +38,39 @@ def run(
     download_dir: str = "data/downloads/${.sat}",
     min_time: str = "2017-01-01",
     max_time: str = "2017-12-31",
-    filters: list[str] = None,
+    regex: str = None,
     _skip_val: bool = False,
 ):
     log.info("Starting")
 
-    filters = (
-        filters
-        if filters is not None
-        else set([f"*{d.year}{d.month:02}*" for d in pd.date_range(min_time, max_time)])
+    regex = (
+        regex
+        if regex is not None
+        else "("
+        + "|".join(
+            list(
+                set(
+                    [
+                        f"*{d.year}{d.month:02}*"
+                        for d in pd.date_range(min_time, max_time)
+                    ]
+                )
+            )
+        )
+        + ")"
     )
+
     dataset_id = f"cmems_obs-sl_glo_phy-ssh_my_{sat}-l3-duacs_PT1S"
 
     Path(download_dir).mkdir(exist_ok=True, parents=True)
-    for filt in filters:
-        copernicusmarine.get(
-            dataset_id=dataset_id,
-            filter=filt,
-            output_directory=download_dir,
-            force_download=True,
-            overwrite_output_data=True,
-            # sync=True, # use exit(1) and kill pipeline
-        )
+    copernicusmarine.get(
+        dataset_id=dataset_id,
+        regex=regex,
+        output_directory=download_dir,
+        force_download=True,
+        overwrite_output_data=True,
+        # sync=True, # use exit(1) and kill pipeline
+    )
 
     if not _skip_val:
         output_validation(download_dir=download_dir)

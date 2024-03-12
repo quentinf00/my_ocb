@@ -25,8 +25,9 @@ pipe_inference_data_stages = store(group="dc_ose_2021/inference")
 pipe_inference_data_stages(
     dl_conf(
         sat="???",
+        min_time="${..min_time}",
+        max_time="${..max_time}",
         download_dir="data/downloads/inference/${.sat}",
-        filters=["*[201612,2017,201801]*"],
     ),
     name="_01_fetch_inference_tracks",
 )

@@ -44,10 +44,6 @@ Returns:
 """
 
 
-chain_config = hydra_zen.make_config(
-    steps=dict(), zen_dataclass=dict(cls_name="BaseQfChain")
-)
-
 chain_store = hydra_zen.store(group="ocb_mods/qf_chains", package="steps")
 
 chain_store(

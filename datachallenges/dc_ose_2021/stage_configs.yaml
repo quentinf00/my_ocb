@@ -14,8 +14,6 @@ stages:
     download_dir: data/downloads/${.sat}
     min_time: '2017-01-01'
     max_time: '2017-12-31'
-    filters:
-    - '*2017*'
     _skip_val: false
   filter_and_merge:
     _target_: qf_filter_merge_daily_ssh_tracks.run
