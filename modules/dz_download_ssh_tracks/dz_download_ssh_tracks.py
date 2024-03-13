@@ -43,22 +43,23 @@ def run(
 ):
     log.info("Starting")
 
-    regex = (
-        regex
-        if regex is not None
-        else "("
-        + "|".join(
-            list(
-                set(
-                    [
-                        f"*{d.year}{d.month:02}*"
-                        for d in pd.date_range(min_time, max_time)
-                    ]
+    if regex is None:
+        regex = (
+            "("
+            + "|".join(
+                sorted(
+                    list(
+                        set(
+                            [
+                                f"{d.year}{d.month:02}"
+                                for d in pd.date_range(min_time, max_time)
+                            ]
+                        )
+                    )
                 )
             )
+            + ")"
         )
-        + ")"
-    )
 
     dataset_id = f"cmems_obs-sl_glo_phy-ssh_my_{sat}-l3-duacs_PT1S"
 
