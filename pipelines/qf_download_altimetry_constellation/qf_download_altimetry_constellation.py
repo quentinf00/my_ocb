@@ -71,7 +71,7 @@ stage_configs = toolz.keymap(
 
 stages = dict(
     sats=["alg", "h2ag", "j2g", "j2n", "j3", "s3a"],
-    min_time="2016-01-01",
+    min_time="2016-12-01",
     max_time="2018-02-01",
     min_lon=-66.0,
     max_lon=-54.0,
