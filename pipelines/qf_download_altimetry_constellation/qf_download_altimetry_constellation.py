@@ -19,9 +19,8 @@ PIPELINE_DESC = "Download tracks from a satellite constellation"
 
 # Create zen store for pipeline
 store = hydra_zen.ZenStore(overwrite_ok=True)
+
 pipe_inference_data_stages = store(group="dc_ose_2021/inference")
-
-
 pipe_inference_data_stages(
     dl_conf(
         sat="???",
@@ -31,7 +30,6 @@ pipe_inference_data_stages(
     ),
     name="_01_fetch_inference_tracks",
 )
-
 pipe_inference_data_stages(
     filter_conf(
         input_dir="data/downloads/inference/${.._01_fetch_inference_tracks.sat}",

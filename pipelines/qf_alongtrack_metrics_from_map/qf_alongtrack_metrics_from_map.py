@@ -32,7 +32,7 @@ stages = {
         output_path="data/method_outputs/${..method}_on_track.nc",
     ),
     "lambdax": pb(
-        alongtrack_lambdax.main_api,
+        alongtrack_lambdax.run,
         ref_path="${..filter_and_merge.output_path}",
         study_path="${..interp_on_track.output_path}",
         study_var="${..interp_on_track.grid_var}",

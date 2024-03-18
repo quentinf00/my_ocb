@@ -4,7 +4,7 @@ vars:
 
 stages:
   update_config:
-    cmd: qf_alongtrack_metrics_from_map --cfg job > stage_configs.yaml
+    cmd: qf_alongtrack_metrics_from_map +overrides=dc_ose_2021/metrics --cfg job > stage_configs.yaml
     outs:
     - stage_configs.yaml
   method_output:
@@ -31,6 +31,8 @@ stages:
     - stage_configs.yaml:
       - stages.filter_and_merge
     cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[filter_and_merge]'
+    deps:
+    - data/downloads/c2
     outs:
     - data/prepared/c2.nc
   interp_on_track:

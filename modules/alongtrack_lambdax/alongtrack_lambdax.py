@@ -8,6 +8,7 @@ import hydra_zen
 import numpy as np
 import pandas as pd
 import xarray as xr
+from hydra.conf import HelpConf, HydraConf
 from ocn_tools._src.metrics.power_spectrum import psd_welch_score
 from ocn_tools._src.preprocessing.alongtrack import select_track_segments
 
