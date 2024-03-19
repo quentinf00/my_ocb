@@ -19,17 +19,18 @@ stages = {
     "method": "default",
     "dl_tracks": pb(
         dz_download_ssh_tracks.run,
+        download_dir='data/downloads/ref/${.sat}'
     ),
     "filter_and_merge": pb(
         qf_filter_merge_daily_ssh_tracks.run,
         input_dir="${..dl_tracks.download_dir}",
-        output_path="data/prepared/${..dl_tracks.sat}.nc",
+        output_path="data/prepared/ref/${..dl_tracks.sat}.nc",
     ),
     "interp_on_track": pb(
         qf_interp_grid_on_track.run,
-        grid_path="data/method_outputs/${..method}.nc",
+        grid_path="data/downloads/method_outputs/${..method}.nc",
         track_path="${..filter_and_merge.output_path}",
-        output_path="data/method_outputs/${..method}_on_track.nc",
+        output_path="data/prepared/method_outputs/${..method}_on_track.nc",
     ),
     "lambdax": pb(
         alongtrack_lambdax.run,
@@ -37,7 +38,7 @@ stages = {
         study_path="${..interp_on_track.output_path}",
         study_var="${..interp_on_track.grid_var}",
         output_lambdax_path="data/metrics/lambdax_${..method}.json",
-        output_psd_path="data/metrics/psd_${..method}.json",
+        output_psd_path="data/prepared/method_outputs/psd_${..method}.nc",
     ),
     "mu": pb(
         dz_alongtrack_mu.run,

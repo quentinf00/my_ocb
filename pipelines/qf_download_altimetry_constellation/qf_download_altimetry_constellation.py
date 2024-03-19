@@ -9,7 +9,6 @@ from dz_download_ssh_tracks import run_cfg as dl_conf
 from hydra.conf import HelpConf, HydraConf
 from omegaconf import OmegaConf
 from qf_filter_merge_daily_ssh_tracks import run_cfg as filter_conf
-from qf_simple_chaining import chain_config, chain_store
 from xarray.core.combine import combine_nested
 
 log = logging.getLogger(__name__)
@@ -26,14 +25,14 @@ pipe_inference_data_stages(
         sat="???",
         min_time="${..min_time}",
         max_time="${..max_time}",
-        download_dir="data/downloads/inference/${.sat}",
+        download_dir="data/downloads/input/${.sat}",
     ),
     name="_01_fetch_inference_tracks",
 )
 pipe_inference_data_stages(
     filter_conf(
-        input_dir="data/downloads/inference/${.._01_fetch_inference_tracks.sat}",
-        output_path="data/prepared/inference/${.._01_fetch_inference_tracks.sat}.nc",
+        input_dir="data/downloads/input/${.._01_fetch_inference_tracks.sat}",
+        output_path="data/prepared/input/${.._01_fetch_inference_tracks.sat}.nc",
         min_lon="${..min_lon}",
         max_lon="${..max_lon}",
         min_lat="${..min_lat}",
@@ -44,24 +43,6 @@ pipe_inference_data_stages(
     name="_02_filter_tracks",
 )
 
-combine_nested_cfg = chain_store[("ocb_mods/qf_chains", "combine_nested")]
-
-steps = OmegaConf.merge(
-    combine_nested_cfg,
-    dict(
-        _01_read_mf_nested_dataset=dict(
-            paths="data/prepared/inference/*.nc",
-        ),
-        _02_write_dataset=dict(path="data/prepared/inference_combined.nc"),
-    ),
-)
-pipe_inference_data_stages(
-    hydra_zen.make_config(
-        steps=steps,
-        bases=(chain_config,),
-    ),
-    name="_03_merge_tracks",
-)
 
 stage_configs = toolz.keymap(
     lambda t: t[1], pipe_inference_data_stages["dc_ose_2021/inference"]
