@@ -1,12 +1,11 @@
-from qf_simple_chaining import chain_store, zen_endpoint, chain_config
-
-import ocn_tools._src.geoprocessing.gridding as ocngrid
-import xarray as xr
-import hydra_zen
-import pandas as pd
 import hydra
+import hydra_zen
 import numpy as np
+import ocn_tools._src.geoprocessing.gridding as ocngrid
+import pandas as pd
+import xarray as xr
 from hydra.conf import HelpConf, HydraConf
+from qf_simple_chaining import chain_config, chain_store, zen_endpoint
 
 pb = hydra_zen.make_custom_builds_fn(
     zen_partial=True,
@@ -15,24 +14,31 @@ b = hydra_zen.make_custom_builds_fn()
 grid_cfg = dict(
     _01_read_tracks=pb(
         xr.open_dataset,
-        filename_or_obj='data/prepared/inference_combined.nc',
+        filename_or_obj="data/prepared/inference_combined.nc",
     ),
-     _02_grid=pb(
+    _02_grid=pb(
         ocngrid.coord_based_to_grid,
-            target_grid_ds=b(
-                xr.Dataset,
-                coords=dict(
-                    time=b(pd.date_range, start='2016-12-01', end='2018-01-31', freq='1D'),
-                    lat=b(np.arange, start=32, stop=44, step=0.05),
-                    lon=b(np.arange, start=-66, stop=-54, step=0.05),
-                )
-            )
+        target_grid_ds=b(
+            xr.Dataset,
+            coords=dict(
+                time=b(pd.date_range, start="2016-12-01", end="2018-01-31", freq="1D"),
+                lat=b(np.arange, start=32, stop=44, step=0.05),
+                lon=b(np.arange, start=-66, stop=-54, step=0.05),
+            ),
+        ),
     ),
-    _03_write_grid=pb(xr.Dataset.to_netcdf, path='data/prepared/gridded.nc', engine='h5netcdf')
+    _03_write_grid=pb(xr.Dataset.to_netcdf, path="data/prepared/gridded.nc"),
 )
 chain_store(grid_cfg, name="to_grid")
 store = hydra_zen.ZenStore(overwrite_ok=True)
-store(HydraConf(help=HelpConf(header="Grid coord based dataset to specified regular grid", app_name=__name__)))
+store(
+    HydraConf(
+        help=HelpConf(
+            header="Grid coord based dataset to specified regular grid",
+            app_name=__name__,
+        )
+    )
+)
 
 store(
     hydra_zen.make_config(
