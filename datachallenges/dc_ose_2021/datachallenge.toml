@@ -15,3 +15,6 @@ var = "rec_ssh"
 [methods.duacs]
 url = "https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/95/7d74696fbf5f2b6d0c528757951b8a"
 var = "ssh"
+
+[satellites]
+[satellites.c2]

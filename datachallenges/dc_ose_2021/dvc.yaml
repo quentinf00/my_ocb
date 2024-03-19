@@ -1,5 +1,10 @@
 vars:
+<<<<<<< Updated upstream
 - datachallenge.toml:pipelines,methods
+=======
+- stage_configs.yaml:stages
+- datachallenge.toml:pipelines,methods,satellites
+>>>>>>> Stashed changes
 
 
 stages:
@@ -15,16 +20,19 @@ stages:
       - data/method_outputs/${key}.nc:
           cache: false
   fetch_reference_data:
-    params:
-    - datachallenge.toml:
-      - pipelines.diagnostic.qf_alongtrack_metrics_from_map
-    - stage_configs.yaml:
-      - stages.dl_tracks
-    cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[dl_tracks]'
-    outs:
-    - data/downloads/c2:
-        cache: false
+    foreach: ${satellites}  # supposé être une liste de satellites
+    do:
+      params:
+      - datachallenge.toml:
+        - pipelines.diagnostic.qf_alongtrack_metrics_from_map
+      - stage_configs.yaml:
+        - stages.dl_tracks
+      cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[dl_tracks]' dl_tracks.sat=${item}
+      outs:
+      - data/downloads/${item}:
+          cache: false
   filter_and_merge_ref:
+<<<<<<< Updated upstream
     params:
     - datachallenge.toml:
       - pipelines.diagnostic.qf_alongtrack_metrics_from_map
@@ -35,6 +43,18 @@ stages:
     - data/downloads/c2
     outs:
     - data/prepared/c2.nc
+=======
+    foreach: ${satellites}  # supposé être une liste de satellites
+    do:
+      params:
+      - datachallenge.toml:
+        - pipelines.diagnostic.qf_alongtrack_metrics_from_map
+      - stage_configs.yaml:
+        - stages.filter_and_merge
+      cmd: qf_alongtrack_metrics_from_map -cd . -cn stage_configs 'to_run=[filter_and_merge]' filter_and_merge.input_dir=data/prepared/${item}.nc
+      outs:
+      - data/prepared/${item}.nc
+>>>>>>> Stashed changes
   interp_on_track:
     foreach: ${methods}
     do:
