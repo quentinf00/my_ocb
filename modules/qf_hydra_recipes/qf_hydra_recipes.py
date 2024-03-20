@@ -40,7 +40,7 @@ grid_cfg = dict(
     _03_write_grid=pb(xr.Dataset.to_netcdf, path="${...params.input_path}"),
 )
 
-qf_grid = qf_run_recipe.register_recipe(name="qf_grid", steps=grid_cfg, params=params)
+qf_grid_fn, grid_recipe = qf_run_recipe.register_recipe(name="qf_grid", steps=grid_cfg, params=params)
 
 
 
@@ -60,7 +60,7 @@ concat_cfg = dict(
     _03_write=pb(xr.Dataset.to_netcdf, path="${...params.output_path}"),
 )
 
-qf_concat = qf_run_recipe.register_recipe(
+qf_concat_fn, concat_recipe = qf_run_recipe.register_recipe(
     name="qf_concat", steps=concat_cfg, params=params, input="${.params.input_path}"
 )
 
@@ -71,7 +71,7 @@ params = dict(
     local_path='${.remote_path}',
 )
 
-grid_cfg = dict(
+get_s3_cfg = dict(
     _01_get_s3fs=pb(
         s3fs.S3FileSystem.get,
         b(s3fs.S3FileSystem, anon=True, client_kwargs={"endpoint_url": 'https://s3.eu-central-1.wasabisys.com'}),
@@ -80,4 +80,4 @@ grid_cfg = dict(
     )
 )
 
-qf_get_s3 = qf_run_recipe.register_recipe(name="qf_s3_get", steps=qf_s3_get, params=params)
+qf_get_s3_fn, get_s3_recipe = qf_run_recipe.register_recipe(name="qf_s3_get", steps=get_s3_cfg, params=params)

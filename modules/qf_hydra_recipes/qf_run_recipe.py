@@ -62,12 +62,13 @@ def register_recipe(name, steps, params=dict(), input=None):
         zen_partial=True,
     )
 
+    recipe = hydra_zen.make_config(
+        input=input,
+        bases=(base_config,),
+        hydra_defaults=["_self_", {"steps": name, "params": name}],
+    )
     store(
-        hydra_zen.make_config(
-            dict(input=input),
-            bases=(base_config,),
-            hydra_defaults=["_self_", {"steps": name, "params": name}],
-        ),
+        recipe,
         name=name,
         package="_global_",
         groups="ocb_mods",
@@ -81,4 +82,4 @@ def register_recipe(name, steps, params=dict(), input=None):
     api_endpoint = hydra.main(config_name=name, version_base="1.3", config_path=".")(
         zen_endpoint
     )
-    return api_endpoint
+    return api_endpoint, recipe
