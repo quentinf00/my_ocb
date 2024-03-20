@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "qf_pipelines"
+authors=[
+  {name = "Quentin Febvre", email = "quentin.febvre@gmail.com"},
+]
+[project.urls]
+Repository="https://github.com/quentinf00/my_ocb.git"
+
+
+[tool.setuptools]
+py-modules=["qf_pipelines"]
