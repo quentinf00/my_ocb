@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "{{cookiecutter.project_slug}}"
+authors=[
+  {name = "{{cookiecutter.first_name}} {{cookiecutter.last_name}}", email = "{{cookiecutter.author_email}}"},
+]
+[project.urls]
+Repository="{{cookiecutter.repo}}"
+
+[project.scripts]
+{{cookiecutter.project_slug}} = "{{cookiecutter.project_slug}}:api_endpoint"
+
+[tool.setuptools]
+py-modules=["{{cookiecutter.project_slug}}"]

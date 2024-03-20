@@ -14,8 +14,7 @@ stages:
     download_dir: data/downloads/${.sat}
     min_time: '2017-01-01'
     max_time: '2017-12-31'
-    filters:
-    - '*2017*'
+    regex: null
     _skip_val: false
   filter_and_merge:
     _target_: qf_filter_merge_daily_ssh_tracks.run
@@ -38,7 +37,7 @@ stages:
     output_path: data/method_outputs/${..method}_on_track.nc
     _skip_val: false
   lambdax:
-    _target_: alongtrack_lambdax.main_api
+    _target_: alongtrack_lambdax.run
     _partial_: true
     study_path: ${..interp_on_track.output_path}
     study_var: ${..interp_on_track.grid_var}
@@ -49,7 +48,7 @@ stages:
     length_scale: 1000.0
     segment_overlapping: 0.25
     output_lambdax_path: data/metrics/lambdax_${..method}.json
-    output_psd_path: data/method_outputs/psd_${..method}.nc
+    output_psd_path: data/metrics/psd_${..method}.json
   mu:
     _target_: dz_alongtrack_mu.run
     _partial_: true
@@ -59,3 +58,4 @@ stages:
     ref_var: ssh
     dims: null
     output_path: data/metrics/mu_${..method}.json
+overrides: dc_ose_2021/metrics

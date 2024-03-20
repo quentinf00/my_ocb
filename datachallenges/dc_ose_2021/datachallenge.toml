@@ -3,9 +3,8 @@ title = "SSH Mapping Gulfstream OSE"
 author = "Quentin"
 
 [pipelines]
-[pipelines.inference_data]
-[pipelines.diagnostic]
 qf_alongtrack_metrics_from_map = "0.0.1"
+qf_download_altimetry_constellation = "0.0.1"
 
 [methods]
 [methods.4dvarnet]
@@ -15,3 +14,4 @@ var = "rec_ssh"
 [methods.duacs]
 url = "https://s3.eu-west-2.wasabisys.com/oceanbench-data-registry/dvc/95/7d74696fbf5f2b6d0c528757951b8a"
 var = "ssh"
+

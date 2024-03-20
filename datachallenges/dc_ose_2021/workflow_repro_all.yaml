@@ -29,14 +29,14 @@ jobs:
           COPERNICUS_MARINE_SERVICE_USERNAME: ${{secrets.copernicus_login}}
           COPERNICUS_MARINE_SERVICE_PASSWORD: ${{secrets.copernicus_pwd}}
         run: |
-          dvc --cd datachallenges/dc_ose_2021 repro -k --pull ${{steps.stages_to_run.outputs.stages}}
+          dvc --cd datachallenges/dc_ose_2021 repro -k --pull
       - name: push new files
         shell: bash -l {0}
         env:
           AWS_ACCESS_KEY_ID: ${{secrets.aws_key}}
           AWS_SECRET_ACCESS_KEY: ${{secrets.aws_secret}}
           AWS_DEFAULT_REGION: ${{secrets.aws_region}}
-        run: dvc --cd datachallenges/dc_ose_2021 push -r s3 ${{steps.stages_to_run.outputs.stages}}
+        run: dvc --cd datachallenges/dc_ose_2021 push -r s3
       - name: dump metrics report
         shell: bash -l {0}
         run: |

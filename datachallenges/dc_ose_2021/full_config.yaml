@@ -1,0 +1,101 @@
+metrics:
+  _target_: qf_alongtrack_metrics_from_map.run_pipeline
+  stages:
+    dl_tracks:
+      _partial_: true
+      _skip_val: false
+      _target_: dz_download_ssh_tracks.run
+      download_dir: data/downloads/ref/${.sat}
+      max_time: '2017-12-31'
+      min_time: '2017-01-01'
+      regex: null
+      sat: c2
+    filter_and_merge:
+      _partial_: true
+      _skip_val: false
+      _target_: qf_filter_merge_daily_ssh_tracks.run
+      input_dir: ${..dl_tracks.download_dir}
+      max_lat: 43.0
+      max_lon: -55.0
+      max_time: '2018-01-01'
+      min_lat: 33.0
+      min_lon: -65.0
+      min_time: '2017-01-01'
+      output_path: data/prepared/ref/${..dl_tracks.sat}.nc
+    interp_on_track:
+      _partial_: true
+      _skip_val: false
+      _target_: qf_interp_grid_on_track.run
+      grid_path: data/downloads/method_outputs/${..method}.nc
+      grid_var: ???
+      output_path: data/prepared/method_outputs/${..method}_on_track.nc
+      track_path: ${..filter_and_merge.output_path}
+    lambdax:
+      _partial_: true
+      _target_: alongtrack_lambdax.run
+      delta_t: 0.9434
+      length_scale: 1000.0
+      output_lambdax_path: data/metrics/lambdax_${..method}.json
+      output_psd_path: data/prepared/method_outputs/psd_${..method}.nc
+      ref_path: ${..filter_and_merge.output_path}
+      ref_var: ssh
+      segment_overlapping: 0.25
+      study_path: ${..interp_on_track.output_path}
+      study_var: ${..interp_on_track.grid_var}
+      velocity: 6.77
+    method: default
+    mu:
+      _partial_: true
+      _target_: dz_alongtrack_mu.run
+      dims: null
+      output_path: data/metrics/mu_${..method}.json
+      ref_path: ${..filter_and_merge.output_path}
+      ref_var: ssh
+      study_path: ${..interp_on_track.output_path}
+      study_var: ${..interp_on_track.grid_var}
+  to_run:
+  - dl_tracks
+  - filter_and_merge
+  - interp_on_track
+  - lambdax
+  - mu
+input_data:
+  _target_: qf_download_altimetry_constellation.run
+  stages:
+    _01_fetch_inference_tracks:
+      _partial_: true
+      _skip_val: false
+      _target_: dz_download_ssh_tracks.run
+      download_dir: data/downloads/input/${.sat}
+      max_time: ${..max_time}
+      min_time: ${..min_time}
+      regex: null
+      sat: ???
+    _02_filter_tracks:
+      _partial_: true
+      _skip_val: false
+      _target_: qf_filter_merge_daily_ssh_tracks.run
+      input_dir: data/downloads/input/${.._01_fetch_inference_tracks.sat}
+      max_lat: ${..max_lat}
+      max_lon: ${..max_lon}
+      max_time: ${..max_time}
+      min_lat: ${..min_lat}
+      min_lon: ${..min_lon}
+      min_time: ${..min_time}
+      output_path: data/prepared/input/${.._01_fetch_inference_tracks.sat}.nc
+    max_lat: 44.0
+    max_lon: -54.0
+    max_time: '2018-02-01'
+    min_lat: 32.0
+    min_lon: -66.0
+    min_time: '2016-12-01'
+    sats:
+    - alg
+    - h2ag
+    - j2g
+    - j2n
+    - j3
+    - s3a
+  to_run:
+  - _01_fetch_inference_tracks
+  - _02_filter_tracks
