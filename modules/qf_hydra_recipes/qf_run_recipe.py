@@ -64,7 +64,7 @@ def register_recipe(name, steps, params=dict(), input=None):
 
     recipe = hydra_zen.make_config(
         input=input,
-        hydra_defaults=["_self_", {"hydra_recipe": name,},{"hydra_recipe/params": name,}],
+        hydra_defaults=[{"ocb_mods/hydra_recipe": name,},{"ocb_mods/hydra_recipe/params": name,}, "_self_"],
         bases=(base_config,),
     )
     store(
