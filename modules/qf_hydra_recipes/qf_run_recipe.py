@@ -13,8 +13,8 @@ PIPELINE_DESC = "Apply sequence of configurable steps"
 
 def run(
     inp: Optional[Any] = None,
-    steps: dict[str, Callable] = dict(),
-    params: Optional[dict] = dict(),
+    steps: dict[str, Callable] = None,
+    params: Optional[dict] = None,
 ):
     log.info("Starting simple chaining with steps:")
     log.info("\n".join(sorted(steps)))
@@ -50,7 +50,7 @@ zen_endpoint = hydra_zen.zen(run)
 def register_recipe(name, steps, params=dict(), input=None):
     steps_store = hydra_zen.store(group="ocb_mods/hydra_recipe", package="steps")
     params_store = hydra_zen.store(
-        group="ocb_mods/hydra_recipe/params", package="_global_"
+        group="ocb_mods/hydra_recipe/params", package="params"
     )
     steps_store(steps, name=name, to_config=lambda x: x)
     params_store(params, name=name, to_config=lambda x: x)
@@ -64,14 +64,14 @@ def register_recipe(name, steps, params=dict(), input=None):
 
     recipe = hydra_zen.make_config(
         input=input,
+        hydra_defaults=["_self_", {"hydra_recipe": name,},{"hydra_recipe/params": name,}],
         bases=(base_config,),
-        hydra_defaults=["_self_", {"steps": name, "params": name}],
     )
     store(
         recipe,
         name=name,
         package="_global_",
-        groups="ocb_mods",
+        group="ocb_mods",
     )
     # Create a  partial configuration associated with the above function (for easy extensibility)
 
@@ -79,7 +79,7 @@ def register_recipe(name, steps, params=dict(), input=None):
     steps_store.add_to_hydra_store(overwrite_ok=True)
 
     # Create CLI endpoint
-    api_endpoint = hydra.main(config_name=name, version_base="1.3", config_path=".")(
+    api_endpoint = hydra.main(config_name="ocb_mods/" + name, version_base="1.3", config_path=".")(
         zen_endpoint
     )
     return api_endpoint, recipe

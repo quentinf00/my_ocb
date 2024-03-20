@@ -46,7 +46,7 @@ qf_grid_fn, grid_recipe = qf_run_recipe.register_recipe(name="qf_grid", steps=gr
 
 # CONCAT
 params = dict(
-    input_path="data/prepared/inference",
+    input_dir="data/prepared/inference",
     concat_dim="time",
     output_path="data/prepared/concatenated.nc",
 )
@@ -61,7 +61,7 @@ concat_cfg = dict(
 )
 
 qf_concat_fn, concat_recipe = qf_run_recipe.register_recipe(
-    name="qf_concat", steps=concat_cfg, params=params, input="${.params.input_path}"
+    name="qf_concat", steps=concat_cfg, params=params, input="${.params.input_dir}"
 )
 
 # Get from s3
@@ -75,8 +75,8 @@ get_s3_cfg = dict(
     _01_get_s3fs=pb(
         s3fs.S3FileSystem.get,
         b(s3fs.S3FileSystem, anon=True, client_kwargs={"endpoint_url": 'https://s3.eu-central-1.wasabisys.com'}),
-        rpath='${..params.remote_path}',
-        lpath='${..params.remote_path}',
+        rpath='${...params.remote_path}',
+        lpath='${...params.remote_path}',
     )
 )
 
