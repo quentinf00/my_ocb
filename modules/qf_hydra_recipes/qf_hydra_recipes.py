@@ -61,7 +61,7 @@ concat_cfg = dict(
 )
 
 qf_concat_fn, concat_recipe = qf_run_recipe.register_recipe(
-    name="qf_concat", steps=concat_cfg, params=params, input="${.params.input_dir}"
+    name="qf_concat", steps=concat_cfg, params=params, inp="${.params.input_dir}"
 )
 
 # Get from s3

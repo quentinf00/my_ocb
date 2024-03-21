@@ -3,6 +3,7 @@ from typing import Any, Callable, Optional
 
 import hydra
 import hydra_zen
+from omegaconf import OmegaConf
 import toolz
 from hydra.conf import HelpConf, HydraConf
 
@@ -47,7 +48,7 @@ zen_endpoint = hydra_zen.zen(run)
 
 
 # Store the config
-def register_recipe(name, steps, params=dict(), input=None):
+def register_recipe(name, steps, params=dict(), inp=None):
     steps_store = hydra_zen.store(group="ocb_mods/hydra_recipe", package="steps")
     params_store = hydra_zen.store(
         group="ocb_mods/hydra_recipe/params", package="params"
@@ -60,15 +61,16 @@ def register_recipe(name, steps, params=dict(), input=None):
         run,
         populate_full_signature=True,
         zen_partial=True,
+        zen_dataclass={'cls_name': f'{"".join(x.capitalize() for x in name.lower().split("_"))}Recipe'}
     )
 
-    recipe = hydra_zen.make_config(
-        input=input,
-        hydra_defaults=[{"ocb_mods/hydra_recipe": name,},{"ocb_mods/hydra_recipe/params": name,}, "_self_"],
+    _recipe = hydra_zen.make_config(
+        inp=inp,
+        hydra_defaults=['_self_', {"hydra_recipe": name,},{"hydra_recipe/params": name,}, ],
         bases=(base_config,),
     )
     store(
-        recipe,
+        _recipe,
         name=name,
         package="_global_",
         group="ocb_mods",
@@ -77,6 +79,14 @@ def register_recipe(name, steps, params=dict(), input=None):
 
     store.add_to_hydra_store(overwrite_ok=True)
     steps_store.add_to_hydra_store(overwrite_ok=True)
+
+    with hydra.initialize(version_base='1.3', config_path='.'):
+        cfg = hydra.compose("/ocb_mods/" + name)
+
+    recipe = hydra_zen.make_config(
+        **{k: node for k,node in cfg.items()
+            if k not in ('_target_', '_partial_', '_args_', '_convert_', '_recursive_')},
+        bases=(base_config,))
 
     # Create CLI endpoint
     api_endpoint = hydra.main(config_name="ocb_mods/" + name, version_base="1.3", config_path=".")(
