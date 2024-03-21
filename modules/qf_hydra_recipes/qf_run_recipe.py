@@ -61,7 +61,6 @@ def register_recipe(name, steps, params=dict(), inp=None):
         run,
         populate_full_signature=True,
         zen_partial=True,
-        zen_dataclass={'cls_name': f'{"".join(x.capitalize() for x in name.lower().split("_"))}Recipe'}
     )
 
     _recipe = hydra_zen.make_config(
@@ -86,7 +85,9 @@ def register_recipe(name, steps, params=dict(), inp=None):
     recipe = hydra_zen.make_config(
         **{k: node for k,node in cfg.items()
             if k not in ('_target_', '_partial_', '_args_', '_convert_', '_recursive_')},
-        bases=(base_config,))
+        bases=(base_config,),
+        zen_dataclass={'cls_name': f'{"".join(x.capitalize() for x in name.lower().split("_"))}Recipe'}
+    )
 
     # Create CLI endpoint
     api_endpoint = hydra.main(config_name="ocb_mods/" + name, version_base="1.3", config_path=".")(
