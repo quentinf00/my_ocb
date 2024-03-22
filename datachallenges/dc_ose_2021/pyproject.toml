@@ -12,8 +12,12 @@ authors=[
 Repository="https://github.com/quentinf00/my_ocb.git"
 
 [project.scripts]
-dc_ose_2021-inference_data = "dc_ose_2021_pipelines.dl_inference_data:inference_data_pipeline"
-dc_ose_2021-metrics = "dc_ose_2021_pipelines.compute_metrics:alongtrack_metrics_pipeline"
+dc_ose_2021-inference_data = "dc_ose_2021_pipelines.dl_inference_data:pipeline [dl_track]"
+dc_ose_2021-metrics = "dc_ose_2021_pipelines.compute_metrics:pipeline [dl_track,metrics]"
+
+[project.optional-dependencies]
+dl_tracks = []
+metrics = []
 
 [tool.setuptools.packages.find]
 include = ["dc_ose_2021_pipelines*"]

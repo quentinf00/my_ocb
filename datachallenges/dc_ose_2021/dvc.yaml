@@ -20,7 +20,7 @@ stages:
         - pipelines.qf_download_altimetry_constellation
       - full_config.yaml:
         - input_data.stages._01_fetch_inference_tracks
-      cmd: qf_download_altimetry_constellation 'to_run=[_01_fetch_inference_tracks]' stages._01_fetch_inference_tracks.sat=${item}
+      cmd: qf_download_altimetry_constellation 'to_run=[_01_fetch_inference_tracks]' stages._01_fetch_inference_tracks.sats=${item}
       outs:
       - data/downloads/input/${item}:
           cache: false

@@ -4,7 +4,7 @@ import dz_download_ssh_tracks
 import hydra_zen
 import qf_filter_merge_daily_ssh_tracks
 import qf_interp_grid_on_track
-import qf_pipelines
+import qf_pipeline
 
 b = hydra_zen.make_custom_builds_fn(populate_full_signature=True)
 pb = hydra_zen.make_custom_builds_fn(zen_partial=True, populate_full_signature=True)
@@ -43,5 +43,6 @@ stages = {
 
 
 params = dict(method="default", study_path="data/method_outputs/${.method}.nc")
-alongtrack_metrics_pipeline = qf_pipelines.register_pipeline(
-        name='dc_ose_2021/alongtrack_metrics', stages=stages, params=params
+pipeline, recipe, params = qf_pipeline.register_pipeline(
+        name='dc_ose_2021_alongtrack_metrics', stages=stages, params=params
+)

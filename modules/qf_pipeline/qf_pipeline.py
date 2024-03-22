@@ -1,6 +1,7 @@
 import logging
 
 import hydra
+from hydra.conf import HydraConf
 import hydra_zen
 
 log = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ zen_endpoint = hydra_zen.zen(run)
 
 
 # Store the config
-def register_pipeline(name, stages, params):
+def register_pipeline(name, stages, params, default_sweep=None):
     if isinstance(params, dict):
         params = hydra_zen.make_config(**params)
     stages_store = hydra_zen.store(group="ocb_pipeline/stages", package="stages")
@@ -40,6 +41,7 @@ def register_pipeline(name, stages, params):
     _recipe = hydra_zen.make_config(
         to_run=tuple(sorted(stages)),
         bases=(base_config,),
+        hydra=dict(sweeper=dict(params=default_sweep)),
         hydra_defaults=[
               {"stages": [f"{name}-{stage_name}" for stage_name in stages]},
                 {"params": name},
