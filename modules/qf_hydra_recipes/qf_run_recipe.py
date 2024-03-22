@@ -27,8 +27,17 @@ def run(
     sorted_steps = sorted(steps)
     if inp is None:
         log.info("No input given, computing it from first step")
-        inp = steps[sorted_steps.pop(0)]()
-    toolz.compose_left(*(steps[k] for k in sorted_steps))(inp)
+        k=sorted_steps.pop(0)
+        log.info(("Running ", k, steps[k]))
+        inp = steps[k]()
+        log.debug((k, "Input ", inp))
+
+    for k in sorted_steps:
+        log.info(("Running ", k, steps[k]))
+        log.debug((k, "Input ", inp))
+        inp = steps[k](inp)
+        log.debug((k, "Output ", inp))
+
 
 
 run.__doc__ = f"""
@@ -49,6 +58,8 @@ zen_endpoint = hydra_zen.zen(run)
 
 # Store the config
 def register_recipe(name, steps, params=dict(), inp=None):
+    if isinstance(params, dict):
+        params = hydra_zen.make_config(**params)
     steps_store = hydra_zen.store(group="ocb_mods/hydra_recipe", package="steps")
     params_store = hydra_zen.store(
         group="ocb_mods/hydra_recipe/params", package="params"
@@ -93,4 +104,4 @@ def register_recipe(name, steps, params=dict(), inp=None):
     api_endpoint = hydra.main(config_name="ocb_mods/" + name, version_base="1.3", config_path=".")(
         zen_endpoint
     )
-    return api_endpoint, recipe
+    return api_endpoint, recipe, params

@@ -6,6 +6,8 @@ import hydra_zen
 log = logging.getLogger(__name__)
 
 
+
+
 def run(
     to_run=[],
     stages=dict(),
@@ -21,6 +23,8 @@ zen_endpoint = hydra_zen.zen(run)
 
 # Store the config
 def register_pipeline(name, stages, params):
+    if isinstance(params, dict):
+        params = hydra_zen.make_config(**params)
     stages_store = hydra_zen.store(group="ocb_pipeline/stages", package="stages")
     params_store = hydra_zen.store(group="ocb_pipeline/params", package="params")
     for stage_name, cfg in stages.items():
@@ -37,9 +41,9 @@ def register_pipeline(name, stages, params):
         to_run=tuple(sorted(stages)),
         bases=(base_config,),
         hydra_defaults=[
-            "_self_",
               {"stages": [f"{name}-{stage_name}" for stage_name in stages]},
-                {"params": name}
+                {"params": name},
+            "_self_",
         ],
     )
     store(_recipe,
@@ -66,4 +70,5 @@ def register_pipeline(name, stages, params):
     api_endpoint = hydra.main(config_name="ocb_pipeline/" + name, version_base="1.3", config_path=".")(
         zen_endpoint
     )
-    return api_endpoint, recipe
+
+    return api_endpoint, recipe, params

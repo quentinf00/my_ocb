@@ -1,4 +1,6 @@
 from pathlib import Path
+import toolz
+import os
 import s3fs
 import hydra_zen
 import numpy as np
@@ -37,10 +39,10 @@ grid_cfg = dict(
             coords="${....params.grid}",
         ),
     ),
-    _03_write_grid=pb(xr.Dataset.to_netcdf, path="${...params.input_path}"),
+    _03_write_grid=pb(xr.Dataset.to_netcdf, path="${...params.output_path}"),
 )
 
-qf_grid_fn, grid_recipe = qf_run_recipe.register_recipe(name="qf_grid", steps=grid_cfg, params=params)
+qf_grid_fn, grid_recipe, grid_params = qf_run_recipe.register_recipe(name="qf_grid", steps=grid_cfg, params=params)
 
 
 
@@ -53,15 +55,16 @@ params = dict(
 concat_cfg = dict(
     _01_glob=pb(
         Path.glob,
+        b(Path, "${......params.input_dir}"),
         pattern="**/*.nc",
     ),
-    _02_read=pb(map, xr.open_dataset),
-    _02_concat=pb(xr.concat, dim="${...params.concat_dim}"),
-    _03_write=pb(xr.Dataset.to_netcdf, path="${...params.output_path}"),
+    _02_read=pb(map, pb(xr.open_dataset)),
+    _03_concat=pb(xr.concat, dim="${...params.concat_dim}"),
+    _04_write=pb(xr.Dataset.to_netcdf, path="${...params.output_path}"),
 )
 
-qf_concat_fn, concat_recipe = qf_run_recipe.register_recipe(
-    name="qf_concat", steps=concat_cfg, params=params, inp="${.params.input_dir}"
+qf_concat_fn, concat_recipe, concat_params = qf_run_recipe.register_recipe(
+    name="qf_concat", steps=concat_cfg, params=params, inp=None
 )
 
 # Get from s3
@@ -71,13 +74,14 @@ params = dict(
     local_path='${.remote_path}',
 )
 
+mkdir = pb(os.makedirs, name=b(os.path.dirname, p='${......params.local_path}'), exist_ok=True)
 get_s3_cfg = dict(
-    _01_get_s3fs=pb(
-        s3fs.S3FileSystem.get,
+    _01_get_s3fs=b(toolz.juxt, mkdir,
+        pb(s3fs.S3FileSystem.get,
         b(s3fs.S3FileSystem, anon=True, client_kwargs={"endpoint_url": 'https://s3.eu-central-1.wasabisys.com'}),
-        rpath='${...params.remote_path}',
-        lpath='${...params.remote_path}',
-    )
+        rpath='${.....params.remote_path}',
+        lpath='${.....params.local_path}',
+    ))
 )
 
-qf_get_s3_fn, get_s3_recipe = qf_run_recipe.register_recipe(name="qf_s3_get", steps=get_s3_cfg, params=params)
+qf_get_s3_fn, get_s3_recipe, get_s3_params = qf_run_recipe.register_recipe(name="qf_s3_get", steps=get_s3_cfg, params=params)
