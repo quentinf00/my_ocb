@@ -26,8 +26,10 @@ zen_endpoint = hydra_zen.zen(run)
 def register_pipeline(name, stages, params, default_sweep=None):
     if isinstance(params, dict):
         params = hydra_zen.make_config(**params)
-    stages_store = hydra_zen.store(group="ocb_pipeline/stages", package="stages")
-    params_store = hydra_zen.store(group="ocb_pipeline/params", package="params")
+    # stages_store = hydra_zen.store(group="ocb_pipeline/stages", package="stages")
+    # params_store = hydra_zen.store(group="ocb_pipeline/params", package="params")
+    stages_store = hydra_zen.store(group="stages", package="stages")
+    params_store = hydra_zen.store(group="params", package="params")
     for stage_name, cfg in stages.items():
         stages_store(cfg, name=f"{name}-{stage_name}", package=f"stages.{stage_name}")
     params_store(params, name=name)
@@ -38,6 +40,7 @@ def register_pipeline(name, stages, params, default_sweep=None):
         populate_full_signature=True,
         zen_partial=True,
     )
+
     _recipe = hydra_zen.make_config(
         to_run=tuple(sorted(stages)),
         bases=(base_config,),
@@ -49,9 +52,9 @@ def register_pipeline(name, stages, params, default_sweep=None):
         ],
     )
     store(_recipe,
-        name=name,
+        name="ocb_pipeline_" + name,
         package="_global_",
-        group="ocb_pipeline",
+        # group="ocb_pipeline",
     )
     # Create a  partial configuration associated with the above function (for easy extensibility)
 
@@ -60,7 +63,7 @@ def register_pipeline(name, stages, params, default_sweep=None):
     params_store.add_to_hydra_store(overwrite_ok=True)
 
     with hydra.initialize(version_base='1.3', config_path='.'):
-        cfg = hydra.compose("/ocb_pipeline/" + name)
+        cfg = hydra.compose("ocb_pipeline_" + name,)
 
     recipe = hydra_zen.make_config(
         **{k: node for k,node in cfg.items()
@@ -69,7 +72,8 @@ def register_pipeline(name, stages, params, default_sweep=None):
         zen_dataclass={'cls_name': f'{"".join(x.capitalize() for x in name.lower().split("_"))}Recipe'}
     )
     # Create CLI endpoint
-    api_endpoint = hydra.main(config_name="ocb_pipeline/" + name, version_base="1.3", config_path=".")(
+    # api_endpoint = hydra.main(config_name="ocb_pipeline/" + name, version_base="1.3", config_path=".")(
+    api_endpoint = hydra.main(config_name="ocb_pipeline_" + name, version_base="1.3", config_path=".")(
         zen_endpoint
     )
 

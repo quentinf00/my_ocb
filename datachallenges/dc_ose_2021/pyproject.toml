@@ -19,5 +19,7 @@ dc_ose_2021-metrics = "dc_ose_2021_pipelines.compute_metrics:pipeline [dl_track,
 dl_tracks = []
 metrics = []
 
-[tool.setuptools.packages.find]
-include = ["dc_ose_2021_pipelines*"]
+
+[tool.setuptools]
+packages=["dc_ose_2021_pipelines"]
+

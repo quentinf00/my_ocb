@@ -60,10 +60,8 @@ zen_endpoint = hydra_zen.zen(run)
 def register_recipe(name, steps, params=dict(), inp=None):
     if isinstance(params, dict):
         params = hydra_zen.make_config(**params)
-    steps_store = hydra_zen.store(group="ocb_mods/hydra_recipe", package="steps")
-    params_store = hydra_zen.store(
-        group="ocb_mods/hydra_recipe/params", package="params"
-    )
+    steps_store = hydra_zen.store(group="hydra_recipe", package="steps")
+    params_store = hydra_zen.store(group="hydra_recipe/params", package="params")
     steps_store(steps, name=name, to_config=lambda x: x)
     params_store(params, name=name, to_config=lambda x: x)
     store = hydra_zen.store()
@@ -81,9 +79,8 @@ def register_recipe(name, steps, params=dict(), inp=None):
     )
     store(
         _recipe,
-        name=name,
+        name="ocb_mods_" + name,
         package="_global_",
-        group="ocb_mods",
     )
     # Create a  partial configuration associated with the above function (for easy extensibility)
 
@@ -91,7 +88,7 @@ def register_recipe(name, steps, params=dict(), inp=None):
     steps_store.add_to_hydra_store(overwrite_ok=True)
 
     with hydra.initialize(version_base='1.3', config_path='.'):
-        cfg = hydra.compose("/ocb_mods/" + name)
+        cfg = hydra.compose("/ocb_mods_" + name)
 
     recipe = hydra_zen.make_config(
         **{k: node for k,node in cfg.items()
@@ -101,7 +98,7 @@ def register_recipe(name, steps, params=dict(), inp=None):
     )
 
     # Create CLI endpoint
-    api_endpoint = hydra.main(config_name="ocb_mods/" + name, version_base="1.3", config_path=".")(
+    api_endpoint = hydra.main(config_name="ocb_mods_" + name, version_base="1.3", config_path=".")(
         zen_endpoint
     )
     return api_endpoint, recipe, params
