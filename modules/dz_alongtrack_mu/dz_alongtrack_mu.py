@@ -84,8 +84,7 @@ store(HydraConf(help=HelpConf(header=run.__doc__, app_name=__name__)))
 
 store(
     hydra_zen.builds(run, populate_full_signature=True),
-    name=__name__,
-    group="ocb_mods",
+    name=f"ocb_mods_{__name__}",
     package="_global_",
 )
 # Create a  partial configuration associated with the above function (for easy extensibility)
@@ -95,7 +94,7 @@ store.add_to_hydra_store(overwrite_ok=True)
 
 # Create CLI endpoint
 api_endpoint = hydra.main(
-    config_name=f"ocb_mods/{__name__}", version_base="1.3", config_path=None
+    config_name=f"ocb_mods_{__name__}", version_base="1.3", config_path=None
 )(zen_endpoint)
 
 

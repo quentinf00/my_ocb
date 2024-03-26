@@ -90,8 +90,8 @@ zen_endpoint = hydra_zen.zen(run)
 # Store the config
 store = hydra_zen.ZenStore()
 store(HydraConf(help=HelpConf(header=run.__doc__, app_name=__name__)))
-main_config = hydra_zen.builds(run, populate_full_signature=True)
-store(main_config, name=__name__)
+store(hydra_zen.builds(run, populate_full_signature=True), name=__name__)
+recipe = hydra_zen.builds(run, populate_full_signature=True, zen_partial=True)
 store.add_to_hydra_store(overwrite_ok=True)
 
 # Create CLI endpoint

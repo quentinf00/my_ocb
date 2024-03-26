@@ -82,7 +82,7 @@ run_pipeline.__doc__ = f"""
 """
 
 # Create a configuration associated with the above function (cf next cell)
-main_config = hydra_zen.builds(run_pipeline, populate_full_signature=True)
+
 
 # Wrap the function to accept the configuration as input
 zen_endpoint = hydra_zen.zen(run_pipeline)
@@ -97,7 +97,9 @@ store(
         )
     )
 )
-store(main_config, name=__name__)
+store(recipe = hydra_zen.builds(run_pipeline, populate_full_signature=True), name=__name__)
+
+recipe = hydra_zen.builds(run_pipeline, populate_full_signature=True, zen_partial=True)
 store.add_to_hydra_store(overwrite_ok=True)
 
 # Create CLI endpoint

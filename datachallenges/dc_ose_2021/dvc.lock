@@ -377,14 +377,14 @@ stages:
       md5: 159a3e398fc33216442a276c14b8bbb2
       size: 30
   update_config:
-    cmd: "qf_alongtrack_metrics_from_map --cfg job | python scripts/wrap_yaml.py --key
-      metrics > full_config.yaml\nqf_download_altimetry_constellation --cfg job |
-      python scripts/wrap_yaml.py --key input_data >> full_config.yaml\n"
+    cmd: "dc_ose_2021-metrics --cfg job | python scripts/wrap_yaml.py --key metrics
+      > full_config.yaml\ndc_ose_2021-input_data --cfg job | python scripts/wrap_yaml.py
+      --key input_data >> full_config.yaml\n"
     outs:
     - path: full_config.yaml
       hash: md5
-      md5: f6cf7db630fce8c7daaf68c56fa06de4
-      size: 2923
+      md5: 625000683aa20acdbbe6fdeff382bd8f
+      size: 3481
   input_data/update_config:
     cmd: qf_download_altimetry_constellation --cfg job > input_data_configs.yaml
     outs:
@@ -393,21 +393,23 @@ stages:
       md5: 1570c354402f5d441a65490a21bd586c
       size: 952
   input_data/fetch_data@alg:
-    cmd: qf_download_altimetry_constellation 'to_run=[_01_fetch_inference_tracks]'
-      stages._01_fetch_inference_tracks.sat=alg
+    cmd: dc_ose_2021-input_data 'to_run=[_01_fetch_inference_tracks]' stages._01_fetch_inference_tracks.sat=alg
+    deps:
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._01_fetch_inference_tracks:
           _partial_: true
           _skip_val: false
           _target_: dz_download_ssh_tracks.run
-          download_dir: data/downloads/input/${.sat}
-          max_time: ${..max_time}
-          min_time: ${..min_time}
+          download_dir: ${...params.dl_dir}/${.sat}
+          max_time: ${...params.max_time}
+          min_time: ${...params.min_time}
           regex:
-          sat: ???
+          sat: ${...params.sweep}
     outs:
     - path: data/downloads/input/alg
       hash: md5
@@ -415,21 +417,23 @@ stages:
       size: 217871259
       nfiles: 455
   input_data/fetch_data@h2ag:
-    cmd: qf_download_altimetry_constellation 'to_run=[_01_fetch_inference_tracks]'
-      stages._01_fetch_inference_tracks.sat=h2ag
+    cmd: dc_ose_2021-input_data 'to_run=[_01_fetch_inference_tracks]' stages._01_fetch_inference_tracks.sat=h2ag
+    deps:
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._01_fetch_inference_tracks:
           _partial_: true
           _skip_val: false
           _target_: dz_download_ssh_tracks.run
-          download_dir: data/downloads/input/${.sat}
-          max_time: ${..max_time}
-          min_time: ${..min_time}
+          download_dir: ${...params.dl_dir}/${.sat}
+          max_time: ${...params.max_time}
+          min_time: ${...params.min_time}
           regex:
-          sat: ???
+          sat: ${...params.sweep}
     outs:
     - path: data/downloads/input/h2ag
       hash: md5
@@ -437,21 +441,23 @@ stages:
       size: 199097299
       nfiles: 426
   input_data/fetch_data@j2g:
-    cmd: qf_download_altimetry_constellation 'to_run=[_01_fetch_inference_tracks]'
-      stages._01_fetch_inference_tracks.sat=j2g
+    cmd: dc_ose_2021-input_data 'to_run=[_01_fetch_inference_tracks]' stages._01_fetch_inference_tracks.sat=j2g
+    deps:
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._01_fetch_inference_tracks:
           _partial_: true
           _skip_val: false
           _target_: dz_download_ssh_tracks.run
-          download_dir: data/downloads/input/${.sat}
-          max_time: ${..max_time}
-          min_time: ${..min_time}
+          download_dir: ${...params.dl_dir}/${.sat}
+          max_time: ${...params.max_time}
+          min_time: ${...params.min_time}
           regex:
-          sat: ???
+          sat: ${...params.sweep}
     outs:
     - path: data/downloads/input/j2g
       hash: md5
@@ -459,21 +465,23 @@ stages:
       size: 35978027
       nfiles: 66
   input_data/fetch_data@j2n:
-    cmd: qf_download_altimetry_constellation 'to_run=[_01_fetch_inference_tracks]'
-      stages._01_fetch_inference_tracks.sat=j2n
+    cmd: dc_ose_2021-input_data 'to_run=[_01_fetch_inference_tracks]' stages._01_fetch_inference_tracks.sat=j2n
+    deps:
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._01_fetch_inference_tracks:
           _partial_: true
           _skip_val: false
           _target_: dz_download_ssh_tracks.run
-          download_dir: data/downloads/input/${.sat}
-          max_time: ${..max_time}
-          min_time: ${..min_time}
+          download_dir: ${...params.dl_dir}/${.sat}
+          max_time: ${...params.max_time}
+          min_time: ${...params.min_time}
           regex:
-          sat: ???
+          sat: ${...params.sweep}
     outs:
     - path: data/downloads/input/j2n
       hash: md5
@@ -481,21 +489,23 @@ stages:
       size: 57152450
       nfiles: 110
   input_data/fetch_data@j3:
-    cmd: qf_download_altimetry_constellation 'to_run=[_01_fetch_inference_tracks]'
-      stages._01_fetch_inference_tracks.sat=j3
+    cmd: dc_ose_2021-input_data 'to_run=[_01_fetch_inference_tracks]' stages._01_fetch_inference_tracks.sat=j3
+    deps:
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._01_fetch_inference_tracks:
           _partial_: true
           _skip_val: false
           _target_: dz_download_ssh_tracks.run
-          download_dir: data/downloads/input/${.sat}
-          max_time: ${..max_time}
-          min_time: ${..min_time}
+          download_dir: ${...params.dl_dir}/${.sat}
+          max_time: ${...params.max_time}
+          min_time: ${...params.min_time}
           regex:
-          sat: ???
+          sat: ${...params.sweep}
     outs:
     - path: data/downloads/input/j3
       hash: md5
@@ -503,21 +513,23 @@ stages:
       size: 242218685
       nfiles: 455
   input_data/fetch_data@s3a:
-    cmd: qf_download_altimetry_constellation 'to_run=[_01_fetch_inference_tracks]'
-      stages._01_fetch_inference_tracks.sat=s3a
+    cmd: dc_ose_2021-input_data 'to_run=[_01_fetch_inference_tracks]' stages._01_fetch_inference_tracks.sat=s3a
+    deps:
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._01_fetch_inference_tracks:
           _partial_: true
           _skip_val: false
           _target_: dz_download_ssh_tracks.run
-          download_dir: data/downloads/input/${.sat}
-          max_time: ${..max_time}
-          min_time: ${..min_time}
+          download_dir: ${...params.dl_dir}/${.sat}
+          max_time: ${...params.max_time}
+          min_time: ${...params.min_time}
           regex:
-          sat: ???
+          sat: ${...params.sweep}
     outs:
     - path: data/downloads/input/s3a
       hash: md5
@@ -533,22 +545,24 @@ stages:
       md5: 866ba8fa07117cb1402a10d96b468414.dir
       size: 217871259
       nfiles: 455
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._02_filter_tracks:
           _partial_: true
           _skip_val: false
           _target_: qf_filter_merge_daily_ssh_tracks.run
-          input_dir: data/downloads/input/${.._01_fetch_inference_tracks.sat}
-          max_lat: ${..max_lat}
-          max_lon: ${..max_lon}
-          max_time: ${..max_time}
-          min_lat: ${..min_lat}
-          min_lon: ${..min_lon}
-          min_time: ${..min_time}
-          output_path: data/prepared/input/${.._01_fetch_inference_tracks.sat}.nc
+          input_dir: ${...params.dl_dir}
+          max_lat: ${...params.max_lat}
+          max_lon: ${...params.max_lon}
+          max_time: ${...params.max_time}
+          min_lat: ${...params.min_lat}
+          min_lon: ${...params.min_lon}
+          min_time: ${...params.min_time}
+          output_path: ${...params.output_dir}/${.._01_fetch_inference_tracks.sat}.nc
     outs:
     - path: data/prepared/input/alg.nc
       hash: md5
@@ -563,22 +577,24 @@ stages:
       md5: 8a0b36d0aaa0631b071c0175e19aeab4.dir
       size: 199097299
       nfiles: 426
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._02_filter_tracks:
           _partial_: true
           _skip_val: false
           _target_: qf_filter_merge_daily_ssh_tracks.run
-          input_dir: data/downloads/input/${.._01_fetch_inference_tracks.sat}
-          max_lat: ${..max_lat}
-          max_lon: ${..max_lon}
-          max_time: ${..max_time}
-          min_lat: ${..min_lat}
-          min_lon: ${..min_lon}
-          min_time: ${..min_time}
-          output_path: data/prepared/input/${.._01_fetch_inference_tracks.sat}.nc
+          input_dir: ${...params.dl_dir}
+          max_lat: ${...params.max_lat}
+          max_lon: ${...params.max_lon}
+          max_time: ${...params.max_time}
+          min_lat: ${...params.min_lat}
+          min_lon: ${...params.min_lon}
+          min_time: ${...params.min_time}
+          output_path: ${...params.output_dir}/${.._01_fetch_inference_tracks.sat}.nc
     outs:
     - path: data/prepared/input/h2ag.nc
       hash: md5
@@ -593,22 +609,24 @@ stages:
       md5: fa0c07ef89946f75f8c3e70e097a4f95.dir
       size: 35978027
       nfiles: 66
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._02_filter_tracks:
           _partial_: true
           _skip_val: false
           _target_: qf_filter_merge_daily_ssh_tracks.run
-          input_dir: data/downloads/input/${.._01_fetch_inference_tracks.sat}
-          max_lat: ${..max_lat}
-          max_lon: ${..max_lon}
-          max_time: ${..max_time}
-          min_lat: ${..min_lat}
-          min_lon: ${..min_lon}
-          min_time: ${..min_time}
-          output_path: data/prepared/input/${.._01_fetch_inference_tracks.sat}.nc
+          input_dir: ${...params.dl_dir}
+          max_lat: ${...params.max_lat}
+          max_lon: ${...params.max_lon}
+          max_time: ${...params.max_time}
+          min_lat: ${...params.min_lat}
+          min_lon: ${...params.min_lon}
+          min_time: ${...params.min_time}
+          output_path: ${...params.output_dir}/${.._01_fetch_inference_tracks.sat}.nc
     outs:
     - path: data/prepared/input/j2g.nc
       hash: md5
@@ -623,22 +641,24 @@ stages:
       md5: c362563b0c734fe15e964e2d0e9c4162.dir
       size: 57152450
       nfiles: 110
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._02_filter_tracks:
           _partial_: true
           _skip_val: false
           _target_: qf_filter_merge_daily_ssh_tracks.run
-          input_dir: data/downloads/input/${.._01_fetch_inference_tracks.sat}
-          max_lat: ${..max_lat}
-          max_lon: ${..max_lon}
-          max_time: ${..max_time}
-          min_lat: ${..min_lat}
-          min_lon: ${..min_lon}
-          min_time: ${..min_time}
-          output_path: data/prepared/input/${.._01_fetch_inference_tracks.sat}.nc
+          input_dir: ${...params.dl_dir}
+          max_lat: ${...params.max_lat}
+          max_lon: ${...params.max_lon}
+          max_time: ${...params.max_time}
+          min_lat: ${...params.min_lat}
+          min_lon: ${...params.min_lon}
+          min_time: ${...params.min_time}
+          output_path: ${...params.output_dir}/${.._01_fetch_inference_tracks.sat}.nc
     outs:
     - path: data/prepared/input/j2n.nc
       hash: md5
@@ -653,22 +673,24 @@ stages:
       md5: cf2d2fd113f6ff0a3454acb87fb25ee8.dir
       size: 242218685
       nfiles: 455
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._02_filter_tracks:
           _partial_: true
           _skip_val: false
           _target_: qf_filter_merge_daily_ssh_tracks.run
-          input_dir: data/downloads/input/${.._01_fetch_inference_tracks.sat}
-          max_lat: ${..max_lat}
-          max_lon: ${..max_lon}
-          max_time: ${..max_time}
-          min_lat: ${..min_lat}
-          min_lon: ${..min_lon}
-          min_time: ${..min_time}
-          output_path: data/prepared/input/${.._01_fetch_inference_tracks.sat}.nc
+          input_dir: ${...params.dl_dir}
+          max_lat: ${...params.max_lat}
+          max_lon: ${...params.max_lon}
+          max_time: ${...params.max_time}
+          min_lat: ${...params.min_lat}
+          min_lon: ${...params.min_lon}
+          min_time: ${...params.min_time}
+          output_path: ${...params.output_dir}/${.._01_fetch_inference_tracks.sat}.nc
     outs:
     - path: data/prepared/input/j3.nc
       hash: md5
@@ -683,22 +705,24 @@ stages:
       md5: 5f8834f5f811bbe275036b9649e48de6.dir
       size: 218603977
       nfiles: 455
+    - path: dc_ose_2021_pipelines/dl_input_data.py
+      hash: md5
+      md5: b0e99ef5da8637cd83d7925644c2e56b
+      size: 1439
     params:
-      datachallenge.toml:
-        pipelines.qf_download_altimetry_constellation: 0.0.1
       full_config.yaml:
         input_data.stages._02_filter_tracks:
           _partial_: true
           _skip_val: false
           _target_: qf_filter_merge_daily_ssh_tracks.run
-          input_dir: data/downloads/input/${.._01_fetch_inference_tracks.sat}
-          max_lat: ${..max_lat}
-          max_lon: ${..max_lon}
-          max_time: ${..max_time}
-          min_lat: ${..min_lat}
-          min_lon: ${..min_lon}
-          min_time: ${..min_time}
-          output_path: data/prepared/input/${.._01_fetch_inference_tracks.sat}.nc
+          input_dir: ${...params.dl_dir}
+          max_lat: ${...params.max_lat}
+          max_lon: ${...params.max_lon}
+          max_time: ${...params.max_time}
+          min_lat: ${...params.min_lat}
+          min_lon: ${...params.min_lon}
+          min_time: ${...params.min_time}
+          output_path: ${...params.output_dir}/${.._01_fetch_inference_tracks.sat}.nc
     outs:
     - path: data/prepared/input/s3a.nc
       hash: md5
@@ -723,20 +747,23 @@ stages:
       md5: 957d74696fbf5f2b6d0c528757951b8a
       size: 4684262
   diagnostics/fetch_reference_data:
-    cmd: qf_alongtrack_metrics_from_map 'to_run=[dl_tracks]'
+    cmd: dc_ose_2021-metrics 'to_run=[_01_dl_tracks]'
+    deps:
+    - path: dc_ose_2021_pipelines/compute_metrics.py
+      hash: md5
+      md5: 11d73275e009ebdb5ec02be70356ef42
+      size: 2423
     params:
-      datachallenge.toml:
-        pipelines.qf_alongtrack_metrics_from_map: 0.0.1
       full_config.yaml:
-        metrics.stages.dl_tracks:
+        metrics.stages._01_dl_tracks:
           _partial_: true
           _skip_val: false
           _target_: dz_download_ssh_tracks.run
           download_dir: data/downloads/ref/${.sat}
-          max_time: '2017-12-31'
-          min_time: '2017-01-01'
+          max_time: ${...params.max_time}
+          min_time: ${...params.min_time}
           regex:
-          sat: c2
+          sat: ${...params.sat}
     outs:
     - path: data/downloads/ref/c2
       hash: md5
@@ -744,37 +771,39 @@ stages:
       size: 165073748
       nfiles: 362
   diagnostics/filter_and_merge_ref:
-    cmd: qf_alongtrack_metrics_from_map 'to_run=[filter_and_merge]'
+    cmd: dc_ose_2021-metrics 'to_run=[_02_filter_and_merge]'
     deps:
     - path: data/downloads/ref/c2
       hash: md5
       md5: 8e65579c4dc11a00e6d3dde2c686105c.dir
       size: 165073748
       nfiles: 362
+    - path: dc_ose_2021_pipelines/compute_metrics.py
+      hash: md5
+      md5: 11d73275e009ebdb5ec02be70356ef42
+      size: 2423
     params:
-      datachallenge.toml:
-        pipelines.qf_alongtrack_metrics_from_map: 0.0.1
       full_config.yaml:
-        metrics.stages.filter_and_merge:
+        metrics.stages._02_filter_and_merge:
           _partial_: true
           _skip_val: false
           _target_: qf_filter_merge_daily_ssh_tracks.run
-          input_dir: ${..dl_tracks.download_dir}
-          max_lat: 43.0
-          max_lon: -55.0
-          max_time: '2018-01-01'
-          min_lat: 33.0
-          min_lon: -65.0
-          min_time: '2017-01-01'
-          output_path: data/prepared/ref/${..dl_tracks.sat}.nc
+          input_dir: ${.._01_dl_tracks.download_dir}
+          max_lat: ${...params.max_lat}
+          max_lon: ${...params.max_lon}
+          max_time: ${...params.max_time}
+          min_lat: ${...params.min_lat}
+          min_lon: ${...params.min_lon}
+          min_time: ${...params.min_time}
+          output_path: data/prepared/ref/${.._01_dl_tracks.sat}.nc
     outs:
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
-      size: 1397837
+      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      size: 1392965
   diagnostics/interp_on_track@4dvarnet:
-    cmd: qf_alongtrack_metrics_from_map 'to_run=[interp_on_track]' 'stages.interp_on_track.grid_var=rec_ssh'
-      'stages.method=4dvarnet'
+    cmd: dc_ose_2021-metrics 'to_run=[_03_interp_on_track]' 'params.study_var=rec_ssh'
+      'params.method=4dvarnet'
     deps:
     - path: data/downloads/method_outputs/4dvarnet.nc
       hash: md5
@@ -782,28 +811,30 @@ stages:
       size: 590300748
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
-      size: 1397837
+      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      size: 1392965
+    - path: dc_ose_2021_pipelines/compute_metrics.py
+      hash: md5
+      md5: 11d73275e009ebdb5ec02be70356ef42
+      size: 2423
     params:
-      datachallenge.toml:
-        pipelines.qf_alongtrack_metrics_from_map: 0.0.1
       full_config.yaml:
-        metrics.stages.interp_on_track:
+        metrics.stages._03_interp_on_track:
           _partial_: true
           _skip_val: false
           _target_: qf_interp_grid_on_track.run
-          grid_path: data/downloads/method_outputs/${..method}.nc
-          grid_var: ???
-          output_path: data/prepared/method_outputs/${..method}_on_track.nc
-          track_path: ${..filter_and_merge.output_path}
+          grid_path: ${...params.study_path}
+          grid_var: ${...params.study_var}
+          output_path: data/method_outputs/${...params.method}_on_track.nc
+          track_path: ${.._02_filter_and_merge.output_path}
     outs:
     - path: data/prepared/method_outputs/4dvarnet_on_track.nc
       hash: md5
-      md5: 01e8c6594ba3a8a653b7dcbb39188d90
-      size: 1587333
+      md5: c3b6d1bff3fdbc34e3b56358c07aad47
+      size: 1581765
   diagnostics/interp_on_track@duacs:
-    cmd: qf_alongtrack_metrics_from_map 'to_run=[interp_on_track]' 'stages.interp_on_track.grid_var=ssh'
-      'stages.method=duacs'
+    cmd: dc_ose_2021-metrics 'to_run=[_03_interp_on_track]' 'params.study_var=ssh'
+      'params.method=duacs'
     deps:
     - path: data/downloads/method_outputs/duacs.nc
       hash: md5
@@ -811,158 +842,164 @@ stages:
       size: 4684262
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
-      size: 1397837
+      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      size: 1392965
+    - path: dc_ose_2021_pipelines/compute_metrics.py
+      hash: md5
+      md5: 11d73275e009ebdb5ec02be70356ef42
+      size: 2423
     params:
-      datachallenge.toml:
-        pipelines.qf_alongtrack_metrics_from_map: 0.0.1
       full_config.yaml:
-        metrics.stages.interp_on_track:
+        metrics.stages._03_interp_on_track:
           _partial_: true
           _skip_val: false
           _target_: qf_interp_grid_on_track.run
-          grid_path: data/downloads/method_outputs/${..method}.nc
-          grid_var: ???
-          output_path: data/prepared/method_outputs/${..method}_on_track.nc
-          track_path: ${..filter_and_merge.output_path}
+          grid_path: ${...params.study_path}
+          grid_var: ${...params.study_var}
+          output_path: data/method_outputs/${...params.method}_on_track.nc
+          track_path: ${.._02_filter_and_merge.output_path}
     outs:
     - path: data/prepared/method_outputs/duacs_on_track.nc
       hash: md5
-      md5: 55a157bf35618a513e3fd35112218d48
-      size: 1587360
+      md5: c50cfe3f583040156ab15188740164f9
+      size: 1581792
   diagnostics/metric_lambdax@4dvarnet:
-    cmd: qf_alongtrack_metrics_from_map 'to_run=[lambdax]' 'stages.interp_on_track.grid_var=rec_ssh'
-      'stages.method=4dvarnet'
+    cmd: dc_ose_2021-metrics 'to_run=[_04_1_lambdax]' 'params.study_var=rec_ssh' 'params.method=4dvarnet'
     deps:
     - path: data/prepared/method_outputs/4dvarnet_on_track.nc
       hash: md5
-      md5: 01e8c6594ba3a8a653b7dcbb39188d90
-      size: 1587333
+      md5: c3b6d1bff3fdbc34e3b56358c07aad47
+      size: 1581765
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
-      size: 1397837
+      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      size: 1392965
+    - path: dc_ose_2021_pipelines/compute_metrics.py
+      hash: md5
+      md5: 11d73275e009ebdb5ec02be70356ef42
+      size: 2423
     params:
-      datachallenge.toml:
-        pipelines.qf_alongtrack_metrics_from_map: 0.0.1
       full_config.yaml:
-        metrics.stages.lambdax:
+        metrics.stages._04_1_lambdax:
           _partial_: true
           _target_: alongtrack_lambdax.run
           delta_t: 0.9434
           length_scale: 1000.0
-          output_lambdax_path: data/metrics/lambdax_${..method}.json
-          output_psd_path: data/prepared/method_outputs/psd_${..method}.nc
-          ref_path: ${..filter_and_merge.output_path}
+          output_lambdax_path: data/metrics/lambdax_${...params.method}.json
+          output_psd_path: data/metrics/psd_${...params.method}.nc
+          ref_path: ${.._02_filter_and_merge.output_path}
           ref_var: ssh
           segment_overlapping: 0.25
-          study_path: ${..interp_on_track.output_path}
-          study_var: ${..interp_on_track.grid_var}
+          study_path: ${.._03_interp_on_track.output_path}
+          study_var: ${.._03_interp_on_track.grid_var}
           velocity: 6.77
     outs:
     - path: data/metrics/lambdax_4dvarnet.json
       hash: md5
-      md5: 15ce77ac50d300cce8eff5a1d97edbdf
+      md5: 5c115c10dc8cf2699c9c33adb1eda7f4
       size: 36
     - path: data/prepared/method_outputs/psd_4dvarnet.nc
       hash: md5
-      md5: 5356c0a6079d47d970318e8347977e6f
+      md5: 9175f74eaf634bbca4a935d50b5be2fa
       size: 8954
   diagnostics/metric_lambdax@duacs:
-    cmd: qf_alongtrack_metrics_from_map 'to_run=[lambdax]' 'stages.interp_on_track.grid_var=ssh'
-      'stages.method=duacs'
+    cmd: dc_ose_2021-metrics 'to_run=[_04_1_lambdax]' 'params.study_var=ssh' 'params.method=duacs'
     deps:
     - path: data/prepared/method_outputs/duacs_on_track.nc
       hash: md5
-      md5: 55a157bf35618a513e3fd35112218d48
-      size: 1587360
+      md5: c50cfe3f583040156ab15188740164f9
+      size: 1581792
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
-      size: 1397837
+      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      size: 1392965
+    - path: dc_ose_2021_pipelines/compute_metrics.py
+      hash: md5
+      md5: 11d73275e009ebdb5ec02be70356ef42
+      size: 2423
     params:
-      datachallenge.toml:
-        pipelines.qf_alongtrack_metrics_from_map: 0.0.1
       full_config.yaml:
-        metrics.stages.lambdax:
+        metrics.stages._04_1_lambdax:
           _partial_: true
           _target_: alongtrack_lambdax.run
           delta_t: 0.9434
           length_scale: 1000.0
-          output_lambdax_path: data/metrics/lambdax_${..method}.json
-          output_psd_path: data/prepared/method_outputs/psd_${..method}.nc
-          ref_path: ${..filter_and_merge.output_path}
+          output_lambdax_path: data/metrics/lambdax_${...params.method}.json
+          output_psd_path: data/metrics/psd_${...params.method}.nc
+          ref_path: ${.._02_filter_and_merge.output_path}
           ref_var: ssh
           segment_overlapping: 0.25
-          study_path: ${..interp_on_track.output_path}
-          study_var: ${..interp_on_track.grid_var}
+          study_path: ${.._03_interp_on_track.output_path}
+          study_var: ${.._03_interp_on_track.grid_var}
           velocity: 6.77
     outs:
     - path: data/metrics/lambdax_duacs.json
       hash: md5
-      md5: 20aedc1f83be5b391eb3032365bf1772
-      size: 34
+      md5: 13f48b13efdda8f0da4e0e13faf4cebd
+      size: 36
     - path: data/prepared/method_outputs/psd_duacs.nc
       hash: md5
-      md5: 9e1b8d50bbe0daff98446c3087769cfd
+      md5: dce130cbc39b37a8086495edd383845e
       size: 8954
   diagnostics/metric_mu@4dvarnet:
-    cmd: qf_alongtrack_metrics_from_map 'to_run=[mu]' 'stages.interp_on_track.grid_var=rec_ssh'
-      'stages.method=4dvarnet'
+    cmd: dc_ose_2021-metrics 'to_run=[_04_2_mu]' 'params.study_var=rec_ssh' 'params.method=4dvarnet'
     deps:
     - path: data/prepared/method_outputs/4dvarnet_on_track.nc
       hash: md5
-      md5: 01e8c6594ba3a8a653b7dcbb39188d90
-      size: 1587333
+      md5: c3b6d1bff3fdbc34e3b56358c07aad47
+      size: 1581765
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
-      size: 1397837
+      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      size: 1392965
+    - path: dc_ose_2021_pipelines/compute_metrics.py
+      hash: md5
+      md5: 11d73275e009ebdb5ec02be70356ef42
+      size: 2423
     params:
-      datachallenge.toml:
-        pipelines.qf_alongtrack_metrics_from_map: 0.0.1
       full_config.yaml:
-        metrics.stages.mu:
+        metrics.stages._04_2_mu:
           _partial_: true
           _target_: dz_alongtrack_mu.run
           dims:
-          output_path: data/metrics/mu_${..method}.json
-          ref_path: ${..filter_and_merge.output_path}
+          output_path: data/metrics/mu_${...params.method}.json
+          ref_path: ${.._02_filter_and_merge.output_path}
           ref_var: ssh
-          study_path: ${..interp_on_track.output_path}
-          study_var: ${..interp_on_track.grid_var}
+          study_path: ${.._03_interp_on_track.output_path}
+          study_var: ${.._03_interp_on_track.grid_var}
     outs:
     - path: data/metrics/mu_4dvarnet.json
       hash: md5
-      md5: efe82203d021a8ca3a03cb93c3793c24
+      md5: 587a2e39a6c202ee253738971974f672
       size: 30
   diagnostics/metric_mu@duacs:
-    cmd: qf_alongtrack_metrics_from_map 'to_run=[mu]' 'stages.interp_on_track.grid_var=ssh'
-      'stages.method=duacs'
+    cmd: dc_ose_2021-metrics 'to_run=[_04_2_mu]' 'params.study_var=ssh' 'params.method=duacs'
     deps:
     - path: data/prepared/method_outputs/duacs_on_track.nc
       hash: md5
-      md5: 55a157bf35618a513e3fd35112218d48
-      size: 1587360
+      md5: c50cfe3f583040156ab15188740164f9
+      size: 1581792
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: a14d2f8f4cdde8805d31f722c806ae49
-      size: 1397837
+      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      size: 1392965
+    - path: dc_ose_2021_pipelines/compute_metrics.py
+      hash: md5
+      md5: 11d73275e009ebdb5ec02be70356ef42
+      size: 2423
     params:
-      datachallenge.toml:
-        pipelines.qf_alongtrack_metrics_from_map: 0.0.1
       full_config.yaml:
-        metrics.stages.mu:
+        metrics.stages._04_2_mu:
           _partial_: true
           _target_: dz_alongtrack_mu.run
           dims:
-          output_path: data/metrics/mu_${..method}.json
-          ref_path: ${..filter_and_merge.output_path}
+          output_path: data/metrics/mu_${...params.method}.json
+          ref_path: ${.._02_filter_and_merge.output_path}
           ref_var: ssh
-          study_path: ${..interp_on_track.output_path}
-          study_var: ${..interp_on_track.grid_var}
+          study_path: ${.._03_interp_on_track.output_path}
+          study_var: ${.._03_interp_on_track.grid_var}
     outs:
     - path: data/metrics/mu_duacs.json
       hash: md5
-      md5: 159a3e398fc33216442a276c14b8bbb2
+      md5: 4577d48e3e2c5a27d92884ba7c601478
       size: 30

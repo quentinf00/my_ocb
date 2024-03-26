@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "qf_hydra_recipes"
+authors=[
+  {name = "Quentin Febvre", email = "quentin.febvre@gmail.com"},
+]
+[project.urls]
+Repository="https://github.com/quentinf00/my_ocb.git"
+
+[project.scripts]
+qf_recipe-grid = "qf_hydra_recipes:qf_grid_fn"
+qf_recipe-concat = "qf_hydra_recipes:qf_concat_fn"
+qf_recipe-get_s3 = "qf_hydra_recipes:qf_get_s3_fn"
+
+[tool.setuptools]
+py-modules=["qf_hydra_recipes", "qf_run_recipe"]
