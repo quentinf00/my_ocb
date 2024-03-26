@@ -11,16 +11,16 @@ authors=[
 
 
 dependencies=[
-  "qf_pipeline @ git+https://github.com/quentinf00/my_ocb.git@hydra-steps#egg=qf_pipeline&subdirectory=modules/qf_pipeline",
-  "dz_download_ssh_tracks @ git+https://github.com/quentinf00/my_ocb.git@hydra-steps#egg=dz_download_ssh_tracks&subdirectory=modules/dz_download_ssh_tracks",
-  "qf_filter_merge_daily_ssh_tracks @ git+https://github.com/quentinf00/my_ocb.git@hydra-steps#egg=qf_filter_merge_daily_ssh_tracks&subdirectory=modules/qf_filter_merge_daily_ssh_tracks",
+  "qf_pipeline @ git+https://github.com/quentinf00/my_ocb.git@v1#egg=qf_pipeline&subdirectory=modules/qf_pipeline",
+  "dz_download_ssh_tracks @ git+https://github.com/quentinf00/my_ocb.git@v1#egg=dz_download_ssh_tracks&subdirectory=modules/dz_download_ssh_tracks",
+  "qf_filter_merge_daily_ssh_tracks @ git+https://github.com/quentinf00/my_ocb.git@v1#egg=qf_filter_merge_daily_ssh_tracks&subdirectory=modules/qf_filter_merge_daily_ssh_tracks",
 ]
 
 [project.optional-dependencies]
 metrics = [
-  "qf_interp_grid_on_track @ git+https://github.com/quentinf00/my_ocb.git@hydra-steps#egg=qf_interp_grid_on_track&subdirectory=modules/qf_interp_grid_on_track",
-  "alongtrack_lambdax @ git+https://github.com/quentinf00/my_ocb.git@hydra-steps#egg=alongtrack_lambdax&subdirectory=modules/alongtrack_lambdax",
-  "dz_alongtrack_mu @ git+https://github.com/quentinf00/my_ocb.git@hydra-steps#egg=dz_alongtrack_mu&subdirectory=modules/dz_alongtrack_mu"
+  "qf_interp_grid_on_track @ git+https://github.com/quentinf00/my_ocb.git@v1#egg=qf_interp_grid_on_track&subdirectory=modules/qf_interp_grid_on_track",
+  "alongtrack_lambdax @ git+https://github.com/quentinf00/my_ocb.git@v1#egg=alongtrack_lambdax&subdirectory=modules/alongtrack_lambdax",
+  "dz_alongtrack_mu @ git+https://github.com/quentinf00/my_ocb.git@v1#egg=dz_alongtrack_mu&subdirectory=modules/dz_alongtrack_mu"
 ]
 all = ["dc_ose_2021[metrics]"]
 
