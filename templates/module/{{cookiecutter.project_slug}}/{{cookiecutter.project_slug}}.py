@@ -95,7 +95,7 @@ store.add_to_hydra_store(overwrite_ok=True)
 
 # Create CLI endpoint
 api_endpoint = hydra.main(
-    config_name=__name__, version_base="1.3", config_path=None
+    config_name='ocb_mods/'  + __name__, version_base="1.3", config_path=None
 )(zen_endpoint)
 
 
