@@ -1,1 +1,0 @@
-qf_alongtrack_metrics_from_map @ git+https://github.com/quentinf00/my_ocb.git#egg=qf_alongtrack_metrics_from_map&subdirectory=pipelines/qf_alongtrack_metrics_from_map

@@ -1,35 +1,33 @@
 vars:
 # - metrics_configs.yaml:stages
-- datachallenge.toml:pipelines,methods
+- datachallenge.toml:methods
 - full_config.yaml:metrics,input_data
 
 
 stages:
   update_config:
     cmd: |
-      qf_alongtrack_metrics_from_map --cfg job | python scripts/wrap_yaml.py --key metrics > full_config.yaml
-      qf_download_altimetry_constellation --cfg job | python scripts/wrap_yaml.py --key input_data >> full_config.yaml
+      dc_ose_2021-metrics --cfg job | python scripts/wrap_yaml.py --key metrics > full_config.yaml
+      dc_ose_2021-input_data --cfg job | python scripts/wrap_yaml.py --key input_data >> full_config.yaml
     outs:
     - full_config.yaml:
         cache: false
   input_data/fetch_data:
-    foreach: ${input_data.stages.sats}
+    foreach: ${input_data.params.sat_list}
     do:
       params:
-      - datachallenge.toml:
-        - pipelines.qf_download_altimetry_constellation
       - full_config.yaml:
         - input_data.stages._01_fetch_inference_tracks
-      cmd: qf_download_altimetry_constellation 'to_run=[_01_fetch_inference_tracks]' stages._01_fetch_inference_tracks.sats=${item}
+      cmd: dc_ose_2021-input_data 'to_run=[_01_fetch_inference_tracks]' stages._01_fetch_inference_tracks.sat=${item}
+      deps:
+        - dc_ose_2021_pipelines/dl_input_data.py
       outs:
       - data/downloads/input/${item}:
           cache: false
   input_data/filter_and_merge:
-    foreach: ${input_data.stages.sats}
+    foreach: ${input_data.params.sat_list}
     do:
       params:
-      - datachallenge.toml:
-        - pipelines.qf_download_altimetry_constellation
       - full_config.yaml:
         - input_data.stages._02_filter_tracks
       cmd: >
@@ -38,6 +36,7 @@ stages:
         stages._02_filter_tracks.input_dir=data/downloads/input/${item}
         stages._02_filter_tracks.output_path=data/prepared/input/${item}.nc
       deps:
+      - dc_ose_2021_pipelines/dl_input_data.py
       - data/downloads/input/${item}
       outs:
       - data/prepared/input/${item}.nc
@@ -50,36 +49,34 @@ stages:
           cache: false
   diagnostics/fetch_reference_data:
     params:
-    - datachallenge.toml:
-      - pipelines.qf_alongtrack_metrics_from_map
     - full_config.yaml:
       - metrics.stages.dl_tracks
-    cmd: qf_alongtrack_metrics_from_map 'to_run=[dl_tracks]'
+    cmd: dc_ose_2021-metrics 'to_run=[dl_tracks]'
+    deps:
+    - dc_ose_2021_pipelines/compute_metrics.py
     outs:
     - data/downloads/ref/c2:
         cache: false
   diagnostics/filter_and_merge_ref:
     params:
-    - datachallenge.toml:
-      - pipelines.qf_alongtrack_metrics_from_map
     - full_config.yaml:
       - metrics.stages.filter_and_merge
-    cmd: qf_alongtrack_metrics_from_map 'to_run=[filter_and_merge]'
+    cmd: dc_ose_2021-metrics 'to_run=[filter_and_merge]'
     deps:
+    - dc_ose_2021_pipelines/compute_metrics.py
     - data/downloads/ref/c2
     outs:
     - data/prepared/ref/c2.nc
   diagnostics/interp_on_track:
     foreach: ${methods}
     do:
-      cmd: qf_alongtrack_metrics_from_map 'to_run=[interp_on_track]'
+      cmd: dc_ose_2021-metrics 'to_run=[interp_on_track]'
         'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
       params:
-      - datachallenge.toml:
-        - pipelines.qf_alongtrack_metrics_from_map
       - full_config.yaml:
         - metrics.stages.interp_on_track
       deps:
+      - dc_ose_2021_pipelines/compute_metrics.py
       - data/prepared/ref/c2.nc
       - data/downloads/method_outputs/${key}.nc
       outs:
@@ -87,14 +84,13 @@ stages:
   diagnostics/metric_lambdax:
     foreach: ${methods}
     do:
-      cmd: qf_alongtrack_metrics_from_map 'to_run=[lambdax]'
+      cmd: dc_ose_2021-metrics 'to_run=[lambdax]'
         'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
       params:
-      - datachallenge.toml:
-        - pipelines.qf_alongtrack_metrics_from_map
       - full_config.yaml:
         - metrics.stages.lambdax
       deps:
+      - dc_ose_2021_pipelines/compute_metrics.py
       - data/prepared/ref/c2.nc
       - data/prepared/method_outputs/${key}_on_track.nc
       outs:
@@ -105,14 +101,13 @@ stages:
   diagnostics/metric_mu:
     foreach: ${methods}
     do:
-      cmd: qf_alongtrack_metrics_from_map 'to_run=[mu]'
+      cmd: dc_ose_2021-metrics 'to_run=[mu]'
         'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
       params:
-      - datachallenge.toml:
-        - pipelines.qf_alongtrack_metrics_from_map
       - full_config.yaml:
         - metrics.stages.mu
       deps:
+      - dc_ose_2021_pipelines/compute_metrics.py
       - data/prepared/ref/c2.nc
       - data/prepared/method_outputs/${key}_on_track.nc
       metrics:

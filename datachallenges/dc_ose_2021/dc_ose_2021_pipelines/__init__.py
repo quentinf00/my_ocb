@@ -1,2 +1,2 @@
-from . import dl_inference_data
+from . import dl_input_data
 from . import  compute_metrics
