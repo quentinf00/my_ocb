@@ -10,7 +10,7 @@ metrics:
     min_lon: -65.0
     min_time: '2017-01-01'
     sat: c2
-    study_path: data/method_outputs/${.method}.nc
+    study_path: data/downloads/method_outputs/${.method}.nc
     study_var: ssh
   stages:
     _01_dl_tracks:
@@ -33,7 +33,7 @@ metrics:
       min_lat: ${...params.min_lat}
       min_lon: ${...params.min_lon}
       min_time: ${...params.min_time}
-      output_path: data/downloads/ref/${.._01_dl_tracks.sat}.nc
+      output_path: data/prepared/ref/${.._01_dl_tracks.sat}.nc
     _03_interp_on_track:
       _partial_: true
       _skip_val: false

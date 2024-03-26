@@ -50,8 +50,8 @@ stages:
   diagnostics/fetch_reference_data:
     params:
     - full_config.yaml:
-      - metrics.stages.dl_tracks
-    cmd: dc_ose_2021-metrics 'to_run=[dl_tracks]'
+      - metrics.stages._01_dl_tracks
+    cmd: dc_ose_2021-metrics 'to_run=[_01_dl_tracks]'
     deps:
     - dc_ose_2021_pipelines/compute_metrics.py
     outs:
@@ -60,8 +60,8 @@ stages:
   diagnostics/filter_and_merge_ref:
     params:
     - full_config.yaml:
-      - metrics.stages.filter_and_merge
-    cmd: dc_ose_2021-metrics 'to_run=[filter_and_merge]'
+      - metrics.stages._02_filter_and_merge
+    cmd: dc_ose_2021-metrics 'to_run=[_02_filter_and_merge]'
     deps:
     - dc_ose_2021_pipelines/compute_metrics.py
     - data/downloads/ref/c2
@@ -70,11 +70,11 @@ stages:
   diagnostics/interp_on_track:
     foreach: ${methods}
     do:
-      cmd: dc_ose_2021-metrics 'to_run=[interp_on_track]'
-        'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
+      cmd: dc_ose_2021-metrics 'to_run=[_03_interp_on_track]'
+        'params.study_var=${item.var}' 'params.method=${key}'
       params:
       - full_config.yaml:
-        - metrics.stages.interp_on_track
+        - metrics.stages._03_interp_on_track
       deps:
       - dc_ose_2021_pipelines/compute_metrics.py
       - data/prepared/ref/c2.nc
@@ -84,11 +84,11 @@ stages:
   diagnostics/metric_lambdax:
     foreach: ${methods}
     do:
-      cmd: dc_ose_2021-metrics 'to_run=[lambdax]'
-        'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
+      cmd: dc_ose_2021-metrics 'to_run=[_04_1_lambdax]'
+        'params.study_var=${item.var}' 'params.method=${key}'
       params:
       - full_config.yaml:
-        - metrics.stages.lambdax
+        - metrics.stages._04_1_lambdax
       deps:
       - dc_ose_2021_pipelines/compute_metrics.py
       - data/prepared/ref/c2.nc
@@ -101,11 +101,11 @@ stages:
   diagnostics/metric_mu:
     foreach: ${methods}
     do:
-      cmd: dc_ose_2021-metrics 'to_run=[mu]'
-        'stages.interp_on_track.grid_var=${item.var}' 'stages.method=${key}'
+      cmd: dc_ose_2021-metrics 'to_run=[_04_2_mu]'
+        'params.study_var=${item.var}' 'params.method=${key}'
       params:
       - full_config.yaml:
-        - metrics.stages.mu
+        - metrics.stages._04_2_mu
       deps:
       - dc_ose_2021_pipelines/compute_metrics.py
       - data/prepared/ref/c2.nc

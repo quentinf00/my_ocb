@@ -22,6 +22,7 @@ metrics = [
   "alongtrack_lambdax @ git+https://github.com/quentinf00/my_ocb.git@hydra-steps#egg=alongtrack_lambdax&subdirectory=modules/alongtrack_lambdax",
   "dz_alongtrack_mu @ git+https://github.com/quentinf00/my_ocb.git@hydra-steps#egg=dz_alongtrack_mu&subdirectory=modules/dz_alongtrack_mu"
 ]
+all = ["dc_ose_2021[metrics]"]
 
 
 [project.urls]
