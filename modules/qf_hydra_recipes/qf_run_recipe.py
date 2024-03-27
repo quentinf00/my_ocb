@@ -29,12 +29,14 @@ def run(
     if inp is None:
         log.info("No input given, computing it from first step")
         k=sorted_steps.pop(0)
-        log.info(("Running ", k, steps[k]))
+        log.info(("Running ", k))
+        log.debug(("Step details ", k, steps[k]))
         inp = steps[k]()
         log.debug((k, "Input ", inp))
 
     for k in sorted_steps:
-        log.info(("Running ", k, steps[k]))
+        log.info(("Running ", k))
+        log.debug(("Step details ", k, steps[k]))
         log.debug((k, "Input ", inp))
         inp = steps[k](inp)
         log.debug((k, "Output ", inp))

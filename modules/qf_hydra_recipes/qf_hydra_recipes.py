@@ -47,18 +47,22 @@ qf_grid_fn, grid_recipe, grid_params = qf_run_recipe.register_recipe(name="qf_gr
 
 # GRIDDING DAILY
 
+
+
+import qf_filter_merge_daily_ssh_tracks
+
+
 b = hydra_zen.make_custom_builds_fn()
 params = dict(
     date='',
     date_min='20161201',
-    date_max='20161202',
-    # date_max='20180131',
+    date_max='20180131',
     input_dir="data/downloads/input",
     glob='**/*${.date}*.nc',
     grid=dict(
-        time=[b(pd.to_datetime, arg="'${...date}'")],
-        lat=b(np.arange, start=32, stop=44, step=0.05),
-        lon=b(np.arange, start=-66, stop=-54, step=0.05),
+        time=[b(pd.to_datetime, arg="'${params.date}'")],
+        lat=b(np.arange, start=-90, stop=90, step=0.05),
+        lon=b(np.arange, start=-180, stop=180, step=0.05),
     ),
     output_dir="data/prepared/gridded",
 )
@@ -66,23 +70,34 @@ import glob
 grid_cfg = dict(
     _01_read_tracks=pb(
         xr.open_mfdataset,
-        paths=b(glob.glob, pathname= '${....params.glob}', root_dir="${....params.input_dir}", recursive=True),
+        preprocess=pb(
+            qf_filter_merge_daily_ssh_tracks.preprocess,
+                min_lon= -180,
+                max_lon= 180,
+                min_lat= -90,
+                max_lat= 90,
+            ),
+        paths=b(glob.glob, pathname= '${....params.input_dir}/${....params.glob}', recursive=True),
         combine='nested',
         concat_dim='time'
     ),
     _02_grid=pb(
         ocngrid.coord_based_to_grid,
+        t_res=b(pd.to_timedelta, '1D'),
         target_grid_ds=b(
             xr.Dataset,
             coords="${....params.grid}",
         ),
     ),
-    _03_write_grid=pb(xr.Dataset.to_netcdf, path="${...params.output_dir}/${...params.date}"),
+    _03_write_grid=pb(xr.Dataset.to_netcdf, path="${...params.output_dir}/${...params.date}.nc"),
 )
 
 
 import operator
-sweep = {'params.date': b(toolz.pipe, b(pd.date_range, start='${params.date_min}', end='${params.date_min}'), b(operator.methodcaller, 'strftime', date_format='%Y%m%d'), pb(list))}
+sweep = {
+    'params.date':
+    dict(_target_="builtins.str.join", _args_=[',', b(toolz.pipe, b(pd.date_range, start='${params.date_min}', end='${params.date_max}'), b(operator.methodcaller, 'strftime', date_format='%Y%m%d'), pb(list))])
+}
 qf_gridday_fn, gridday_recipe, gridday_params = qf_run_recipe.register_recipe(name="qf_gridday", steps=grid_cfg, params=params, default_sweep=sweep)
 
 
