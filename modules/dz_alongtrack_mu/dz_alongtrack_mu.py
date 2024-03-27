@@ -21,7 +21,6 @@ def run(
     study_var: str = "ssh",
     ref_path: str = "data/prepared/c2.nc",
     ref_var: str = "ssh",
-    dims: str = None,
     output_path: str = "data/metrics/mu.json",
 ):
     log.info("Starting")
@@ -41,11 +40,6 @@ def run(
         # .interpolate_na(dim='time', method='nearest')
     )
 
-    partial_track_fn = partial(
-        select_track_segments,
-        variable_interp="study",
-        variable="ref",
-    )
 
     partial_score_fn = partial(
         nrmse_ds,
@@ -56,11 +50,11 @@ def run(
 
     mu = (
         eval_ds
-        # .pipe(partial_track_fn)
         .pipe(partial_score_fn).item()
     )
 
-    log.debug(mu)
+    log.info(f"Mu score: {mu}" )
+    log.info(f"Writing to : {output_path}" )
 
     with open(Path(output_path), "w") as f:
         json.dump({"$\mu$": mu}, f)

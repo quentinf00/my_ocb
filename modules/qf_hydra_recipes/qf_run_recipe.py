@@ -19,6 +19,7 @@ def run(
 ):
     log.info("Starting simple chaining with steps:")
     log.info("\n".join(sorted(steps)))
+    log.debug(f"{params=}")
 
     if not steps:
         log.info("No steps returning input")
@@ -57,7 +58,7 @@ zen_endpoint = hydra_zen.zen(run)
 
 
 # Store the config
-def register_recipe(name, steps, params=dict(), inp=None):
+def register_recipe(name, steps, params=dict(), inp=None, default_sweep=None):
     if isinstance(params, dict):
         params = hydra_zen.make_config(**params)
     steps_store = hydra_zen.store(group="hydra_recipe", package="steps")
@@ -74,6 +75,7 @@ def register_recipe(name, steps, params=dict(), inp=None):
 
     _recipe = hydra_zen.make_config(
         inp=inp,
+        hydra=dict(sweeper=dict(params=default_sweep)),
         hydra_defaults=['_self_', {"hydra_recipe": name,},{"hydra_recipe/params": name,}, ],
         bases=(base_config,),
     )
