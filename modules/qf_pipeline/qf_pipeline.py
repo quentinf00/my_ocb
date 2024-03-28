@@ -8,7 +8,7 @@ log = logging.getLogger(__name__)
 
 
 store = hydra_zen.ZenStore(overwrite_ok=True)
-store = store(dict(), name='__placeholder', group='ext')
+store(dict(), name='__placeholder', group='ext')
 stages_store = store(group="ocb_pipeline/stages", package="stages")
 params_store = store(group="ocb_pipeline/params", package="params")
 
@@ -21,6 +21,13 @@ def run(
     log.info("Starting")
     for stage in to_run:
         log.info(f"Running stage {stage}")
+
+        if hasattr(stages[stage], 'func'):
+            log.debug(stages[stage].func.__name__)
+            log.debug(stages[stage].func.__doc__)
+        elif hasattr(stages[stage], '__doc__'):
+            log.debug(stages[stage].__doc__)
+
         stages[stage]()
         log.info(f"Stage {stage} done")
 
@@ -47,10 +54,8 @@ def register_pipeline(name, stages, params, help_msg='', default_sweep=None):
 
     help_msg = """
     Pipeline with stages
-    """ + '\n'.join([f"{s} -> {stages[s]._target_}" for s in sorted(stages)]) + f"""
-    with params
-    {}
-    """
+    """ + '\n'.join([f"{s} -> {stages[s]._target_}" for s in sorted(stages)]) 
+
     _recipe = hydra_zen.make_config(
         to_run=tuple(sorted(stages)),
         bases=(base_config,),
@@ -88,3 +93,4 @@ def register_pipeline(name, stages, params, help_msg='', default_sweep=None):
     )
 
     return api_endpoint, recipe, params
+
