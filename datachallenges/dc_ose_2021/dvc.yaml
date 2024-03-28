@@ -31,7 +31,7 @@ stages:
       - full_config.yaml:
         - input_data.stages._02_filter_tracks
       cmd: >
-        qf_download_altimetry_constellation
+        dc_ose_2021-input_data
         'to_run=[_02_filter_tracks]'
         stages._02_filter_tracks.input_dir=data/downloads/input/${item}
         stages._02_filter_tracks.output_path=data/prepared/input/${item}.nc

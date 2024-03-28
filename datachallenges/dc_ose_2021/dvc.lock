@@ -537,7 +537,7 @@ stages:
       size: 218603977
       nfiles: 455
   input_data/filter_and_merge@alg:
-    cmd: "qf_download_altimetry_constellation 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/alg
+    cmd: "dc_ose_2021-input_data 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/alg
       stages._02_filter_tracks.output_path=data/prepared/input/alg.nc\n"
     deps:
     - path: data/downloads/input/alg
@@ -566,10 +566,10 @@ stages:
     outs:
     - path: data/prepared/input/alg.nc
       hash: md5
-      md5: 9e1cbff80f71c2a16a0a4a901f309a5d
+      md5: 07d4d3d41e032512e07617a02e33657a
       size: 2199309
   input_data/filter_and_merge@h2ag:
-    cmd: "qf_download_altimetry_constellation 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/h2ag
+    cmd: "dc_ose_2021-input_data 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/h2ag
       stages._02_filter_tracks.output_path=data/prepared/input/h2ag.nc\n"
     deps:
     - path: data/downloads/input/h2ag
@@ -598,10 +598,10 @@ stages:
     outs:
     - path: data/prepared/input/h2ag.nc
       hash: md5
-      md5: 3611056b05c87fb50ddd23c35a7e8dfd
+      md5: d92c6048169b4a1567caa21b08f2728b
       size: 2035842
   input_data/filter_and_merge@j2g:
-    cmd: "qf_download_altimetry_constellation 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/j2g
+    cmd: "dc_ose_2021-input_data 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/j2g
       stages._02_filter_tracks.output_path=data/prepared/input/j2g.nc\n"
     deps:
     - path: data/downloads/input/j2g
@@ -630,10 +630,10 @@ stages:
     outs:
     - path: data/prepared/input/j2g.nc
       hash: md5
-      md5: 2c9f16e6c0056999ce3eba17e34c04e9
+      md5: 7a18932161ea39c866acc31eb2b50d3c
       size: 408989
   input_data/filter_and_merge@j2n:
-    cmd: "qf_download_altimetry_constellation 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/j2n
+    cmd: "dc_ose_2021-input_data 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/j2n
       stages._02_filter_tracks.output_path=data/prepared/input/j2n.nc\n"
     deps:
     - path: data/downloads/input/j2n
@@ -662,10 +662,10 @@ stages:
     outs:
     - path: data/prepared/input/j2n.nc
       hash: md5
-      md5: 6985942ca1388c2793dcc1a952ded0b5
+      md5: 041c8924bb2c57af0b3f6f1171d9c19b
       size: 631943
   input_data/filter_and_merge@j3:
-    cmd: "qf_download_altimetry_constellation 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/j3
+    cmd: "dc_ose_2021-input_data 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/j3
       stages._02_filter_tracks.output_path=data/prepared/input/j3.nc\n"
     deps:
     - path: data/downloads/input/j3
@@ -694,10 +694,10 @@ stages:
     outs:
     - path: data/prepared/input/j3.nc
       hash: md5
-      md5: c9b3b138b714a373a8cd0915f404e008
+      md5: 1399e4787476f06f5113b1c365e0ee4b
       size: 2429105
   input_data/filter_and_merge@s3a:
-    cmd: "qf_download_altimetry_constellation 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/s3a
+    cmd: "dc_ose_2021-input_data 'to_run=[_02_filter_tracks]' stages._02_filter_tracks.input_dir=data/downloads/input/s3a
       stages._02_filter_tracks.output_path=data/prepared/input/s3a.nc\n"
     deps:
     - path: data/downloads/input/s3a
@@ -726,7 +726,7 @@ stages:
     outs:
     - path: data/prepared/input/s3a.nc
       hash: md5
-      md5: 28acc13697351f73a34cfa750efa16cc
+      md5: 74fd8c2fb7885a187d39cb22a1ba5d29
       size: 2279193
   diagnostics/method_output@4dvarnet:
     cmd: wget 
@@ -799,7 +799,7 @@ stages:
     outs:
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      md5: 31a6a765b57ced5daa12ef91bb28d05d
       size: 1392965
   diagnostics/interp_on_track@4dvarnet:
     cmd: dc_ose_2021-metrics 'to_run=[_03_interp_on_track]' 'params.study_var=rec_ssh'
@@ -811,7 +811,7 @@ stages:
       size: 590300748
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      md5: 31a6a765b57ced5daa12ef91bb28d05d
       size: 1392965
     - path: dc_ose_2021_pipelines/compute_metrics.py
       hash: md5
@@ -830,8 +830,8 @@ stages:
     outs:
     - path: data/prepared/method_outputs/4dvarnet_on_track.nc
       hash: md5
-      md5: c3b6d1bff3fdbc34e3b56358c07aad47
-      size: 1581765
+      md5: 4efe0116b27275884dd5af240b859883
+      size: 1581792
   diagnostics/interp_on_track@duacs:
     cmd: dc_ose_2021-metrics 'to_run=[_03_interp_on_track]' 'params.study_var=ssh'
       'params.method=duacs'
@@ -842,7 +842,7 @@ stages:
       size: 4684262
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      md5: 31a6a765b57ced5daa12ef91bb28d05d
       size: 1392965
     - path: dc_ose_2021_pipelines/compute_metrics.py
       hash: md5
@@ -861,18 +861,18 @@ stages:
     outs:
     - path: data/prepared/method_outputs/duacs_on_track.nc
       hash: md5
-      md5: c50cfe3f583040156ab15188740164f9
+      md5: b70384d976759273763e6591b45d7019
       size: 1581792
   diagnostics/metric_lambdax@4dvarnet:
     cmd: dc_ose_2021-metrics 'to_run=[_04_1_lambdax]' 'params.study_var=rec_ssh' 'params.method=4dvarnet'
     deps:
     - path: data/prepared/method_outputs/4dvarnet_on_track.nc
       hash: md5
-      md5: c3b6d1bff3fdbc34e3b56358c07aad47
-      size: 1581765
+      md5: 4efe0116b27275884dd5af240b859883
+      size: 1581792
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      md5: 31a6a765b57ced5daa12ef91bb28d05d
       size: 1392965
     - path: dc_ose_2021_pipelines/compute_metrics.py
       hash: md5
@@ -900,18 +900,18 @@ stages:
       size: 36
     - path: data/prepared/method_outputs/psd_4dvarnet.nc
       hash: md5
-      md5: 9175f74eaf634bbca4a935d50b5be2fa
-      size: 8954
+      md5: 401e3a1fcf39b203a6c9dd6c00ceeb9f
+      size: 8942
   diagnostics/metric_lambdax@duacs:
     cmd: dc_ose_2021-metrics 'to_run=[_04_1_lambdax]' 'params.study_var=ssh' 'params.method=duacs'
     deps:
     - path: data/prepared/method_outputs/duacs_on_track.nc
       hash: md5
-      md5: c50cfe3f583040156ab15188740164f9
+      md5: b70384d976759273763e6591b45d7019
       size: 1581792
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      md5: 31a6a765b57ced5daa12ef91bb28d05d
       size: 1392965
     - path: dc_ose_2021_pipelines/compute_metrics.py
       hash: md5
@@ -939,18 +939,18 @@ stages:
       size: 36
     - path: data/prepared/method_outputs/psd_duacs.nc
       hash: md5
-      md5: dce130cbc39b37a8086495edd383845e
-      size: 8954
+      md5: 05d8061077c9a43437a2054c4a034f91
+      size: 8942
   diagnostics/metric_mu@4dvarnet:
     cmd: dc_ose_2021-metrics 'to_run=[_04_2_mu]' 'params.study_var=rec_ssh' 'params.method=4dvarnet'
     deps:
     - path: data/prepared/method_outputs/4dvarnet_on_track.nc
       hash: md5
-      md5: c3b6d1bff3fdbc34e3b56358c07aad47
-      size: 1581765
+      md5: 4efe0116b27275884dd5af240b859883
+      size: 1581792
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      md5: 31a6a765b57ced5daa12ef91bb28d05d
       size: 1392965
     - path: dc_ose_2021_pipelines/compute_metrics.py
       hash: md5
@@ -977,11 +977,11 @@ stages:
     deps:
     - path: data/prepared/method_outputs/duacs_on_track.nc
       hash: md5
-      md5: c50cfe3f583040156ab15188740164f9
+      md5: b70384d976759273763e6591b45d7019
       size: 1581792
     - path: data/prepared/ref/c2.nc
       hash: md5
-      md5: cf4a111fb31bb87bbf84bccf9685fbd0
+      md5: 31a6a765b57ced5daa12ef91bb28d05d
       size: 1392965
     - path: dc_ose_2021_pipelines/compute_metrics.py
       hash: md5
