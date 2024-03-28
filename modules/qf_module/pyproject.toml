@@ -8,6 +8,9 @@ name = "qf_module"
 authors=[
   {name = "Quentin Febvre", email = "quentin.febvre@gmail.com"},
 ]
+dependencies=[
+  "hydra-zen"
+]
 
 [project.urls]
 Repository="https://github.com/quentinf00/my_ocb.git"
