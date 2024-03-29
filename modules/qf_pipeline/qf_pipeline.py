@@ -17,9 +17,11 @@ def run(
     to_run=[],
     stages=dict(),
     params=dict(),
+    dry=False
 ):
     log.info("Starting")
     for stage in to_run:
+
         log.info(f"Running stage {stage}")
 
         if hasattr(stages[stage], 'func'):
@@ -28,8 +30,10 @@ def run(
         elif hasattr(stages[stage], '__doc__'):
             log.debug(stages[stage].__doc__)
 
-        stages[stage]()
-        log.info(f"Stage {stage} done")
+        if not dry:
+            stages[stage]()
+            log.info(f"Stage {stage} done")
+        
 
     log.info("Done")
 
@@ -52,9 +56,12 @@ def register_pipeline(name, stages, params, help_msg='', default_sweep=None):
         zen_partial=True,
     )
 
-    help_msg = """
-    Pipeline with stages
-    """ + '\n'.join([f"{s} -> {stages[s]._target_}" for s in sorted(stages)]) 
+    help_msg ="==============\n" +help_msg + """
+Stages
+\t""" + '\n\t'.join([f"{s} -> {stages[s]._target_}" for s in sorted(stages)]) \
++'\n' \
++ 'specify to_run\n'+\
+ 'run  with "dry=True hydra.verbose=qf_pipeline" for detail help on each stage\n\n'
 
     _recipe = hydra_zen.make_config(
         to_run=tuple(sorted(stages)),
